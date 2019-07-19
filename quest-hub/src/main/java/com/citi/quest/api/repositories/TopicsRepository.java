@@ -17,4 +17,9 @@ public interface TopicsRepository extends MongoRepository<Topic, String>{
 	
 	@ApiOperation("Find all suggested skills for a topic")
 	List<Skills> findSkillsByTopicId(String topicId);
+	
+	/*
+	 * @ApiOperation("Find topics having search text") List<Topic>
+	 * findTopicsLikeTopicName(String topicName);
+	 */
 }

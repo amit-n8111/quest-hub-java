@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
 
 @Document
@@ -21,7 +22,7 @@ public class UserInfo extends AbstractDocument{
 	
 	BusinessUnit buName;
 	
-	List<Skills> skills;
+	Map<Skills, SkillDetailsDTO> skills;
 	
 	List<Topic> topicsSubscribed;
 	
@@ -29,9 +30,8 @@ public class UserInfo extends AbstractDocument{
 	
 	Double rating;
 	
-	Map<Date, Integer> availability;
+	Map<Date, Integer> availability = null;
 	
-	List<Task> earlierTasks;
 
 	/**
 	 * @return the soeId
@@ -103,17 +103,18 @@ public class UserInfo extends AbstractDocument{
 		this.buName = buName;
 	}
 
+
 	/**
 	 * @return the skills
 	 */
-	public List<Skills> getSkills() {
+	public Map<Skills, SkillDetailsDTO> getSkills() {
 		return skills;
 	}
 
 	/**
 	 * @param skills the skills to set
 	 */
-	public void setSkills(List<Skills> skills) {
+	public void setSkills(Map<Skills, SkillDetailsDTO> skills) {
 		this.skills = skills;
 	}
 
@@ -171,20 +172,6 @@ public class UserInfo extends AbstractDocument{
 	 */
 	public void setAvailability(Map<Date, Integer> availability) {
 		this.availability = availability;
-	}
-
-	/**
-	 * @return the earlierTasks
-	 */
-	public List<Task> getEarlierTasks() {
-		return earlierTasks;
-	}
-
-	/**
-	 * @param earlierTasks the earlierTasks to set
-	 */
-	public void setEarlierTasks(List<Task> earlierTasks) {
-		this.earlierTasks = earlierTasks;
 	}
 	
 }

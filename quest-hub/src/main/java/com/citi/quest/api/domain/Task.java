@@ -11,15 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.citi.quest.api.enums.BusinessUnit;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.enums.TaskType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document
 public class Task extends AbstractDocument {
 
 	// String taskId;
 
-	String taskName;
+	String taskName ;
 
-	String taskDescription;
+	String taskDescription ;
 
 	// File attachment;
 
@@ -29,11 +30,11 @@ public class Task extends AbstractDocument {
 
 	// String taskPosterName;
 
-	List<UserInfo> interestedSeekers;
+	List<UserInfo> interestedSeekers ;
 
 	UserInfo assignedSeeker;
 
-	List<Skills> skillsRequired;
+	List<Skills> skillsRequired ;
 
 	Topic topic;
 
@@ -45,13 +46,15 @@ public class Task extends AbstractDocument {
 
 	Date endDate;
 
-	List<SoftwareTools> toolsRequired;
+	List<SoftwareTools> toolsRequired ;
 
 	UserInfo createdBy;
 
+	@JsonIgnore
 	@CreatedDate
-	LocalDateTime createdDate;
+	LocalDateTime createdDate ;
 	
+	@JsonIgnore
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 

@@ -4,8 +4,6 @@ import java.util.List;
 
 public class Topic extends AbstractDocument{
 	
-	String topicId;
-	
 	String topicName;
 	
 	List<Skills> skills;
@@ -21,20 +19,6 @@ public class Topic extends AbstractDocument{
 	 */
 	public void setSkills(List<Skills> skills) {
 		this.skills = skills;
-	}
-
-	/**
-	 * @return the topicId
-	 */
-	public String getTopicId() {
-		return topicId;
-	}
-
-	/**
-	 * @param topicId the topicId to set
-	 */
-	public void setTopicId(String topicId) {
-		this.topicId = topicId;
 	}
 
 	/**
