@@ -44,7 +44,7 @@ public class TaskPostServiceImpl implements TaskPostService{
 	private void updateTaskInfo(UserInfo userInfo, Task task) {
 		task.setCreatedBy(userInfo);
 		task.setCreatedDate(LocalDateTime.now());
-		task.setStatus(TaskStatus.OPEN);
+		task.setStatus(TaskStatus.PUBLISHED);
 	}
 
 	

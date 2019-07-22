@@ -2,7 +2,7 @@ package com.citi.quest.api.enums;
 
 public enum TaskStatus {
 
-	OPEN("open"), IN_PROGRESS("in progress"), COMPLETED("completed");
+	DRAFT("draft"), PUBLISHED("published"), ASSIGNED("assigned"),  IN_PROGRESS("in progress"), COMPLETED("completed");
 	
 	private String taskStatus;
 	

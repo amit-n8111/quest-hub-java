@@ -49,6 +49,8 @@ public class Task extends AbstractDocument {
 	List<SoftwareTools> toolsRequired ;
 
 	UserInfo createdBy;
+	
+	List<Questions> questions;
 
 	@JsonIgnore
 	@CreatedDate
@@ -58,18 +60,51 @@ public class Task extends AbstractDocument {
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 
+	/**
+	 * @return the questions
+	 */
+	public List<Questions> getQuestions() {
+		return questions;
+	}
+
+	/**
+	 * @param questions the questions to set
+	 */
+	public void setQuestions(List<Questions> questions) {
+		this.questions = questions;
+	}
+
+	Boolean isTemplate;
+	
+	String templateName;
 	
 	/**
-	 * @return the taskId
+	 * @return the isTemplate
 	 */
-	/*
-	 * public String getTaskId() { return taskId; }
-	 * 
-	 *//**
-		 * @param taskId the taskId to set
-		 *//*
-			 * public void setTaskId(String taskId) { this.taskId = taskId; }
-			 */
+	public Boolean getIsTemplate() {
+		return isTemplate;
+	}
+
+	/**
+	 * @param isTemplate the isTemplate to set
+	 */
+	public void setIsTemplate(Boolean isTemplate) {
+		this.isTemplate = isTemplate;
+	}
+
+	/**
+	 * @return the templateName
+	 */
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	/**
+	 * @param templateName the templateName to set
+	 */
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
+	}
 
 	/**
 	 * @return the lastModifiedDate
