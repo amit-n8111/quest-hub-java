@@ -16,8 +16,8 @@ import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.repositories.SkillsRepository;
 
 /**
- * This class is reponsible for handling events tiriggerd as a result of <Topic>
- * create/save operations.
+ * This class is responsible for handling events triggered as a result of
+ * <Topic> create/save operations.
  * 
  * @author Ashutosh Srivastav
  *
