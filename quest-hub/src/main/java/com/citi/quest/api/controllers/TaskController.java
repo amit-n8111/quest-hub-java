@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.Task;
-import com.citi.quest.api.service.api.TaskPostService;
+import com.citi.quest.api.service.impl.TaskService;
 
 import io.swagger.annotations.Api;
 
@@ -19,7 +19,7 @@ import io.swagger.annotations.Api;
 public class TaskController {
 
 	@Autowired
-	TaskPostService taskPostService;
+	TaskService taskPostService;
 	
 	@PostMapping(value= "{user}")
 	public Task saveTask(@RequestBody Task task, @PathVariable(value="user") String user){

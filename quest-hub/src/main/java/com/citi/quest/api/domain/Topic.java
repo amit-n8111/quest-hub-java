@@ -1,23 +1,46 @@
 package com.citi.quest.api.domain;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.data.annotation.LastModifiedDate;
 
 public class Topic extends AbstractDocument{
 	
-	String topicName;
+	private String topicName;
 	
-	List<Skills> skills;
+	private List<Skill> skills;
+	
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
+	
+	
+	
+	/**
+	 * @return the lastModifiedDate
+	 */
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	/**
+	 * @param lastModifiedDate the lastModifiedDate to set
+	 */
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
 	/**
 	 * @return the skills
 	 */
-	public List<Skills> getSkills() {
+	public List<Skill> getSkills() {
 		return skills;
 	}
 
 	/**
 	 * @param skills the skills to set
 	 */
-	public void setSkills(List<Skills> skills) {
+	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
 	}
 

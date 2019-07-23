@@ -3,8 +3,6 @@
  */
 package com.citi.quest.api.domain;
 
-import java.math.BigInteger;
-
 import org.springframework.data.annotation.Id;
 
 /**
@@ -14,15 +12,25 @@ import org.springframework.data.annotation.Id;
 public class AbstractDocument {
 	
 	@Id
-	private BigInteger id;
+	private Long id;
 
 	/**
 	 * @return the id
 	 */
-	public BigInteger getId() {
+	public Long getId() {
 		return id;
 	}
 	
+	
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

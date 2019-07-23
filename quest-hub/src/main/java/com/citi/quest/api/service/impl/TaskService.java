@@ -11,26 +11,20 @@ import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
-import com.citi.quest.api.service.api.TaskPostService;
 
-/**
- * 
- * 
- *
- */
 
 @Service
 @Transactional
-public class TaskPostServiceImpl implements TaskPostService{
+public class TaskService {
 
 	
 	@Autowired
-	TaskRepository taskRepository;
+	private TaskRepository taskRepository;
 	
 	@Autowired
-	UserInfoRepository userRepository;
+	private UserInfoRepository userRepository;
 	
-	@Override
+
 	public Task postTask(Task task, String user) {
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		updateTaskInfo(userInfo, task);

@@ -3,9 +3,7 @@ package com.citi.quest.api.domain;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class SoftwareTools  extends AbstractDocument{
-	
-	String toolId;
+public class SoftwareTool  extends AbstractDocument{
 	
 	String toolName;
 	
@@ -13,19 +11,6 @@ public class SoftwareTools  extends AbstractDocument{
 	
 	Topic topic;
 
-	/**
-	 * @return the toolId
-	 */
-	public String getToolId() {
-		return toolId;
-	}
-
-	/**
-	 * @param toolId the toolId to set
-	 */
-	public void setToolId(String toolId) {
-		this.toolId = toolId;
-	}
 
 	/**
 	 * @return the toolName

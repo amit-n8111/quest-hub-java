@@ -34,7 +34,7 @@ public class Task extends AbstractDocument {
 
 	UserInfo assignedSeeker;
 
-	List<Skills> skillsRequired ;
+	List<Skill> skillsRequired ;
 
 	Topic topic;
 
@@ -46,11 +46,11 @@ public class Task extends AbstractDocument {
 
 	Date endDate;
 
-	List<SoftwareTools> toolsRequired ;
+	List<SoftwareTool> toolsRequired ;
 
 	UserInfo createdBy;
 	
-	List<Questions> questions;
+	List<Question> questions;
 
 	@JsonIgnore
 	@CreatedDate
@@ -63,14 +63,14 @@ public class Task extends AbstractDocument {
 	/**
 	 * @return the questions
 	 */
-	public List<Questions> getQuestions() {
+	public List<Question> getQuestions() {
 		return questions;
 	}
 
 	/**
 	 * @param questions the questions to set
 	 */
-	public void setQuestions(List<Questions> questions) {
+	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
 
@@ -235,14 +235,14 @@ public class Task extends AbstractDocument {
 	/**
 	 * @return the skillsRequired
 	 */
-	public List<Skills> getSkillsRequired() {
+	public List<Skill> getSkillsRequired() {
 		return skillsRequired;
 	}
 
 	/**
 	 * @param skillsRequired the skillsRequired to set
 	 */
-	public void setSkillsRequired(List<Skills> skillsRequired) {
+	public void setSkillsRequired(List<Skill> skillsRequired) {
 		this.skillsRequired = skillsRequired;
 	}
 
@@ -319,14 +319,14 @@ public class Task extends AbstractDocument {
 	/**
 	 * @return the toolsRequired
 	 */
-	public List<SoftwareTools> getToolsRequired() {
+	public List<SoftwareTool> getToolsRequired() {
 		return toolsRequired;
 	}
 
 	/**
 	 * @param toolsRequired the toolsRequired to set
 	 */
-	public void setToolsRequired(List<SoftwareTools> toolsRequired) {
+	public void setToolsRequired(List<SoftwareTool> toolsRequired) {
 		this.toolsRequired = toolsRequired;
 	}
 

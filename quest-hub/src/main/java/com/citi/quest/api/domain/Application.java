@@ -13,7 +13,7 @@ public class Application extends AbstractDocument{
 	
 	Task task;
 	
-	Map<Questions, String> response;
+	Map<Question, String> response;
 
 	/**
 	 * @return the applicationId
@@ -60,14 +60,14 @@ public class Application extends AbstractDocument{
 	/**
 	 * @return the response
 	 */
-	public Map<Questions, String> getResponse() {
+	public Map<Question, String> getResponse() {
 		return response;
 	}
 
 	/**
 	 * @param response the response to set
 	 */
-	public void setResponse(Map<Questions, String> response) {
+	public void setResponse(Map<Question, String> response) {
 		this.response = response;
 	}
 }

@@ -5,15 +5,15 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import com.citi.quest.api.domain.Questions;
+import com.citi.quest.api.domain.Question;
 
 import io.swagger.annotations.ApiOperation;
 
 @RepositoryRestResource
-public interface QuestionsRepository extends MongoRepository<Questions, String>{
+public interface QuestionsRepository extends MongoRepository<Question, Long>{
 
+	@Override
 	@ApiOperation("Find questions for the application.")
-	List<Questions> findAll();
-	
+	List<Question> findAll();
 	
 }

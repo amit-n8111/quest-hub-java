@@ -22,7 +22,7 @@ public class UserInfo extends AbstractDocument{
 	
 	BusinessUnit buName;
 	
-	Map<Skills, SkillDetailsDTO> skills;
+	Map<Skill, SkillDetailsDTO> skills;
 	
 	List<Topic> topicsSubscribed;
 	
@@ -107,14 +107,14 @@ public class UserInfo extends AbstractDocument{
 	/**
 	 * @return the skills
 	 */
-	public Map<Skills, SkillDetailsDTO> getSkills() {
+	public Map<Skill, SkillDetailsDTO> getSkills() {
 		return skills;
 	}
 
 	/**
 	 * @param skills the skills to set
 	 */
-	public void setSkills(Map<Skills, SkillDetailsDTO> skills) {
+	public void setSkills(Map<Skill, SkillDetailsDTO> skills) {
 		this.skills = skills;
 	}
 

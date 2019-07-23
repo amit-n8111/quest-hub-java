@@ -1,7 +1,6 @@
 package com.citi.quest.api.domain;
 
-public class Questions extends AbstractDocument  {
-	
+public class Question extends AbstractDocument  {
 	
 	
 	String question;
