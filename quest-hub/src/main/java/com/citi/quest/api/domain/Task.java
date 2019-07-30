@@ -18,23 +18,19 @@ public class Task extends AbstractDocument {
 
 	// String taskId;
 
-	String taskName ;
+	String taskName;
 
-	String taskDescription ;
-
-	// File attachment;
+	String taskDescription;
 
 	TaskType taskType;
 
 	TaskStatus status;
 
-	// String taskPosterName;
-
-	List<UserInfo> interestedSeekers ;
+	List<UserInfo> interestedSeekers;
 
 	UserInfo assignedSeeker;
 
-	List<Skill> skillsRequired ;
+	List<Skill> skillsRequired;
 
 	Topic topic;
 
@@ -46,16 +42,16 @@ public class Task extends AbstractDocument {
 
 	Date endDate;
 
-	List<SoftwareTool> toolsRequired ;
+	List<SoftwareTool> toolsRequired;
 
 	UserInfo createdBy;
-	
+
 	List<Question> questions;
 
 	@JsonIgnore
 	@CreatedDate
-	LocalDateTime createdDate ;
-	
+	LocalDateTime createdDate;
+
 	@JsonIgnore
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
@@ -75,9 +71,9 @@ public class Task extends AbstractDocument {
 	}
 
 	Boolean isTemplate;
-	
+
 	String templateName;
-	
+
 	/**
 	 * @return the isTemplate
 	 */

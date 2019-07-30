@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.UserInfo;
+import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
@@ -25,11 +26,13 @@ public class TaskService {
 	private UserInfoRepository userRepository;
 	
 
-	public Task postTask(Task task, String user) {
+	public TaskDTO postTask(Task task, String user) {
+		TaskDTO taskDto = new TaskDTO();
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		updateTaskInfo(userInfo, task);
 		task = taskRepository.save(task);
-		return task;
+		taskDto = taskRepository.findTaskById(task.getId());
+		return taskDto;
 	}
 
 	/*

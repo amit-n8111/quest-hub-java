@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.Task;
+import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.service.impl.TaskService;
 
 import io.swagger.annotations.Api;
@@ -22,8 +23,7 @@ public class TaskController {
 	TaskService taskPostService;
 	
 	@PostMapping(value= "{user}")
-	public Task saveTask(@RequestBody Task task, @PathVariable(value="user") String user){
-		task = taskPostService.postTask(task, user);
-		return task;
+	public TaskDTO saveTask(@RequestBody Task task, @PathVariable(value = "user") String user) {
+		return taskPostService.postTask(task, user);
 	}
 }

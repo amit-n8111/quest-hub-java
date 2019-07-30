@@ -10,28 +10,28 @@ import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
 
 @Document
-public class UserInfo extends AbstractDocument{
-	
+public class UserInfo extends AbstractDocument {
+
 	String soeId;
-	
+
 	String firstName;
-	
+
 	String lastName;
-	
+
 	String teamName;
-	
+
 	BusinessUnit buName;
-	
+
 	Map<Skill, SkillDetailsDTO> skills;
-	
+
 	List<Topic> topicsSubscribed;
-	
+
 	String managerSoeId;
-	
+
 	Double rating;
-	
+
 	Map<Date, Integer> availability = null;
-	
+
 
 	/**
 	 * @return the soeId
@@ -173,5 +173,5 @@ public class UserInfo extends AbstractDocument{
 	public void setAvailability(Map<Date, Integer> availability) {
 		this.availability = availability;
 	}
-	
+
 }
