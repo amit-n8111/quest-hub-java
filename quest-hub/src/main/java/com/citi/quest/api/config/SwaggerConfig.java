@@ -1,4 +1,4 @@
-package com.citi.quest.config;
+package com.citi.quest.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
