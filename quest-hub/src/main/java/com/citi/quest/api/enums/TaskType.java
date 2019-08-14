@@ -1,10 +1,10 @@
 package com.citi.quest.api.enums;
 
 public enum TaskType {
-	MICRO_TASK("microTask"), MICRO_PROJECT("microProject");
-	
+	MICRO_TASK("MICRO_TASK"), MICRO_PROJECT("MICRO_TASK");
+
 	private String typeOfTask;
-	
+
 	private TaskType(String type) {
 		typeOfTask = type;
 	}

@@ -14,7 +14,6 @@ import com.citi.quest.api.service.impl.TaskService;
 
 import io.swagger.annotations.Api;
 
-
 @RestController
 @Api(tags = "API responsible for Task related operations")
 @RequestMapping("/api/v1/task")
@@ -22,9 +21,9 @@ public class TaskController {
 
 	@Autowired
 	TaskService taskPostService;
-	
-	@PostMapping(value= "edit/{taskId}")
-	public ResponseEntity<Boolean> saveTask(@RequestBody TaskDTO task, @PathVariable(value = "user") String user) {
+
+	@PostMapping(value = "edit/{taskId}")
+	public ResponseEntity<Boolean> saveTask(@RequestBody TaskDTO task, @PathVariable(value = "taskId") String user) {
 		taskPostService.postTask(task, user);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}

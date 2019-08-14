@@ -11,21 +11,23 @@ public class TaskDTO {
 	Long taskId;
 
 	String taskName;
-	
+
 	Long topicId;
-	
+
+	Long taskStatusId;
+
 	String taskDescription;
-	
+
 	TaskType taskType;
-	
+
 	Date taskDueDate;
-	
+
 	Date taskCreateDate;
-	
+
 	String taskCreatedBy;
-	
-	List<Question> questions;
-	
+
+	List<Question> screeningQuestions;
+
 	List<String> skills;
 
 	public Long getTaskId() {
@@ -92,12 +94,12 @@ public class TaskDTO {
 		this.taskCreatedBy = taskCreatedBy;
 	}
 
-	public List<Question> getQuestions() {
-		return questions;
+	public List<Question> getScreeningQuestions() {
+		return screeningQuestions;
 	}
 
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
+	public void setScreeningQuestions(List<Question> questions) {
+		this.screeningQuestions = questions;
 	}
 
 	public List<String> getSkills() {
@@ -107,7 +109,13 @@ public class TaskDTO {
 	public void setSkills(List<String> skills) {
 		this.skills = skills;
 	}
-	
-	
+
+	public Long getTaskStatusId() {
+		return taskStatusId;
+	}
+
+	public void setTaskStatusId(Long taskStatusId) {
+		this.taskStatusId = taskStatusId;
+	}
 
 }

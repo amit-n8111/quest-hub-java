@@ -1,329 +1,123 @@
 package com.citi.quest.api.domain;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.citi.quest.api.enums.BusinessUnit;
-import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.enums.TaskType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document
 public class Task extends AbstractDocument {
 
-	// String taskId;
+	Long taskId;
 
 	String taskName;
+
+	Long topicId;
+
+	Long taskStatusId;
 
 	String taskDescription;
 
 	TaskType taskType;
 
-	TaskStatus status;
+	Date taskDueDate;
 
-	List<UserInfo> interestedSeekers;
+	Date taskCreateDate;
 
-	UserInfo assignedSeeker;
+	String taskCreatedBy;
 
-	List<Skill> skillsRequired;
+	List<Question> screeningQuestions;
 
-	Topic topic;
+	List<String> skills;
 
-	BusinessUnit buName;
-
-	Integer manHours;
-
-	Date startDate;
-
-	Date endDate;
-
-	List<SoftwareTool> toolsRequired;
-
-	UserInfo createdBy;
-
-	List<Question> questions;
-
-	@JsonIgnore
-	@CreatedDate
-	LocalDateTime createdDate;
-
-	@JsonIgnore
-	@LastModifiedDate
-	private LocalDateTime lastModifiedDate;
-
-	/**
-	 * @return the questions
-	 */
-	public List<Question> getQuestions() {
-		return questions;
+	public Long getTaskId() {
+		return taskId;
 	}
 
-	/**
-	 * @param questions the questions to set
-	 */
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
 	}
 
-	Boolean isTemplate;
-
-	String templateName;
-
-	/**
-	 * @return the isTemplate
-	 */
-	public Boolean getIsTemplate() {
-		return isTemplate;
-	}
-
-	/**
-	 * @param isTemplate the isTemplate to set
-	 */
-	public void setIsTemplate(Boolean isTemplate) {
-		this.isTemplate = isTemplate;
-	}
-
-	/**
-	 * @return the templateName
-	 */
-	public String getTemplateName() {
-		return templateName;
-	}
-
-	/**
-	 * @param templateName the templateName to set
-	 */
-	public void setTemplateName(String templateName) {
-		this.templateName = templateName;
-	}
-
-	/**
-	 * @return the lastModifiedDate
-	 */
-	public LocalDateTime getLastModifiedDate() {
-		return lastModifiedDate;
-	}
-
-	/**
-	 * @param lastModifiedDate the lastModifiedDate to set
-	 */
-	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
-
-	/**
-	 * @return the taskName
-	 */
 	public String getTaskName() {
 		return taskName;
 	}
 
-	/**
-	 * @param taskName the taskName to set
-	 */
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
 
-	/**
-	 * @return the taskDescription
-	 */
+	public Long getTopicId() {
+		return topicId;
+	}
+
+	public void setTopicId(Long topicId) {
+		this.topicId = topicId;
+	}
+
+	public Long getTaskStatusId() {
+		return taskStatusId;
+	}
+
+	public void setTaskStatusId(Long taskStatusId) {
+		this.taskStatusId = taskStatusId;
+	}
+
 	public String getTaskDescription() {
 		return taskDescription;
 	}
 
-	/**
-	 * @return the createdBy
-	 */
-	public UserInfo getCreatedBy() {
-		return createdBy;
-	}
-
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(UserInfo createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	/**
-	 * @return the createdDate
-	 */
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	/**
-	 * @param createdDate the createdDate to set
-	 */
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	/**
-	 * @param taskDescription the taskDescription to set
-	 */
 	public void setTaskDescription(String taskDescription) {
 		this.taskDescription = taskDescription;
 	}
 
-	/**
-	 * @return the taskType
-	 */
 	public TaskType getTaskType() {
 		return taskType;
 	}
 
-	/**
-	 * @param taskType the taskType to set
-	 */
 	public void setTaskType(TaskType taskType) {
 		this.taskType = taskType;
 	}
 
-	/**
-	 * @return the status
-	 */
-	public TaskStatus getStatus() {
-		return status;
+	public Date getTaskDueDate() {
+		return taskDueDate;
 	}
 
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(TaskStatus status) {
-		this.status = status;
+	public void setTaskDueDate(Date taskDueDate) {
+		this.taskDueDate = taskDueDate;
 	}
 
-	/**
-	 * @return the interestedSeekers
-	 */
-	public List<UserInfo> getInterestedSeekers() {
-		return interestedSeekers;
+	public Date getTaskCreateDate() {
+		return taskCreateDate;
 	}
 
-	/**
-	 * @param interestedSeekers the interestedSeekers to set
-	 */
-	public void setInterestedSeekers(List<UserInfo> interestedSeekers) {
-		this.interestedSeekers = interestedSeekers;
+	public void setTaskCreateDate(Date taskCreateDate) {
+		this.taskCreateDate = taskCreateDate;
 	}
 
-	/**
-	 * @return the assignedSeeker
-	 */
-	public UserInfo getAssignedSeeker() {
-		return assignedSeeker;
+	public String getTaskCreatedBy() {
+		return taskCreatedBy;
 	}
 
-	/**
-	 * @param assignedSeeker the assignedSeeker to set
-	 */
-	public void setAssignedSeeker(UserInfo assignedSeeker) {
-		this.assignedSeeker = assignedSeeker;
+	public void setTaskCreatedBy(String taskCreatedBy) {
+		this.taskCreatedBy = taskCreatedBy;
 	}
 
-	/**
-	 * @return the skillsRequired
-	 */
-	public List<Skill> getSkillsRequired() {
-		return skillsRequired;
+	public List<Question> getScreeningQuestions() {
+		return screeningQuestions;
 	}
 
-	/**
-	 * @param skillsRequired the skillsRequired to set
-	 */
-	public void setSkillsRequired(List<Skill> skillsRequired) {
-		this.skillsRequired = skillsRequired;
+	public void setScreeningQuestions(List<Question> screeningQuestions) {
+		this.screeningQuestions = screeningQuestions;
 	}
 
-	/**
-	 * @return the topic
-	 */
-	public Topic getTopic() {
-		return topic;
+	public List<String> getSkills() {
+		return skills;
 	}
 
-	/**
-	 * @param topic the topic to set
-	 */
-	public void setTopic(Topic topic) {
-		this.topic = topic;
-	}
-
-	/**
-	 * @return the buName
-	 */
-	public BusinessUnit getBuName() {
-		return buName;
-	}
-
-	/**
-	 * @param buName the buName to set
-	 */
-	public void setBuName(BusinessUnit buName) {
-		this.buName = buName;
-	}
-
-	/**
-	 * @return the manHours
-	 */
-	public Integer getManHours() {
-		return manHours;
-	}
-
-	/**
-	 * @param manHours the manHours to set
-	 */
-	public void setManHours(Integer manHours) {
-		this.manHours = manHours;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the toolsRequired
-	 */
-	public List<SoftwareTool> getToolsRequired() {
-		return toolsRequired;
-	}
-
-	/**
-	 * @param toolsRequired the toolsRequired to set
-	 */
-	public void setToolsRequired(List<SoftwareTool> toolsRequired) {
-		this.toolsRequired = toolsRequired;
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
 	}
 
 }
