@@ -1,37 +1,113 @@
 package com.citi.quest.api.dtos;
 
+import java.util.Date;
+import java.util.List;
+
+import com.citi.quest.api.domain.Question;
+import com.citi.quest.api.enums.TaskType;
+
 public class TaskDTO {
 
+	Long taskId;
+
 	String taskName;
-
+	
+	Long topicId;
+	
 	String taskDescription;
+	
+	TaskType taskType;
+	
+	Date taskDueDate;
+	
+	Date taskCreateDate;
+	
+	String taskCreatedBy;
+	
+	List<Question> questions;
+	
+	List<String> skills;
 
-	/**
-	 * @return the taskName
-	 */
+	public Long getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
+	}
+
 	public String getTaskName() {
 		return taskName;
 	}
 
-	/**
-	 * @param taskName the taskName to set
-	 */
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
 
-	/**
-	 * @return the taskDescription
-	 */
+	public Long getTopicId() {
+		return topicId;
+	}
+
+	public void setTopicId(Long topicId) {
+		this.topicId = topicId;
+	}
+
 	public String getTaskDescription() {
 		return taskDescription;
 	}
 
-	/**
-	 * @param taskDescription the taskDescription to set
-	 */
 	public void setTaskDescription(String taskDescription) {
 		this.taskDescription = taskDescription;
 	}
+
+	public TaskType getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(TaskType taskType) {
+		this.taskType = taskType;
+	}
+
+	public Date getTaskDueDate() {
+		return taskDueDate;
+	}
+
+	public void setTaskDueDate(Date taskDueDate) {
+		this.taskDueDate = taskDueDate;
+	}
+
+	public Date getTaskCreateDate() {
+		return taskCreateDate;
+	}
+
+	public void setTaskCreateDate(Date taskCreateDate) {
+		this.taskCreateDate = taskCreateDate;
+	}
+
+	public String getTaskCreatedBy() {
+		return taskCreatedBy;
+	}
+
+	public void setTaskCreatedBy(String taskCreatedBy) {
+		this.taskCreatedBy = taskCreatedBy;
+	}
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
+
+	public List<String> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<String> skills) {
+		this.skills = skills;
+	}
+	
+	
 
 }

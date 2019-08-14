@@ -26,22 +26,22 @@ public class TaskService {
 	private UserInfoRepository userRepository;
 	
 
-	public TaskDTO postTask(Task task, String user) {
-		TaskDTO taskDto = new TaskDTO();
+	public void postTask(TaskDTO taskDto, String user) {
 		UserInfo userInfo = userRepository.findBySoeId(user);
-		updateTaskInfo(userInfo, task);
+		Task task = updateTaskInfo(userInfo, taskDto);
 		task = taskRepository.save(task);
-		taskDto = taskRepository.findTaskById(task.getId());
-		return taskDto;
 	}
 
 	/*
 	 * 
 	 */
-	private void updateTaskInfo(UserInfo userInfo, Task task) {
+	private Task updateTaskInfo(UserInfo userInfo, TaskDTO taskDto) {
+		Task task = new Task();
+		
 		task.setCreatedBy(userInfo);
 		task.setCreatedDate(LocalDateTime.now());
 		task.setStatus(TaskStatus.PUBLISHED);
+		return task;
 	}
 
 	
