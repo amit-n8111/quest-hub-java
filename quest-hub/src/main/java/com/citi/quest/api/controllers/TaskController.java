@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.Task;
+import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.service.impl.TaskService;
 
 import io.swagger.annotations.Api;
 
 @RestController
-@Api(tags = "API responsible for Task related operations")
+@Api(tags = "questHub-Tasks APIs")
 @RequestMapping("/api/v1/task")
 public class TaskController {
 
@@ -35,5 +36,10 @@ public class TaskController {
 	@GetMapping(value = "tasks")
 	public List<Task> getTasks() {
 		return taskPostService.getTasks();
+	}
+	
+	@PostMapping(value = "tasks")
+	public List<Task> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
+		return taskPostService.searchTasks(searchTaskDTO);
 	}
 }

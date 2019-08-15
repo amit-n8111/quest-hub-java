@@ -6,14 +6,18 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document
 public class Skill extends AbstractDocument{
 	
 	String name;
 	
+	@JsonIgnore
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 	
+	@JsonIgnore
 	@CreatedDate
 	private LocalDateTime createdDate;
 	

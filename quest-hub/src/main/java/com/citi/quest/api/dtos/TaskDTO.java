@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.citi.quest.api.domain.Question;
+import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.enums.TaskType;
 
 public class TaskDTO {
@@ -28,7 +29,7 @@ public class TaskDTO {
 
 	List<Question> screeningQuestions;
 
-	List<String> skills;
+	List<Skill> skills;
 
 	public Long getTaskId() {
 		return taskId;
@@ -102,11 +103,11 @@ public class TaskDTO {
 		this.screeningQuestions = questions;
 	}
 
-	public List<String> getSkills() {
+	public List<Skill> getSkills() {
 		return skills;
 	}
 
-	public void setSkills(List<String> skills) {
+	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
 	}
 

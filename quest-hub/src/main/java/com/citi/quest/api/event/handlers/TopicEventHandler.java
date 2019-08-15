@@ -40,5 +40,5 @@ public class TopicEventHandler {
 		List<Skill> skills = topic.getSkills();
 		skillRepository.save(skills);
 	}
-
+	
 }
