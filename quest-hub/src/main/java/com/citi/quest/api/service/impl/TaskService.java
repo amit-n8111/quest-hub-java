@@ -1,6 +1,7 @@
 package com.citi.quest.api.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,6 @@ public class TaskService {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
 
 		Task task = updateTaskInfo(taskDto);
-
 		task = taskRepository.save(task);
 	}
 
@@ -50,6 +50,10 @@ public class TaskService {
 		task.setTaskStatusId(1L);
 
 		return task;
+	}
+
+	public List<Task> getTasks() {
+		return taskRepository.findAll();
 	}
 
 }
