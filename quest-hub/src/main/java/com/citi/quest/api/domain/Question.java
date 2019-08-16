@@ -2,19 +2,19 @@ package com.citi.quest.api.domain;
 
 public class Question extends AbstractDocument {
 
-	String questionName;
+	String question;
 
 	/**
 	 * @return the question
 	 */
 	public String getQuestion() {
-		return questionName;
+		return question;
 	}
 
 	/**
 	 * @param question the question to set
 	 */
 	public void setQuestion(String question) {
-		this.questionName = question;
+		this.question = question;
 	}
 }

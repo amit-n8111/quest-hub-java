@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -29,7 +28,7 @@ public class TaskController {
 	TaskService taskPostService;
 
 	@PostMapping(value = "edit/")
-	public ResponseEntity<Boolean> saveTask(@RequestHeader(value = "sm_user") String user ,@RequestBody TaskDTO task) {
+	public ResponseEntity<Boolean> saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody TaskDTO task) {
 		taskPostService.postTask(task, user);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
@@ -38,7 +37,7 @@ public class TaskController {
 	public List<Task> getTasks() {
 		return taskPostService.getTasks();
 	}
-	
+
 	@PostMapping(value = "tasks")
 	public List<Task> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
 		return taskPostService.searchTasks(searchTaskDTO);
