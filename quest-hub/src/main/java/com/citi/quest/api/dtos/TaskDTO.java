@@ -13,7 +13,7 @@ public class TaskDTO {
 
 	String taskName;
 
-	Long topicId;
+	Long taskTopicId;
 
 	Long taskStatusId;
 
@@ -47,12 +47,20 @@ public class TaskDTO {
 		this.taskName = taskName;
 	}
 
-	public Long getTopicId() {
-		return topicId;
+	public Long getTaskTopicId() {
+		return taskTopicId;
 	}
 
-	public void setTopicId(Long topicId) {
-		this.topicId = topicId;
+	public void setTaskTopicId(Long taskTopicId) {
+		this.taskTopicId = taskTopicId;
+	}
+
+	public Long getTaskStatusId() {
+		return taskStatusId;
+	}
+
+	public void setTaskStatusId(Long taskStatusId) {
+		this.taskStatusId = taskStatusId;
 	}
 
 	public String getTaskDescription() {
@@ -99,8 +107,8 @@ public class TaskDTO {
 		return screeningQuestions;
 	}
 
-	public void setScreeningQuestions(List<Question> questions) {
-		this.screeningQuestions = questions;
+	public void setScreeningQuestions(List<Question> screeningQuestions) {
+		this.screeningQuestions = screeningQuestions;
 	}
 
 	public List<Skill> getSkills() {
@@ -111,12 +119,6 @@ public class TaskDTO {
 		this.skills = skills;
 	}
 
-	public Long getTaskStatusId() {
-		return taskStatusId;
-	}
-
-	public void setTaskStatusId(Long taskStatusId) {
-		this.taskStatusId = taskStatusId;
-	}
+	
 
 }

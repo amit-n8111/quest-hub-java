@@ -18,7 +18,7 @@ public class Task extends AbstractDocument {
 
 	String taskName;
 
-	Long topicId;
+	Long taskTopicId;
 
 	Long taskStatusId;
 
@@ -53,11 +53,11 @@ public class Task extends AbstractDocument {
 	}
 
 	public Long getTopicId() {
-		return topicId;
+		return taskTopicId;
 	}
 
-	public void setTopicId(Long topicId) {
-		this.topicId = topicId;
+	public void setTopicId(Long taskTopicId) {
+		this.taskTopicId = taskTopicId;
 	}
 
 	public Long getTaskStatusId() {

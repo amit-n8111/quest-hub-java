@@ -52,7 +52,7 @@ public class TaskService {
 		task.setScreeningQuestions(taskDto.getScreeningQuestions());
 		task.setSkills(taskDto.getSkills());
 
-		task.setTopicId(taskDto.getTopicId());
+		task.setTopicId(taskDto.getTaskTopicId());
 
 		task.setTaskCreatedBy(taskDto.getTaskCreatedBy());
 		task.setTaskCreateDate(new Date());
@@ -67,32 +67,32 @@ public class TaskService {
 	}
 
 	public List<Task> searchTasks(SearchTaskDTO searchTaskDTO) {
-		
+
 		Criteria criteria = new Criteria();
-    	Query query = new Query();
-    	
-    	if(StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
-    		query.addCriteria(Criteria.where("taskCreatedBy").is(searchTaskDTO.getCreatedBy()));
-    	}
-    	
-    	if(StringUtils.isNotBlank(searchTaskDTO.getSearch())) {
-    		query.addCriteria(new Criteria().orOperator(criteria.where("taskName").regex(searchTaskDTO.getSearch()),
-    				criteria.where("taskDescription").regex(searchTaskDTO.getSearch())));
-    		
-    	}
-    	
-    	query.with(new PageRequest(searchTaskDTO.getPageNumber() - 1, searchTaskDTO.getPageSize()));
-    	
-    	if(StringUtils.isNotBlank(searchTaskDTO.getSortBy())) {
-    		
-    		if("ASC".equalsIgnoreCase(searchTaskDTO.getSortOrder())) {
-    			query.with(new Sort(Sort.Direction.ASC, searchTaskDTO.getSortBy()));
-    		} else {
-    			query.with(new Sort(Sort.Direction.DESC, searchTaskDTO.getSortBy()));
-    		}
-    		 
-    	}
-        return mongoOperations.find(query, Task.class);
+		Query query = new Query();
+
+		if (StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
+			query.addCriteria(Criteria.where("taskCreatedBy").is(searchTaskDTO.getCreatedBy()));
+		}
+
+		if (StringUtils.isNotBlank(searchTaskDTO.getSearch())) {
+			query.addCriteria(new Criteria().orOperator(criteria.where("taskName").regex(searchTaskDTO.getSearch()),
+					criteria.where("taskDescription").regex(searchTaskDTO.getSearch())));
+
+		}
+
+		query.with(new PageRequest(searchTaskDTO.getPageNumber() - 1, searchTaskDTO.getPageSize()));
+
+		if (StringUtils.isNotBlank(searchTaskDTO.getSortBy())) {
+
+			if ("ASC".equalsIgnoreCase(searchTaskDTO.getSortOrder())) {
+				query.with(new Sort(Sort.Direction.ASC, searchTaskDTO.getSortBy()));
+			} else {
+				query.with(new Sort(Sort.Direction.DESC, searchTaskDTO.getSortBy()));
+			}
+
+		}
+		return mongoOperations.find(query, Task.class);
 	}
 
 }
