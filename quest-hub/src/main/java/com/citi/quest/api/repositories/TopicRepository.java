@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Topic;
 
 import io.swagger.annotations.Api;
@@ -20,7 +19,7 @@ public interface TopicRepository extends MongoRepository<Topic, Long> {
 	List<Topic> findAll();
 
 	@ApiOperation("Find all suggested skills for a topic")
-	List<Skill> findSkillsById(String topicId);
+	List<Topic> findSkillsById(@Param("topicId") String topicId);
 
 	/*
 	 * @ApiOperation("Find topics having search text") List<Topic>

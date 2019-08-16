@@ -14,8 +14,6 @@ public class Task extends AbstractDocument {
 	@Transient
     public static final String SEQUENCE_NAME = "task_sequence";
 	
-	Long taskId;
-
 	String taskName;
 
 	Long taskTopicId;
@@ -35,14 +33,6 @@ public class Task extends AbstractDocument {
 	List<Question> screeningQuestions;
 
 	List<Skill> skills;
-
-	public Long getTaskId() {
-		return taskId;
-	}
-
-	public void setTaskId(Long taskId) {
-		this.taskId = taskId;
-	}
 
 	public String getTaskName() {
 		return taskName;

@@ -4,7 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@Document
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Topic extends AbstractDocument{
 	
 	private String topicName;
