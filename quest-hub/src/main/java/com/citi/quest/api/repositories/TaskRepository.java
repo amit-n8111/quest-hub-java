@@ -6,7 +6,10 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.dtos.TaskDTO;
 
+import io.swagger.annotations.Api;
+
 @RepositoryRestResource
+@Api(tags = "questHub-Tasks APIs")
 public interface TaskRepository extends MongoRepository<Task, Long>{
 
 	/*

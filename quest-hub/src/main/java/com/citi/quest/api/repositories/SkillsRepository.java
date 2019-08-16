@@ -10,7 +10,7 @@ import com.citi.quest.api.domain.Skill;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(tags = "QuestHub APIS for Skills related operations")
+@Api(tags = "questHub-Skills APIs")
 @RepositoryRestResource
 public interface SkillsRepository extends MongoRepository<Skill, Long> {
 
