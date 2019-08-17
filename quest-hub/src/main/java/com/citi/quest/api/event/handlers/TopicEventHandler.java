@@ -6,6 +6,7 @@ package com.citi.quest.api.event.handlers;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
@@ -38,9 +39,12 @@ public class TopicEventHandler {
 	
 	@HandleAfterSave
 	public void handleTopicSave(Topic topic) {
+		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
-		Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
-		Long maxId = maxSkill.getId();
+		if(CollectionUtils.isNotEmpty(existingSkills)) {
+			Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
+			maxId = maxSkill.getId();
+		}
 		for(Skill skill : topic.getSkills()) {
 			if(skill.getId()<=0 || skill.getId() == null) {
 				maxId = maxId +1;
@@ -52,9 +56,12 @@ public class TopicEventHandler {
 	
 	@HandleAfterCreate
 	public void handleTopicCreate(Topic topic) {
+		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
-		Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
-		Long maxId = maxSkill.getId();
+		if(CollectionUtils.isNotEmpty(existingSkills)) {
+			Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
+			maxId = maxSkill.getId();
+		}
 		for(Skill skill : topic.getSkills()) {
 			if(skill.getId()<=0 || skill.getId() == null) {
 				maxId = maxId +1;
@@ -66,20 +73,28 @@ public class TopicEventHandler {
 	
 	@HandleBeforeSave
 	public void handleTopicSaveWithoutId(Topic topic) {
+		Long maxId = 0L;
 		if (topic.getId() <= 0 || topic.getId() == null) {
 			List<Topic> topics = topicRepository.findAll();
-			Topic max = topics.stream().max(Comparator.comparing(Topic::getId)).get();
-			topic.setId(max.getId() + 1);
+			if(CollectionUtils.isNotEmpty(topics)) {
+				Topic max = topics.stream().max(Comparator.comparing(Topic::getId)).get();
+				maxId=max.getId();
+			}
+			topic.setId(maxId + 1);
 		}
 		topicRepository.save(topic);
 	}
 	
 	@HandleBeforeCreate
 	public void handleTopicCreateWithoutId(Topic topic) {
-		if(topic.getId()<=0 || topic.getId()==null) {
+		Long maxId = 0L;
+		if (topic.getId() <= 0 || topic.getId() == null) {
 			List<Topic> topics = topicRepository.findAll();
-			Topic max = topics.stream().max(Comparator.comparing(Topic::getId)).get();
-			topic.setId(max.getId()+1);
+			if(CollectionUtils.isNotEmpty(topics)) {
+				Topic max = topics.stream().max(Comparator.comparing(Topic::getId)).get();
+				maxId=max.getId();
+			}
+			topic.setId(maxId + 1);
 		}
 		topicRepository.save(topic);
 	}

@@ -3,17 +3,15 @@ package com.citi.quest.api.domain;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.citi.quest.api.enums.TaskType;
 
 @Document
-public class Task extends AbstractDocument {
-
-	@Transient
-    public static final String SEQUENCE_NAME = "task_sequence";
+public class Task  {
 	
+	Long taskId;
+
 	String taskName;
 
 	Long taskTopicId;
@@ -33,6 +31,14 @@ public class Task extends AbstractDocument {
 	List<Question> screeningQuestions;
 
 	List<Skill> skills;
+
+	public Long getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
+	}
 
 	public String getTaskName() {
 		return taskName;

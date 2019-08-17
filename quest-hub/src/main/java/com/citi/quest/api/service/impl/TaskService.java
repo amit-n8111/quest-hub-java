@@ -41,8 +41,7 @@ public class TaskService {
 	private Task updateTaskInfo(TaskDTO taskDto) {
 		Task task = new Task();
 
-		task.setId(taskDto.getTaskId());
-		task.setId(taskDto.getTaskId());
+		task.setTaskId(taskDto.getTaskId());
 		task.setTaskName(taskDto.getTaskName());
 		task.setTaskStatusId(taskDto.getTaskStatusId());
 		task.setTaskDescription(taskDto.getTaskDescription());

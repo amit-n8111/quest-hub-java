@@ -3,6 +3,7 @@ package com.citi.quest.api.event.handlers;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleAfterSave;
@@ -33,12 +34,15 @@ public class TaskEventHandler {
 	
 	@HandleAfterSave
 	public void handleSkillsSave(Task task) {
+		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
-		Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
-		Long maxId = maxSkill.getId();
-		for(Skill skill : task.getSkills()) {
-			if(skill.getId()<=0 || skill.getId() == null) {
-				maxId = maxId +1;
+		if (CollectionUtils.isNotEmpty(existingSkills)) {
+			Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
+			maxId = maxSkill.getId();
+		}
+		for (Skill skill : task.getSkills()) {
+			if (skill.getId() <= 0 || skill.getId() == null) {
+				maxId = maxId + 1;
 				skill.setId(maxId);
 				skillRepository.save(skill);
 			}
@@ -47,12 +51,15 @@ public class TaskEventHandler {
 	
 	@HandleAfterCreate
 	public void handleSkillsCreate(Task task) {
+		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
-		Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
-		Long maxId = maxSkill.getId();
-		for(Skill skill : task.getSkills()) {
-			if(skill.getId()<=0 || skill.getId() == null) {
-				maxId = maxId +1;
+		if (CollectionUtils.isNotEmpty(existingSkills)) {
+			Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
+			maxId = maxSkill.getId();
+		}
+		for (Skill skill : task.getSkills()) {
+			if (skill.getId() <= 0 || skill.getId() == null) {
+				maxId = maxId + 1;
 				skill.setId(maxId);
 				skillRepository.save(skill);
 			}
@@ -61,9 +68,12 @@ public class TaskEventHandler {
 	
 	@HandleAfterSave
 	public void handleScreeningQuestionsSave(Task task) {
+		Long maxId = 0L;
 		List<Question> existingQues = questionsRepository.findAll();
-		Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
-		Long maxId = maxSkill.getId();
+		if(CollectionUtils.isNotEmpty(existingQues)) {
+			Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
+			maxId = maxSkill.getId();
+		}
 		for(Question question : task.getScreeningQuestions()) {
 			if(question.getId()<=0 || question.getId() == null) {
 				maxId = maxId +1;
@@ -75,9 +85,12 @@ public class TaskEventHandler {
 	
 	@HandleAfterCreate
 	public void handleScreeningQuestionsCreate(Task task) {
+		Long maxId = 0L;
 		List<Question> existingQues = questionsRepository.findAll();
-		Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
-		Long maxId = maxSkill.getId();
+		if(CollectionUtils.isNotEmpty(existingQues)) {
+			Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
+			maxId = maxSkill.getId();
+		}
 		for(Question question : task.getScreeningQuestions()) {
 			if(question.getId()<=0 || question.getId() == null) {
 				maxId = maxId +1;
@@ -89,20 +102,28 @@ public class TaskEventHandler {
 	
 	@HandleBeforeSave
 	public void handleTaskSaveWithoutId(Task task) {
-		if (task.getId() <= 0 || task.getId() == null) {
+		Long maxId = 0L;
+		if (task.getTaskId() <= 0 || task.getTaskId() == null) {
 			List<Task> tasks = taskRepository.findAll();
-			Task max = tasks.stream().max(Comparator.comparing(Task::getId)).get();
-			task.setId(max.getId() + 1);
+			if (CollectionUtils.isNotEmpty(tasks)) {
+				Task max = tasks.stream().max(Comparator.comparing(Task::getTaskId)).get();
+				maxId = max.getTaskId();
+			}
+			task.setTaskId(maxId + 1);
 		}
 		taskRepository.save(task);
 	}
 	
 	@HandleBeforeCreate
 	public void handleTaskCreateWithoutId(Task task) {
-		if (task.getId() <= 0 || task.getId() == null) {
+		Long maxId = 0L;
+		if (task.getTaskId() <= 0 || task.getTaskId() == null) {
 			List<Task> tasks = taskRepository.findAll();
-			Task max = tasks.stream().max(Comparator.comparing(Task::getId)).get();
-			task.setId(max.getId() + 1);
+			if (CollectionUtils.isNotEmpty(tasks)) {
+				Task max = tasks.stream().max(Comparator.comparing(Task::getTaskId)).get();
+				maxId = max.getTaskId();
+			}
+			task.setTaskId(maxId + 1);
 		}
 		taskRepository.save(task);
 	}
