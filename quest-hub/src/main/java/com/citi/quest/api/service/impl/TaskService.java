@@ -1,5 +1,9 @@
 package com.citi.quest.api.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +17,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.citi.quest.api.domain.Application;
 import com.citi.quest.api.domain.Task;
+import com.citi.quest.api.domain.UserInfo;
+import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
+import com.citi.quest.api.event.handlers.ApplicationEventHandler;
+import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.TaskRepository;
+import com.citi.quest.api.repositories.UserInfoRepository;
 
 @Service
 @Transactional
@@ -24,10 +34,19 @@ public class TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
-
+	
+	@Autowired
+	ApplicationRepository applicationRepository;
+	
+	@Autowired
+	UserInfoRepository userRepository;
+	
 	@Autowired
 	MongoOperations mongoOperations;
 
+	@Autowired
+	ApplicationEventHandler applicationHandler;
+	
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
 
@@ -92,6 +111,23 @@ public class TaskService {
 
 		}
 		return mongoOperations.find(query, Task.class);
+	}
+
+	public String applyTask(String user, String taskId, ApplicationDTO applicationDTO) {
+		Application application = new Application();
+		UserInfo userInfo = userRepository.findBySoeId(user);
+		application.setUser(userInfo);
+		application.setCommentsOrNotes(applicationDTO.getCommentsOrNotes());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEEE MMMMM yyyy HH:mm:ss.SSSZ");
+		LocalDateTime startdateTime = LocalDateTime.parse(applicationDTO.getAvailableDateRange().get(0), formatter);
+		LocalDateTime enddateTime = LocalDateTime.parse(applicationDTO.getAvailableDateRange().get(1), formatter);
+		List<LocalDateTime> times = new ArrayList<LocalDateTime>();
+		times.add(startdateTime);
+		times.add(enddateTime);
+		application.setAvailableDateRange(times);
+		application.setTask(taskRepository.findOne(Long.parseLong(taskId)));
+		applicationHandler.handleApplicationCreateWithoutId(application);
+		return "Task Application Sent";
 	}
 
 }

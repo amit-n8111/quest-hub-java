@@ -1,9 +1,12 @@
 package com.citi.quest.api.dtos;
 
+import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.enums.ExpertiseLevel;
 
 public class SkillDetailsDTO {
 
+	Skill skill;
+	
 	ExpertiseLevel level;
 	
 	Integer yearsOfExperience;

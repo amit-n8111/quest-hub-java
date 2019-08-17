@@ -1,33 +1,24 @@
 package com.citi.quest.api.domain;
 
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.citi.quest.api.dtos.QuestionDTO;
 
 @Document
 public class Application extends AbstractDocument{
 
-	String applicationId;
-	
 	UserInfo user;
 	
 	Task task;
 	
-	Map<Question, String> response;
-
-	/**
-	 * @return the applicationId
-	 */
-	public String getApplicationId() {
-		return applicationId;
-	}
-
-	/**
-	 * @param applicationId the applicationId to set
-	 */
-	public void setApplicationId(String applicationId) {
-		this.applicationId = applicationId;
-	}
+	QuestionDTO screeningQuestions;
+	
+	List<LocalDateTime> availableDateRange;
+	
+	String commentsOrNotes;
 
 	/**
 	 * @return the user
@@ -57,17 +48,29 @@ public class Application extends AbstractDocument{
 		this.task = task;
 	}
 
-	/**
-	 * @return the response
-	 */
-	public Map<Question, String> getResponse() {
-		return response;
+	public QuestionDTO getScreeningQuestions() {
+		return screeningQuestions;
 	}
 
-	/**
-	 * @param response the response to set
-	 */
-	public void setResponse(Map<Question, String> response) {
-		this.response = response;
+	public void setScreeningQuestions(QuestionDTO screeningQuestions) {
+		this.screeningQuestions = screeningQuestions;
 	}
+
+	public List<LocalDateTime> getAvailableDateRange() {
+		return availableDateRange;
+	}
+
+	public void setAvailableDateRange(List<LocalDateTime> availableDateRange) {
+		this.availableDateRange = availableDateRange;
+	}
+
+	public String getCommentsOrNotes() {
+		return commentsOrNotes;
+	}
+
+	public void setCommentsOrNotes(String commentsOrNotes) {
+		this.commentsOrNotes = commentsOrNotes;
+	}
+
+
 }

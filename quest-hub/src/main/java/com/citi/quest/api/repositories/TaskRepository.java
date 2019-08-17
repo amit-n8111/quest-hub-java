@@ -15,7 +15,7 @@ public interface TaskRepository extends MongoRepository<Task, Long>{
 	/*
 	 * @ApiOperation("Find tasks in draft status") List<Task> findAll();
 	 */
-	TaskDTO findTaskById(Long id);
+	TaskDTO findTaskByTaskId(Long taskId);
 	
 	//List<Task> searchTasks(SearchTaskDTO searchTask){
 		

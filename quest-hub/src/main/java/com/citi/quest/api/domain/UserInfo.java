@@ -1,8 +1,6 @@
 package com.citi.quest.api.domain;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,23 +12,21 @@ public class UserInfo extends AbstractDocument {
 
 	String soeId;
 
-	String firstName;
-
-	String lastName;
+	String name;
+	
+	String location;
 
 	String teamName;
 
 	BusinessUnit buName;
 
-	Map<Skill, SkillDetailsDTO> skills;
+	List<SkillDetailsDTO> skillDetails;
 
 	List<Topic> topicsSubscribed;
 
 	String managerSoeId;
 
 	Double rating;
-
-	Map<Date, Integer> availability = null;
 
 
 	/**
@@ -47,33 +43,6 @@ public class UserInfo extends AbstractDocument {
 		this.soeId = soeId;
 	}
 
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
-	}
-
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
 
 	/**
 	 * @return the teamName
@@ -103,20 +72,6 @@ public class UserInfo extends AbstractDocument {
 		this.buName = buName;
 	}
 
-
-	/**
-	 * @return the skills
-	 */
-	public Map<Skill, SkillDetailsDTO> getSkills() {
-		return skills;
-	}
-
-	/**
-	 * @param skills the skills to set
-	 */
-	public void setSkills(Map<Skill, SkillDetailsDTO> skills) {
-		this.skills = skills;
-	}
 
 	/**
 	 * @return the topicsSubscribed
@@ -158,20 +113,6 @@ public class UserInfo extends AbstractDocument {
 	 */
 	public void setRating(Double rating) {
 		this.rating = rating;
-	}
-
-	/**
-	 * @return the availability
-	 */
-	public Map<Date, Integer> getAvailability() {
-		return availability;
-	}
-
-	/**
-	 * @param availability the availability to set
-	 */
-	public void setAvailability(Map<Date, Integer> availability) {
-		this.availability = availability;
 	}
 
 }
