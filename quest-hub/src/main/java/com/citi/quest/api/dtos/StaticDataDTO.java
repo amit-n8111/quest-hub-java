@@ -23,10 +23,8 @@ public class StaticDataDTO {
 			eph[i] = new EnumPlaceHolder();
 			eph[i].setId(status.getId());
 			eph[i].setName(status.getStatus());
-			System.out.println(eph[i]);
 			i++;
 		}
-		System.out.println(eph);
 		return eph;
 	}
 
@@ -37,10 +35,8 @@ public class StaticDataDTO {
 			eph[i] = new EnumPlaceHolder();
 			eph[i].setId(status.getId());
 			eph[i].setName(status.getRewardType());
-			System.out.println(eph[i]);
 			i++;
 		}
-		System.out.println(eph);
 		return eph;
 	}
 
@@ -51,10 +47,8 @@ public class StaticDataDTO {
 			eph[i] = new EnumPlaceHolder();
 			eph[i].setId(status.getId());
 			eph[i].setName(status.getTypeOfTask());
-			System.out.println(eph[i]);
 			i++;
 		}
-		System.out.println(eph);
 		return eph;
 	}
 
