@@ -1,5 +1,6 @@
 package com.citi.quest.api.dtos;
 
+import com.citi.quest.api.domain.EnumPlaceHolder;
 import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.enums.RewardType;
 import com.citi.quest.api.enums.TaskStatus;
@@ -7,35 +8,77 @@ import com.citi.quest.api.enums.TaskType;
 
 public class StaticDataDTO {
 
-	TaskStatus[] taskStatus = TaskStatus.values();
+	EnumPlaceHolder[] taskStatus = getStatusValues(TaskStatus.values());
 
-	TaskType[] taskType = TaskType.values();
+	EnumPlaceHolder[] taskType = getTaskValues(TaskType.values());
 
-	RewardType[] rewardType = RewardType.values();
+	EnumPlaceHolder[] rewardType = getRewardValues(RewardType.values());
 
 	Topic[] topic;
 
-	public TaskStatus[] getTaskStatus() {
+	private EnumPlaceHolder[] getStatusValues(TaskStatus[] values) {
+		EnumPlaceHolder[] eph = new EnumPlaceHolder[values.length];
+		int i = 0;
+		for (TaskStatus status : values) {
+			eph[i] = new EnumPlaceHolder();
+			eph[i].setId(status.getId());
+			eph[i].setName(status.getStatus());
+			System.out.println(eph[i]);
+			i++;
+		}
+		System.out.println(eph);
+		return eph;
+	}
+
+	private EnumPlaceHolder[] getRewardValues(RewardType[] values) {
+		EnumPlaceHolder[] eph = new EnumPlaceHolder[values.length];
+		int i = 0;
+		for (RewardType status : values) {
+			eph[i] = new EnumPlaceHolder();
+			eph[i].setId(status.getId());
+			eph[i].setName(status.getRewardType());
+			System.out.println(eph[i]);
+			i++;
+		}
+		System.out.println(eph);
+		return eph;
+	}
+
+	private EnumPlaceHolder[] getTaskValues(TaskType[] values) {
+		EnumPlaceHolder[] eph = new EnumPlaceHolder[values.length];
+		int i = 0;
+		for (TaskType status : values) {
+			eph[i] = new EnumPlaceHolder();
+			eph[i].setId(status.getId());
+			eph[i].setName(status.getTypeOfTask());
+			System.out.println(eph[i]);
+			i++;
+		}
+		System.out.println(eph);
+		return eph;
+	}
+
+	public EnumPlaceHolder[] getTaskStatus() {
 		return taskStatus;
 	}
 
-	public void setTaskStatus(TaskStatus[] taskStatus) {
+	public void setTaskStatus(EnumPlaceHolder[] taskStatus) {
 		this.taskStatus = taskStatus;
 	}
 
-	public TaskType[] getTaskType() {
+	public EnumPlaceHolder[] getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskType[] taskType) {
+	public void setTaskType(EnumPlaceHolder[] taskType) {
 		this.taskType = taskType;
 	}
 
-	public RewardType[] getRewardType() {
+	public EnumPlaceHolder[] getRewardType() {
 		return rewardType;
 	}
 
-	public void setRewardType(RewardType[] rewardType) {
+	public void setRewardType(EnumPlaceHolder[] rewardType) {
 		this.rewardType = rewardType;
 	}
 
@@ -47,5 +90,4 @@ public class StaticDataDTO {
 		this.topic = topic;
 	}
 
-	
 }
