@@ -1,12 +1,10 @@
 package com.citi.quest.api.service.impl;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +41,6 @@ public class TaskService {
 	
 	@Autowired
 	MongoOperations mongoOperations;
-
-	@Autowired
-	ApplicationEventHandler applicationHandler;
 	
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
@@ -118,15 +113,19 @@ public class TaskService {
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		application.setUser(userInfo);
 		application.setCommentsOrNotes(applicationDTO.getCommentsOrNotes());
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEEE MMMMM yyyy HH:mm:ss.SSSZ");
-		LocalDateTime startdateTime = LocalDateTime.parse(applicationDTO.getAvailableDateRange().get(0), formatter);
-		LocalDateTime enddateTime = LocalDateTime.parse(applicationDTO.getAvailableDateRange().get(1), formatter);
-		List<LocalDateTime> times = new ArrayList<LocalDateTime>();
-		times.add(startdateTime);
-		times.add(enddateTime);
-		application.setAvailableDateRange(times);
+		application.setStartDate(applicationDTO.getStartDate());
+		application.setEndDate(applicationDTO.getEndDate());
 		application.setTask(taskRepository.findOne(Long.parseLong(taskId)));
-		applicationHandler.handleApplicationCreateWithoutId(application);
+		Long maxId = 0L;
+		if (null == application.getId() || application.getId() <= 0) {
+			List<Application> applications = applicationRepository.findAll();
+			if(CollectionUtils.isNotEmpty(applications)) {
+				Application max = applications.stream().max(Comparator.comparing(Application::getId)).get();
+				maxId=max.getId();
+			}
+			application.setId(maxId + 1);
+		}
+		applicationRepository.save(application);
 		return "Task Application Sent";
 	}
 

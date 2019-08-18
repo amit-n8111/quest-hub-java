@@ -1,7 +1,6 @@
 package com.citi.quest.api.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,7 +15,9 @@ public class Application extends AbstractDocument{
 	
 	QuestionDTO screeningQuestions;
 	
-	List<LocalDateTime> availableDateRange;
+	LocalDateTime startDate;
+	
+	LocalDateTime endDate;
 	
 	String commentsOrNotes;
 
@@ -56,12 +57,20 @@ public class Application extends AbstractDocument{
 		this.screeningQuestions = screeningQuestions;
 	}
 
-	public List<LocalDateTime> getAvailableDateRange() {
-		return availableDateRange;
+	public LocalDateTime getStartDate() {
+		return startDate;
 	}
 
-	public void setAvailableDateRange(List<LocalDateTime> availableDateRange) {
-		this.availableDateRange = availableDateRange;
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getCommentsOrNotes() {

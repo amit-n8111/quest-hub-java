@@ -47,7 +47,7 @@ public class TaskController {
 	}
 	
 	@PostMapping(value = "apply/{taskId}")
-	public String applyTask(@RequestBody ApplicationDTO applicationDTO, @RequestParam(value="taskId") String taskId,HttpRequest request) {
+	public String applyTask(@RequestBody ApplicationDTO applicationDTO, @RequestParam(value="taskId") String taskId) {
 		String user ="AN58526";
 		return taskPostService.applyTask(user, taskId, applicationDTO);
 	}

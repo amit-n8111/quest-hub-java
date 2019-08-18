@@ -1,19 +1,29 @@
 package com.citi.quest.api.dtos;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ApplicationDTO {
 
-	List<String> availableDateRange;
+	LocalDateTime startDate;
+	LocalDateTime endDate;
 	String commentsOrNotes;
 	List<QuestionDTO> screeningQuestions;
 
-	public List<String> getAvailableDateRange() {
-		return availableDateRange;
+	public LocalDateTime getStartDate() {
+		return startDate;
 	}
 
-	public void setAvailableDateRange(List<String> availableDateRange) {
-		this.availableDateRange = availableDateRange;
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 	public String getCommentsOrNotes() {

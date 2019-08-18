@@ -37,7 +37,7 @@ public class ApplicationEventHandler {
 	@HandleBeforeCreate
 	public void handleApplicationCreateWithoutId(Application application) {
 		Long maxId = 0L;
-		if (application.getId() <= 0 || application.getId() == null) {
+		if (null == application.getId() || application.getId() <= 0) {
 			List<Application> applications = applicationRepository.findAll();
 			if(CollectionUtils.isNotEmpty(applications)) {
 				Application max = applications.stream().max(Comparator.comparing(Application::getId)).get();

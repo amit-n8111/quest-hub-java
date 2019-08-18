@@ -10,5 +10,7 @@ import io.swagger.annotations.Api;
 @Api(tags = "questHub-Application APIs")
 @RepositoryRestResource
 public interface ApplicationRepository extends MongoRepository<Application, Long>{
+	
+	
 
 }
