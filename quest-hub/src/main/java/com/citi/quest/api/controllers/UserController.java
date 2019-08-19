@@ -1,12 +1,17 @@
 package com.citi.quest.api.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.UserInfo;
+import com.citi.quest.api.dtos.SearchUserDTO;
 import com.citi.quest.api.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -28,6 +33,11 @@ public class UserController {
 	@GetMapping(value = "{userId}")
 	public UserInfo getUserInfo( @RequestParam("userId") String userId) {
 		return userService.getUserInfo(userId);
+	}
+	
+	@PostMapping(value = "")
+	public List<UserInfo> getAllUserInfo(@RequestBody SearchUserDTO searchUserDTO) {
+		return userService.getAllUserInfo(searchUserDTO);
 	}
 
 }
