@@ -32,11 +32,11 @@ public interface UserInfoRepository extends MongoRepository<UserInfo, Long> {
 	@ApiOperation("Get all earlier tasks completed by SoeId")
 	List<Task> findEarlierTasksBySoeId(String soeId);
 
-	@ApiOperation("Get Users Using cusom ")
+	/*@ApiOperation("Get Users Using cusom ")
 	List<UserInfo> findUserWithCusomParams(	Integer pageNumber, 
 												Integer pageSize, 
 												String order, 
 												String search,
-												Long taskTopicId, Long skillId);
+												Long taskTopicId, Long skillId);*/
 
 }
