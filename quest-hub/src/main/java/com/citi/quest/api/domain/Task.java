@@ -10,8 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.citi.quest.api.enums.TaskType;
 
 @Document
-public class Task  implements Serializable{
-	
+public class Task implements Serializable {
+
+	private static final long serialVersionUID = 2997245778895520149L;
+
 	@Id
 	Long taskId;
 
@@ -19,7 +21,7 @@ public class Task  implements Serializable{
 
 	Long taskTopicId;
 
-	Long taskStatusId;
+	Integer taskStatusId;
 
 	String taskDescription;
 
@@ -34,6 +36,40 @@ public class Task  implements Serializable{
 	List<Question> screeningQuestions;
 
 	List<Skill> skills;
+
+	String taskAssignedTo;
+
+	String taskFeedBack;
+
+	Integer manHoursNeeded;
+
+	Integer rewardTypeId;
+
+	Integer rating;
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
+
+	public Integer getManHoursNeeded() {
+		return manHoursNeeded;
+	}
+
+	public void setManHoursNeeded(Integer manHoursNeeded) {
+		this.manHoursNeeded = manHoursNeeded;
+	}
+
+	public Integer getRewardTypeId() {
+		return rewardTypeId;
+	}
+
+	public void setRewardTypeId(Integer rewardTypeId) {
+		this.rewardTypeId = rewardTypeId;
+	}
 
 	public Long getTaskId() {
 		return taskId;
@@ -59,11 +95,11 @@ public class Task  implements Serializable{
 		this.taskTopicId = taskTopicId;
 	}
 
-	public Long getTaskStatusId() {
+	public Integer getTaskStatusId() {
 		return taskStatusId;
 	}
 
-	public void setTaskStatusId(Long taskStatusId) {
+	public void setTaskStatusId(Integer taskStatusId) {
 		this.taskStatusId = taskStatusId;
 	}
 
@@ -121,6 +157,30 @@ public class Task  implements Serializable{
 
 	public void setSkills(List<Skill> skills) {
 		this.skills = skills;
+	}
+
+	public Long getTaskTopicId() {
+		return taskTopicId;
+	}
+
+	public void setTaskTopicId(Long taskTopicId) {
+		this.taskTopicId = taskTopicId;
+	}
+
+	public String getTaskAssignedTo() {
+		return taskAssignedTo;
+	}
+
+	public void setTaskAssignedTo(String taskAssignedTo) {
+		this.taskAssignedTo = taskAssignedTo;
+	}
+
+	public String getTaskFeedBack() {
+		return taskFeedBack;
+	}
+
+	public void setTaskFeedBack(String taskFeedBack) {
+		this.taskFeedBack = taskFeedBack;
 	}
 
 }

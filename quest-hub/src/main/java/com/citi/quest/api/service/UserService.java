@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
+import com.citi.quest.api.dtos.SearchUserResponseDTO;
 
 public interface UserService {
 
@@ -11,6 +12,6 @@ public interface UserService {
 	
 	UserInfo getUserInfo(String userId);
 
-	List<UserInfo> getAllUserInfo(SearchUserDTO searchUserDTO);
+	List<SearchUserResponseDTO> searchUserInfo(SearchUserDTO searchUserDTO);
 
 }

@@ -69,7 +69,7 @@ public class TaskService {
 		task.setTaskCreatedBy(taskDto.getTaskCreatedBy());
 		task.setTaskCreateDate(new Date());
 
-		task.setTaskStatusId(1L);
+		task.setTaskStatusId(1);
 
 		return task;
 	}

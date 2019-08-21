@@ -15,7 +15,7 @@ public class TaskDTO {
 
 	Long taskTopicId;
 
-	Long taskStatusId;
+	Integer taskStatusId;
 
 	String taskDescription;
 
@@ -55,11 +55,11 @@ public class TaskDTO {
 		this.taskTopicId = taskTopicId;
 	}
 
-	public Long getTaskStatusId() {
+	public Integer getTaskStatusId() {
 		return taskStatusId;
 	}
 
-	public void setTaskStatusId(Long taskStatusId) {
+	public void setTaskStatusId(Integer taskStatusId) {
 		this.taskStatusId = taskStatusId;
 	}
 

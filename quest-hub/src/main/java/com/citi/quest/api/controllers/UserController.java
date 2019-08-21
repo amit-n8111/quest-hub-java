@@ -13,32 +13,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
+import com.citi.quest.api.dtos.SearchUserResponseDTO;
 import com.citi.quest.api.service.UserService;
 
 import io.swagger.annotations.Api;
 
 @RestController
 @Api(tags = "questHub-User APIs")
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 public class UserController {
 
 	@Autowired
 	UserService userService;
 
-	@GetMapping(value = "markFavorite/{taskId}")
+	@GetMapping(value = "user/markFavorite/{taskId}")
 	public Boolean markAsFavorite(@PathVariable Long taskId) {
 		String user = "AN58526";
 		return userService.markTaskAsFavorite(taskId, user);
 	}
 
-	@GetMapping(value = "{userId}")
+	@GetMapping(value = "user/{userId}")
 	public UserInfo getUserInfo(@RequestParam("userId") String userId) {
 		return userService.getUserInfo(userId);
 	}
 
-	@PostMapping(value = "")
-	public List<UserInfo> getAllUserInfo(@RequestBody SearchUserDTO searchUserDTO) {
-		return userService.getAllUserInfo(searchUserDTO);
+	@PostMapping(value = "users")
+	public List<SearchUserResponseDTO> searchUserInfo(@RequestBody SearchUserDTO searchUserDTO) {
+		return userService.searchUserInfo(searchUserDTO);
+	}
+
+	@PostMapping(value = "users/saveFromCollaborate")
+	public Boolean saveUserfromCollaborate(@RequestBody List<SearchUserDTO> searchUserDTO) {
+		//to be implemented...
+		return true;
 	}
 
 }
