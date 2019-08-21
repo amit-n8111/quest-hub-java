@@ -24,7 +24,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/sendMail")
-	public void  sendMail() {
+	public void sendMail() {
 		emailNotification.sendEmail();;
 	}
 }
