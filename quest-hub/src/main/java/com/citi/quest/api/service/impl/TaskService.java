@@ -21,7 +21,6 @@ import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
-import com.citi.quest.api.event.handlers.ApplicationEventHandler;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
@@ -32,16 +31,16 @@ public class TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
-	
+
 	@Autowired
 	ApplicationRepository applicationRepository;
-	
+
 	@Autowired
 	UserInfoRepository userRepository;
-	
+
 	@Autowired
 	MongoOperations mongoOperations;
-	
+
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
 
@@ -108,20 +107,20 @@ public class TaskService {
 		return mongoOperations.find(query, Task.class);
 	}
 
-	public String applyTask(String user, String taskId, ApplicationDTO applicationDTO) {
+	public String applyTask(String user, Long taskId, ApplicationDTO applicationDTO) {
 		Application application = new Application();
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		application.setUser(userInfo);
 		application.setCommentsOrNotes(applicationDTO.getCommentsOrNotes());
 		application.setStartDate(applicationDTO.getStartDate());
 		application.setEndDate(applicationDTO.getEndDate());
-		application.setTask(taskRepository.findOne(Long.parseLong(taskId)));
+		application.setTask(taskRepository.findOne(taskId));
 		Long maxId = 0L;
 		if (null == application.getId() || application.getId() <= 0) {
 			List<Application> applications = applicationRepository.findAll();
-			if(CollectionUtils.isNotEmpty(applications)) {
+			if (CollectionUtils.isNotEmpty(applications)) {
 				Application max = applications.stream().max(Comparator.comparing(Application::getId)).get();
-				maxId=max.getId();
+				maxId = max.getId();
 			}
 			application.setId(maxId + 1);
 		}

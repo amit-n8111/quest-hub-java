@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,21 +21,21 @@ import io.swagger.annotations.Api;
 @Api(tags = "questHub-User APIs")
 @RequestMapping("/api/v1/user")
 public class UserController {
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@GetMapping(value = "markFavorite/{taskId}")
-	public Boolean markAsFavorite( @RequestParam("taskId") Long taskId) {
+	public Boolean markAsFavorite(@PathVariable Long taskId) {
 		String user = "AN58526";
 		return userService.markTaskAsFavorite(taskId, user);
 	}
-	
+
 	@GetMapping(value = "{userId}")
-	public UserInfo getUserInfo( @RequestParam("userId") String userId) {
+	public UserInfo getUserInfo(@RequestParam("userId") String userId) {
 		return userService.getUserInfo(userId);
 	}
-	
+
 	@PostMapping(value = "")
 	public List<UserInfo> getAllUserInfo(@RequestBody SearchUserDTO searchUserDTO) {
 		return userService.getAllUserInfo(searchUserDTO);
