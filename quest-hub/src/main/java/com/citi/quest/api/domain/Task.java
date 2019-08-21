@@ -1,15 +1,18 @@
 package com.citi.quest.api.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.citi.quest.api.enums.TaskType;
 
 @Document
-public class Task  {
+public class Task  implements Serializable{
 	
+	@Id
 	Long taskId;
 
 	String taskName;
