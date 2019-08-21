@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import com.citi.quest.api.domain.Sequence;
 
 /**
- * Service class responsible for generating unique sequence for insert
- * operations of an document.
+ * Service class responsible for generating unique sequence, in a thread safe manner,
+ * for insert operations.
  * 
  * @author Ashutosh Srivastav
  * @createdOn Aug 21, 2019
@@ -41,6 +41,8 @@ public class SequenceGenerator {
 
 	/**
 	 * Returns the next available sequence to be assigned for insert operations.
+	 * This operation is thread safe and guarantees that no duplicate sequences
+	 * are generated.
 	 * 
 	 * @param domainSequenceKey - a key uniquely representing a domain object
 	 * @return the next available sequence as <Long>
