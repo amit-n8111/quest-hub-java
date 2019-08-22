@@ -61,10 +61,10 @@ public class UserServiceImpl implements UserService {
 		Query query = new Query();
 
 		if (userSearchDTO.getTaskTopicId() != null) {
-			query.addCriteria(Criteria.where("taskTopicId").is(userSearchDTO.getTaskTopicId()));
+			query.addCriteria(Criteria.where("topicsSubscribed").elemMatch(Criteria.where("id").is(userSearchDTO.getTaskTopicId())));
 		}
 		if (userSearchDTO.getSkillId() != null) {
-			query.addCriteria(Criteria.where("skillId").is(userSearchDTO.getSkillId()));
+			query.addCriteria(Criteria.where("skillDetails").elemMatch(Criteria.where("id").is(userSearchDTO.getSkillId())));
 		}
 		if (StringUtils.isNotBlank(userSearchDTO.getSearch())) {
 			query.addCriteria(new Criteria().orOperator(
