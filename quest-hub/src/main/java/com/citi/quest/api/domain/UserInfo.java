@@ -2,14 +2,16 @@ package com.citi.quest.api.domain;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
 
 @Document
-public class UserInfo extends AbstractDocument {
-
+public class UserInfo{
+	
+	@Id
 	String soeId;
 
 	String name;

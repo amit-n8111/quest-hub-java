@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiParam;
 
 @RepositoryRestResource
 @Api(tags = "questHub-User APIs")
-public interface UserInfoRepository extends MongoRepository<UserInfo, Long> {
+public interface UserInfoRepository extends MongoRepository<UserInfo, String> {
 
 	@ApiOperation("Find user Information by soeId")
 	UserInfo findBySoeId(
