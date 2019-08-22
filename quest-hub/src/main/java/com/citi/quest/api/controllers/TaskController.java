@@ -17,6 +17,7 @@ import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
+import com.citi.quest.api.dtos.TaskResponseDTO;
 import com.citi.quest.api.service.impl.TaskService;
 
 import io.swagger.annotations.Api;
@@ -41,7 +42,7 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "tasks")
-	public List<Task> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
+	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
 		return taskPostService.searchTasks(searchTaskDTO);
 	}
 

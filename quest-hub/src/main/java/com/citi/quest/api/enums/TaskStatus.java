@@ -2,12 +2,12 @@ package com.citi.quest.api.enums;
 
 public enum TaskStatus {
 
-	DRAFT("draft",1), PUBLISHED("published",2), ASSIGNED("assigned",3),  IN_PROGRESS("in_progress",4), COMPLETED("completed",5);
+	DRAFT(1, "Draft"), PUBLISHED(2, "Published"), ASSIGNED(3,"Assigned"),  IN_PROGRESS(4, "In Progress"), COMPLETED(5, "Completed");
 	
-	private int id;
+	private Integer id;
 	private String taskStatus;
 	
-	private TaskStatus(String taskStatus,int id) {
+	private TaskStatus(Integer id, String taskStatus) {
 		this.id = id;
 		this.taskStatus = taskStatus;
 	}
@@ -16,7 +16,7 @@ public enum TaskStatus {
 		return taskStatus;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	

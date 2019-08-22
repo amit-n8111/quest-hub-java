@@ -2,10 +2,13 @@ package com.citi.quest.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.dtos.DashboardDTO;
+import com.citi.quest.api.dtos.EmailDTO;
 import com.citi.quest.api.notification.EmailNotification;
 
 import io.swagger.annotations.Api;
@@ -23,8 +26,8 @@ public class DashboardController {
 		return new DashboardDTO();
 	}
 	
-	@GetMapping("/sendMail")
-	public void sendMail() {
-		emailNotification.sendEmail();;
+	@PostMapping("/sendMail")
+	public void sendMail(@RequestBody EmailDTO emailDTO) {
+		emailNotification.sendEmail(emailDTO);
 	}
 }

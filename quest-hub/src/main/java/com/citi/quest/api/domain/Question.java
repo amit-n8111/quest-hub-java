@@ -1,5 +1,8 @@
 package com.citi.quest.api.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Question extends AbstractDocument {
 
 	String question;

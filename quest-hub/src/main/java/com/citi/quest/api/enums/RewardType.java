@@ -2,17 +2,17 @@ package com.citi.quest.api.enums;
 
 public enum RewardType {
 
-	GRATITUDE("gratitude", 1);
+	GRATITUDE(1, "gratitude");
 
-	private int id;
+	private Integer id;
 	private String rewardType;
 
-	private RewardType(String rewardType, int id) {
+	private RewardType(Integer id, String rewardType) {
 		this.id = id;
 		this.rewardType = rewardType;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
