@@ -30,6 +30,28 @@ public class TaskDTO {
 	List<Question> screeningQuestions;
 
 	List<Skill> skills;
+	
+	Integer manHoursNeeded;
+
+	Integer rewardTypeId;
+	
+	
+
+	public Integer getManHoursNeeded() {
+		return manHoursNeeded;
+	}
+
+	public void setManHoursNeeded(Integer manHoursNeeded) {
+		this.manHoursNeeded = manHoursNeeded;
+	}
+
+	public Integer getRewardTypeId() {
+		return rewardTypeId;
+	}
+
+	public void setRewardTypeId(Integer rewardTypeId) {
+		this.rewardTypeId = rewardTypeId;
+	}
 
 	public Long getTaskId() {
 		return taskId;

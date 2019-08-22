@@ -13,7 +13,9 @@ public class UserInfo extends AbstractDocument {
 	String soeId;
 
 	String name;
-	
+
+	String email;
+
 	String location;
 
 	String teamName;
@@ -28,6 +30,13 @@ public class UserInfo extends AbstractDocument {
 
 	Double rating;
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	/**
 	 * @return the soeId
@@ -37,12 +46,12 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param soeId the soeId to set
+	 * @param soeId
+	 *            the soeId to set
 	 */
 	public void setSoeId(String soeId) {
 		this.soeId = soeId;
 	}
-
 
 	/**
 	 * @return the teamName
@@ -52,7 +61,8 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param teamName the teamName to set
+	 * @param teamName
+	 *            the teamName to set
 	 */
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
@@ -66,12 +76,12 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param buName the buName to set
+	 * @param buName
+	 *            the buName to set
 	 */
 	public void setBuName(BusinessUnit buName) {
 		this.buName = buName;
 	}
-
 
 	/**
 	 * @return the topicsSubscribed
@@ -81,7 +91,8 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param topicsSubscribed the topicsSubscribed to set
+	 * @param topicsSubscribed
+	 *            the topicsSubscribed to set
 	 */
 	public void setTopicsSubscribed(List<Topic> topicsSubscribed) {
 		this.topicsSubscribed = topicsSubscribed;
@@ -95,7 +106,8 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param managerSoeId the managerSoeId to set
+	 * @param managerSoeId
+	 *            the managerSoeId to set
 	 */
 	public void setManagerSoeId(String managerSoeId) {
 		this.managerSoeId = managerSoeId;
@@ -109,7 +121,8 @@ public class UserInfo extends AbstractDocument {
 	}
 
 	/**
-	 * @param rating the rating to set
+	 * @param rating
+	 *            the rating to set
 	 */
 	public void setRating(Double rating) {
 		this.rating = rating;
@@ -139,5 +152,4 @@ public class UserInfo extends AbstractDocument {
 		this.skillDetails = skillDetails;
 	}
 
-	
 }
