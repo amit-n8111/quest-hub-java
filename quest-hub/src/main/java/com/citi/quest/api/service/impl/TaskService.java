@@ -107,7 +107,7 @@ public class TaskService {
 		return mongoOperations.find(query, Task.class);
 	}
 
-	public String applyTask(String user, Long taskId, ApplicationDTO applicationDTO) {
+	public Boolean applyTask(String user, Long taskId, ApplicationDTO applicationDTO) {
 		Application application = new Application();
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		application.setUser(userInfo);
@@ -125,7 +125,7 @@ public class TaskService {
 			application.setId(maxId + 1);
 		}
 		applicationRepository.save(application);
-		return "Task Application Sent";
+		return true;
 	}
 
 }
