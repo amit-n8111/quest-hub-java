@@ -31,7 +31,7 @@ public class Task implements Serializable {
 
 	Date taskCreateDate;
 
-	String taskCreatedBy;
+	String taskCreatedBy = "PD74847";
 
 	List<Question> screeningQuestions;
 

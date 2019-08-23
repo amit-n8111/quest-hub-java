@@ -124,39 +124,47 @@ public class TaskService {
 
 	private List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks) {
 		List<TaskResponseDTO> taskDTOs = new ArrayList<>();
-		tasks.forEach(task -> {
-			TaskResponseDTO taskDTO = new TaskResponseDTO();
-			taskDTO.setTaskCreatedBy(userRepository.findBySoeId(task.getTaskCreatedBy()));
-			taskDTO.setManHoursNeeded(task.getManHoursNeeded());
-			taskDTO.setMarkedAsFavorite(true);// TO DO
-			taskDTO.setNumberOfApplicationRecieved(1);// TO DO
-			taskDTO.setRewardTypeId(task.getRewardTypeId());
-			for (RewardType rewardType : RewardType.values()) {
-				if (rewardType.getId() == task.getRewardTypeId()) {
-					taskDTO.setRewardType(rewardType.getRewardType());
+		if (CollectionUtils.isNotEmpty(tasks)) {
+			for (Task task : tasks) {
+				TaskResponseDTO taskDTO = new TaskResponseDTO();
+				taskDTO.setTaskCreatedBy(userRepository.findBySoeId(task.getTaskCreatedBy()));
+				taskDTO.setManHoursNeeded(task.getManHoursNeeded());
+				taskDTO.setMarkedAsFavorite(true);// TO DO
+				taskDTO.setNumberOfApplicationRecieved(1);// TO DO
+				taskDTO.setRewardTypeId(task.getRewardTypeId());
+				for (RewardType rewardType : RewardType.values()) {
+					if (rewardType.getId() == task.getRewardTypeId()) {
+						taskDTO.setRewardType(rewardType.getRewardType());
+					}
 				}
-			}
-			taskDTO.setScreeningQuestions(task.getScreeningQuestions());
-			taskDTO.setTaskCreatedDate(task.getTaskCreateDate());
-			taskDTO.setTaskDescription(task.getTaskDescription());
-			taskDTO.setTaskDueDate(task.getTaskDueDate());
-			taskDTO.setTaskId(task.getTaskId());
-			taskDTO.setTaskName(task.getTaskName());
-			taskDTO.setTaskSkills(task.getSkills());
-			taskDTO.setTaskStatusId(task.getTaskStatusId());
-			for (TaskStatus status : TaskStatus.values()) {
-				if (status.getId() == task.getTaskStatusId()) {
-					taskDTO.setTaskStatusName(status.getStatus());
+				taskDTO.setScreeningQuestions(task.getScreeningQuestions());
+				taskDTO.setTaskCreatedDate(task.getTaskCreateDate());
+				taskDTO.setTaskDescription(task.getTaskDescription());
+				taskDTO.setTaskDueDate(task.getTaskDueDate());
+				taskDTO.setTaskId(task.getTaskId());
+				taskDTO.setTaskName(task.getTaskName());
+				taskDTO.setTaskSkills(task.getSkills());
+				taskDTO.setTaskStatusId(task.getTaskStatusId());
+				for (TaskStatus status : TaskStatus.values()) {
+					if (status.getId() == task.getTaskStatusId()) {
+						taskDTO.setTaskStatusName(status.getStatus());
+					}
 				}
-			}
-			taskDTO.setTaskTopicId(task.getTaskTopicId());
-			taskDTO.setTaskTopicName(topicRepository.findOne(task.getTaskTopicId()).getTopicName());
-			taskDTO.setTotalTasks(100);// TO DO
-			taskDTO.setTaskType(task.getTaskType().getTypeOfTask());
-			taskDTO.setTaskTypeName(task.getTaskType().getTypeOfTask());
-			taskDTOs.add(taskDTO);
+				taskDTO.setTaskTopicId(task.getTaskTopicId());
+				if (null != topicRepository.findOne(task.getTaskTopicId())) {
+					taskDTO.setTaskTopicName(topicRepository.findOne(task.getTaskTopicId()).getTopicName());
+				}
 
-		});
+				taskDTO.setTotalTasks(100);// TO DO
+				if (null != task.getTaskType()) {
+					taskDTO.setTaskType(task.getTaskType().getTypeOfTask());
+					taskDTO.setTaskTypeName(task.getTaskType().getTypeOfTask());
+				}
+
+				taskDTOs.add(taskDTO);
+
+			}
+		}
 
 		return taskDTOs;
 	}
