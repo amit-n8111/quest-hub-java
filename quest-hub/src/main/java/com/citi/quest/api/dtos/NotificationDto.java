@@ -1,9 +1,8 @@
 package com.citi.quest.api.dtos;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
 public class NotificationDto {
-
+	Long notId;
+	
 	Long taskId;
 	
 	String taskName;
@@ -13,6 +12,30 @@ public class NotificationDto {
 	String userName;
 	
 	Boolean isViewed = false;
+
+	public Long getNotId() {
+		return notId;
+	}
+
+	public void setNotId(Long notId) {
+		this.notId = notId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public Long getTaskId() {
 		return taskId;
@@ -28,14 +51,6 @@ public class NotificationDto {
 
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
-	}
-
-	public String getInterestedUser() {
-		return userName;
-	}
-
-	public void setInterestedUser(String interestedUser) {
-		this.userName = interestedUser;
 	}
 
 	public Boolean getIsViewed() {
