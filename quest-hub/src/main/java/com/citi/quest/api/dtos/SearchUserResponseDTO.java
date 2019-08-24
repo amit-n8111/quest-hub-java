@@ -2,32 +2,41 @@ package com.citi.quest.api.dtos;
 
 import java.util.List;
 
+import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.enums.BusinessUnit;
 
 public class SearchUserResponseDTO {
-	
+
 	String soeId;
 
 	String name;
-	
+
+	String email;
+
+	String teamName;
+
 	String location;
-	
+
+	String managerSoeId;
+
 	BusinessUnit buName;
-	
+
 	Integer totalHoursWorked;
-	
+
 	Integer numberOfTasksCompleted;
-	
+
 	Double rating;
-	
+
 	Integer numberOfReviews;
-	
-	List<SkillDetailsDTO> skillDetails;
-	
+
+	List<Skill> skillDetails;
+
 	List<WorkHistoryAndFeedbackDTO> workHistoryAndFeedbackDTO;
-	
-	//availability
-	//userDescription
+
+	String userDescription;
+
+	// availability
+	// userDescription
 
 	public String getSoeId() {
 		return soeId;
@@ -93,11 +102,11 @@ public class SearchUserResponseDTO {
 		this.numberOfReviews = numberOfReviews;
 	}
 
-	public List<SkillDetailsDTO> getSkillDetails() {
+	public List<Skill> getSkillDetails() {
 		return skillDetails;
 	}
 
-	public void setSkillDetails(List<SkillDetailsDTO> skillDetails) {
+	public void setSkillDetails(List<Skill> skillDetails) {
 		this.skillDetails = skillDetails;
 	}
 
@@ -108,8 +117,37 @@ public class SearchUserResponseDTO {
 	public void setWorkHistoryAndFeedbackDTO(List<WorkHistoryAndFeedbackDTO> workHistoryAndFeedbackDTO) {
 		this.workHistoryAndFeedbackDTO = workHistoryAndFeedbackDTO;
 	}
-	
-	
-	
+
+	public String getUserDescription() {
+		return userDescription;
+	}
+
+	public void setUserDescription(String userDescription) {
+		this.userDescription = userDescription;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getTeamName() {
+		return teamName;
+	}
+
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+
+	public String getManagerSoeId() {
+		return managerSoeId;
+	}
+
+	public void setManagerSoeId(String managerSoeId) {
+		this.managerSoeId = managerSoeId;
+	}
 
 }

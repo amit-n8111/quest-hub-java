@@ -6,13 +6,13 @@ import com.citi.quest.api.enums.ExpertiseLevel;
 public class SkillDetailsDTO {
 
 	Skill skill;
-	
+
 	ExpertiseLevel level;
-	
+
 	Integer yearsOfExperience;
-	
+
 	String lastWorked;
-	
+
 	/**
 	 * @return the level
 	 */

@@ -61,10 +61,12 @@ public class UserServiceImpl implements UserService {
 		Query query = new Query();
 
 		if (userSearchDTO.getTaskTopicId() != null) {
-			query.addCriteria(Criteria.where("topicsSubscribed").elemMatch(Criteria.where("id").is(userSearchDTO.getTaskTopicId())));
+			query.addCriteria(Criteria.where("topicsSubscribed")
+					.elemMatch(Criteria.where("id").is(userSearchDTO.getTaskTopicId())));
 		}
 		if (userSearchDTO.getSkillId() != null) {
-			query.addCriteria(Criteria.where("skillDetails").elemMatch(Criteria.where("id").is(userSearchDTO.getSkillId())));
+			query.addCriteria(
+					Criteria.where("skillDetails").elemMatch(Criteria.where("id").is(userSearchDTO.getSkillId())));
 		}
 		if (StringUtils.isNotBlank(userSearchDTO.getSearch())) {
 			query.addCriteria(new Criteria().orOperator(
@@ -96,6 +98,10 @@ public class UserServiceImpl implements UserService {
 			searchUserResponseDTO.setBuName(user.getBuName());
 			searchUserResponseDTO.setRating(user.getRating());
 			searchUserResponseDTO.setSkillDetails(user.getSkillDetails());
+			searchUserResponseDTO.setManagerSoeId(user.getManagerSoeId());
+			searchUserResponseDTO.setEmail(user.getEmail());
+			searchUserResponseDTO.setTeamName(user.getTeamName());
+			searchUserResponseDTO.setUserDescription(user.getUserDescription());
 			Integer taskCompletedId = 5;
 			List<Task> tasks = taskRepository.findByTaskAssignedToAndTaskStatusId(user.getSoeId(), taskCompletedId);
 			WorkHistoryAndFeedbackDTO workHistoryAndFeedbackDTO = new WorkHistoryAndFeedbackDTO();

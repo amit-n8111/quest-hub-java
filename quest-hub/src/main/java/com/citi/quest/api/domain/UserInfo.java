@@ -5,14 +5,17 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
-public class UserInfo{
-	
+public class UserInfo {
+
 	@Id
 	String soeId;
+
+	@JsonProperty("userSoeId")
+	String userSoeId;
 
 	String name;
 
@@ -24,13 +27,15 @@ public class UserInfo{
 
 	BusinessUnit buName;
 
-	List<SkillDetailsDTO> skillDetails;
+	List<Skill> skillDetails;
 
 	List<Topic> topicsSubscribed;
 
 	String managerSoeId;
 
 	Double rating;
+
+	String userDescription;
 
 	public String getEmail() {
 		return email;
@@ -48,11 +53,14 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param soeId
-	 *            the soeId to set
+	 * @param soeId the soeId to set
 	 */
 	public void setSoeId(String soeId) {
 		this.soeId = soeId;
+	}
+
+	public String getUserSoeId() {
+		return soeId;
 	}
 
 	/**
@@ -63,8 +71,7 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param teamName
-	 *            the teamName to set
+	 * @param teamName the teamName to set
 	 */
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
@@ -78,8 +85,7 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param buName
-	 *            the buName to set
+	 * @param buName the buName to set
 	 */
 	public void setBuName(BusinessUnit buName) {
 		this.buName = buName;
@@ -93,8 +99,7 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param topicsSubscribed
-	 *            the topicsSubscribed to set
+	 * @param topicsSubscribed the topicsSubscribed to set
 	 */
 	public void setTopicsSubscribed(List<Topic> topicsSubscribed) {
 		this.topicsSubscribed = topicsSubscribed;
@@ -108,8 +113,7 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param managerSoeId
-	 *            the managerSoeId to set
+	 * @param managerSoeId the managerSoeId to set
 	 */
 	public void setManagerSoeId(String managerSoeId) {
 		this.managerSoeId = managerSoeId;
@@ -123,8 +127,7 @@ public class UserInfo{
 	}
 
 	/**
-	 * @param rating
-	 *            the rating to set
+	 * @param rating the rating to set
 	 */
 	public void setRating(Double rating) {
 		this.rating = rating;
@@ -146,12 +149,20 @@ public class UserInfo{
 		this.location = location;
 	}
 
-	public List<SkillDetailsDTO> getSkillDetails() {
+	public List<Skill> getSkillDetails() {
 		return skillDetails;
 	}
 
-	public void setSkillDetails(List<SkillDetailsDTO> skillDetails) {
+	public void setSkillDetails(List<Skill> skillDetails) {
 		this.skillDetails = skillDetails;
+	}
+
+	public String getUserDescription() {
+		return userDescription;
+	}
+
+	public void setUserDescription(String userDescription) {
+		this.userDescription = userDescription;
 	}
 
 }
