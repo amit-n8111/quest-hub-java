@@ -32,7 +32,7 @@ public class TaskEventHandler {
 	@Autowired
 	private TaskRepository taskRepository;
 	
-	@HandleAfterSave
+	@HandleBeforeSave
 	public void handleSkillsSave(Task task) {
 		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
@@ -49,7 +49,7 @@ public class TaskEventHandler {
 		}
 	}
 	
-	@HandleAfterCreate
+	@HandleBeforeCreate
 	public void handleSkillsCreate(Task task) {
 		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
@@ -68,7 +68,7 @@ public class TaskEventHandler {
 		}
 	}
 	
-	@HandleAfterSave
+	@HandleBeforeSave
 	public void handleScreeningQuestionsSave(Task task) {
 		Long maxId = 0L;
 		List<Question> existingQues = questionsRepository.findAll();
@@ -85,7 +85,7 @@ public class TaskEventHandler {
 		}
 	}
 	
-	@HandleAfterCreate
+	@HandleBeforeCreate
 	public void handleScreeningQuestionsCreate(Task task) {
 		Long maxId = 0L;
 		List<Question> existingQues = questionsRepository.findAll();

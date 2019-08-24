@@ -37,7 +37,7 @@ public class TopicEventHandler {
 	@Autowired
 	private TopicRepository topicRepository;
 	
-	@HandleAfterSave
+	@HandleBeforeSave
 	public void handleTopicSave(Topic topic) {
 		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
@@ -54,7 +54,7 @@ public class TopicEventHandler {
 		}
 	}
 	
-	@HandleAfterCreate
+	@HandleBeforeCreate
 	public void handleTopicCreate(Topic topic) {
 		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
