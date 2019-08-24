@@ -143,6 +143,9 @@ public class Task implements Serializable {
 	}
 
 	public void setTaskCreateDate(Date taskCreateDate) {
+		if(null ==  taskId || taskId < 0) {
+			taskCreateDate = new Date();
+		}
 		this.taskCreateDate = taskCreateDate;
 	}
 
