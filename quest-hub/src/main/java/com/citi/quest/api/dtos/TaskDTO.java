@@ -19,7 +19,9 @@ public class TaskDTO {
 
 	String taskDescription;
 
-	TaskType taskType;
+	String taskType;
+	
+	Integer taskTypeId;
 
 	Date taskDueDate;
 
@@ -93,12 +95,20 @@ public class TaskDTO {
 		this.taskDescription = taskDescription;
 	}
 
-	public TaskType getTaskType() {
+	public String getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskType taskType) {
+	public void setTaskType(String taskType) {
 		this.taskType = taskType;
+	}
+	
+	public Integer getTaskTypeId() {
+		return taskTypeId;
+	}
+
+	public void setTaskTypeId(Integer taskTypeId) {
+		this.taskTypeId = taskTypeId;
 	}
 
 	public Date getTaskDueDate() {

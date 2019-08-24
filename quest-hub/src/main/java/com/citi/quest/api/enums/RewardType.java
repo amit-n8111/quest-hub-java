@@ -2,7 +2,7 @@ package com.citi.quest.api.enums;
 
 public enum RewardType {
 
-	GRATITUDE(1, "gratitude");
+	GRATITUDE(1, "Gratitude");
 
 	private Integer id;
 	private String rewardType;

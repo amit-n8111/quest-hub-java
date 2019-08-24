@@ -7,8 +7,6 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.citi.quest.api.enums.TaskType;
-
 @Document
 public class Task implements Serializable {
 
@@ -25,7 +23,9 @@ public class Task implements Serializable {
 
 	String taskDescription;
 
-	TaskType taskType;
+	String taskType;
+	
+	Integer taskTypeId;
 
 	Date taskDueDate;
 
@@ -100,6 +100,9 @@ public class Task implements Serializable {
 	}
 
 	public void setTaskStatusId(Integer taskStatusId) {
+		if(null ==  taskId || taskId < 0) {
+			taskStatusId = 1;
+		}
 		this.taskStatusId = taskStatusId;
 	}
 
@@ -111,12 +114,20 @@ public class Task implements Serializable {
 		this.taskDescription = taskDescription;
 	}
 
-	public TaskType getTaskType() {
+	public String getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskType taskType) {
+	public void setTaskType(String taskType) {
 		this.taskType = taskType;
+	}
+	
+	public Integer getTaskTypeId() {
+		return taskTypeId;
+	}
+
+	public void setTaskTypeId(Integer taskTypeId) {
+		this.taskTypeId = taskTypeId;
 	}
 
 	public Date getTaskDueDate() {

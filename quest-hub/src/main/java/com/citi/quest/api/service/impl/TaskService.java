@@ -157,8 +157,8 @@ public class TaskService {
 
 				taskDTO.setTotalTasks(100);// TO DO
 				if (null != task.getTaskType()) {
-					taskDTO.setTaskType(task.getTaskType().getTypeOfTask());
-					taskDTO.setTaskTypeName(task.getTaskType().getTypeOfTask());
+					taskDTO.setTaskType(task.getTaskTypeId().toString());
+					taskDTO.setTaskTypeName(task.getTaskType());
 				}
 
 				taskDTOs.add(taskDTO);
