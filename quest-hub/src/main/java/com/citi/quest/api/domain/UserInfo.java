@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,7 +28,7 @@ public class UserInfo {
 
 	BusinessUnit buName;
 
-	List<Skill> skillDetails;
+	List<SkillDetailsDTO> skillDetails;
 
 	List<Topic> topicsSubscribed;
 
@@ -149,11 +150,11 @@ public class UserInfo {
 		this.location = location;
 	}
 
-	public List<Skill> getSkillDetails() {
+	public List<SkillDetailsDTO> getSkillDetails() {
 		return skillDetails;
 	}
 
-	public void setSkillDetails(List<Skill> skillDetails) {
+	public void setSkillDetails(List<SkillDetailsDTO> skillDetails) {
 		this.skillDetails = skillDetails;
 	}
 

@@ -2,7 +2,6 @@ package com.citi.quest.api.dtos;
 
 import java.util.List;
 
-import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.enums.BusinessUnit;
 
 public class SearchUserResponseDTO {
@@ -29,7 +28,7 @@ public class SearchUserResponseDTO {
 
 	Integer numberOfReviews;
 
-	List<Skill> skillDetails;
+	List<SkillDetailsDTO> skillDetails;
 
 	List<WorkHistoryAndFeedbackDTO> workHistoryAndFeedbackDTO;
 
@@ -102,11 +101,11 @@ public class SearchUserResponseDTO {
 		this.numberOfReviews = numberOfReviews;
 	}
 
-	public List<Skill> getSkillDetails() {
+	public List<SkillDetailsDTO> getSkillDetails() {
 		return skillDetails;
 	}
 
-	public void setSkillDetails(List<Skill> skillDetails) {
+	public void setSkillDetails(List<SkillDetailsDTO> skillDetails) {
 		this.skillDetails = skillDetails;
 	}
 

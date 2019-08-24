@@ -13,6 +13,14 @@ public class SkillDetailsDTO {
 
 	String lastWorked;
 
+	public Skill getSkill() {
+		return skill;
+	}
+
+	public void setSkill(Skill skill) {
+		this.skill = skill;
+	}
+
 	/**
 	 * @return the level
 	 */
