@@ -1,24 +1,25 @@
 package com.citi.quest.api.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.citi.quest.api.dtos.QuestionDTO;
 
 @Document
-public class Application extends AbstractDocument{
+public class Application extends AbstractDocument {
 
 	UserInfo user;
-	
+
 	Task task;
-	
-	QuestionDTO screeningQuestions;
-	
+
+	List<QuestionDTO> screeningQuestions;
+
 	LocalDateTime startDate;
-	
+
 	LocalDateTime endDate;
-	
+
 	String commentsOrNotes;
 
 	/**
@@ -49,11 +50,11 @@ public class Application extends AbstractDocument{
 		this.task = task;
 	}
 
-	public QuestionDTO getScreeningQuestions() {
+	public List<QuestionDTO> getScreeningQuestions() {
 		return screeningQuestions;
 	}
 
-	public void setScreeningQuestions(QuestionDTO screeningQuestions) {
+	public void setScreeningQuestions(List<QuestionDTO> screeningQuestions) {
 		this.screeningQuestions = screeningQuestions;
 	}
 
@@ -80,6 +81,5 @@ public class Application extends AbstractDocument{
 	public void setCommentsOrNotes(String commentsOrNotes) {
 		this.commentsOrNotes = commentsOrNotes;
 	}
-
 
 }

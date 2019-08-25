@@ -173,6 +173,7 @@ public class TaskService {
 		Application application = new Application();
 		UserInfo userInfo = userRepository.findBySoeId(user);
 		application.setUser(userInfo);
+		application.setScreeningQuestions(applicationDTO.getScreeningQuestions());
 		application.setCommentsOrNotes(applicationDTO.getCommentsOrNotes());
 		application.setStartDate(applicationDTO.getStartDate());
 		application.setEndDate(applicationDTO.getEndDate());

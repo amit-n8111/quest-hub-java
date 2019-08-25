@@ -47,8 +47,8 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "apply/{taskId}")
-	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO) {
-		String user = "AN58526";
+	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO,
+			@RequestHeader(value = "sm_user") String user) {
 		return taskPostService.applyTask(user, taskId, applicationDTO);
 	}
 }
