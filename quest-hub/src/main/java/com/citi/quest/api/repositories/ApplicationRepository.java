@@ -1,5 +1,7 @@
 package com.citi.quest.api.repositories;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -16,5 +18,8 @@ public interface ApplicationRepository extends MongoRepository<Application, Long
 
 	@ApiOperation("Get Application by its id")
 	ApplicationDTO findById(@Param("id") Long id);
+	
+	List<Application> findByTaskTaskId(Long taskId);
 
+	List<Application> findByUserSoeId(String soeId);
 }

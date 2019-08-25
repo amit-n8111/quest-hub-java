@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Application;
+import com.citi.quest.api.domain.Favorite;
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
@@ -30,6 +31,7 @@ import com.citi.quest.api.enums.RewardType;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.notification.EmailNotification;
 import com.citi.quest.api.repositories.ApplicationRepository;
+import com.citi.quest.api.repositories.FavoriteRepository;
 import com.citi.quest.api.repositories.QuestionsRepository;
 import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
@@ -63,6 +65,9 @@ public class TaskService {
 	
 	@Autowired
 	private QuestionsRepository questionsRepository;
+	
+	@Autowired
+	private FavoriteRepository favRepository;
 
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
@@ -101,7 +106,7 @@ public class TaskService {
 		return taskRepository.findAll();
 	}
 
-	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO) {
+	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user) {
 
 		Criteria criteria = new Criteria();
 		Query query = new Query();
@@ -129,18 +134,22 @@ public class TaskService {
 
 		}
 		List<Task> tasks = mongoOperations.find(query, Task.class);
-		return mapToTaskResponseDTO(tasks);
+		return mapToTaskResponseDTO(tasks, user);
 	}
 
-	private List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks) {
+	private List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user) {
 		List<TaskResponseDTO> taskDTOs = new ArrayList<>();
 		if (CollectionUtils.isNotEmpty(tasks)) {
 			for (Task task : tasks) {
 				TaskResponseDTO taskDTO = new TaskResponseDTO();
 				taskDTO.setTaskCreatedBy(userRepository.findBySoeId(task.getTaskCreatedBy()));
 				taskDTO.setManHoursNeeded(task.getManHoursNeeded());
-				taskDTO.setMarkedAsFavorite(true);// TO DO
-				taskDTO.setNumberOfApplicationRecieved(1);// TO DO
+				Favorite fav = favRepository.findOne(user);
+				if(null != fav && fav.getTaskIds().contains(task.getTaskId())) {
+					taskDTO.setMarkedAsFavorite(true);
+				}
+				List<Application> applications= applicationRepository.findByTaskTaskId(task.getTaskId());
+				taskDTO.setNumberOfApplicationRecieved(applications.size());
 				taskDTO.setRewardTypeId(task.getRewardTypeId());
 				for (RewardType rewardType : RewardType.values()) {
 					if (rewardType.getId() == task.getRewardTypeId()) {
@@ -277,6 +286,14 @@ public class TaskService {
 			task.setTaskId(maxId + 1);
 		}
 		return taskRepository.save(task);
+	}
+
+	public TaskResponseDTO getTask(Long taskId, String user) {
+		Task task = taskRepository.findOne(taskId);
+		List<Task> tasks= new ArrayList<>();
+		tasks.add(task);
+		List<TaskResponseDTO> taskDTOs = mapToTaskResponseDTO(tasks, user);
+		return taskDTOs.get(0);
 	}
 	
 	

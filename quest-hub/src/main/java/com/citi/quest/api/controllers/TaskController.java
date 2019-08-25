@@ -42,8 +42,8 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "task/tasks")
-	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
-		return taskPostService.searchTasks(searchTaskDTO);
+	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO, @RequestHeader(value = "sm_user") String user) {
+		return taskPostService.searchTasks(searchTaskDTO, user);
 	}
 
 	@PostMapping(value = "task/apply/{taskId}")
@@ -55,5 +55,10 @@ public class TaskController {
 	@PostMapping(value = "tasks")
 	public Task saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody Task task) {
 		return taskPostService.saveTask(user, task);
+	}
+	
+	@GetMapping(value = "tasks/{taskId}")
+	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user, @PathVariable(value = "taskId") Long taskId) {
+		return taskPostService.getTask(taskId, user);
 	}
 }
