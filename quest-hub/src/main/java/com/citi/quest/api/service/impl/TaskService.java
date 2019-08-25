@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Application;
 import com.citi.quest.api.domain.Favorite;
+import com.citi.quest.api.domain.Notification;
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
@@ -32,6 +33,7 @@ import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.notification.EmailNotification;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.FavoriteRepository;
+import com.citi.quest.api.repositories.NotificationRepository;
 import com.citi.quest.api.repositories.QuestionsRepository;
 import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
@@ -68,6 +70,9 @@ public class TaskService {
 	
 	@Autowired
 	private FavoriteRepository favRepository;
+	
+	@Autowired
+	private NotificationRepository notifRepository;
 
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
@@ -225,6 +230,16 @@ public class TaskService {
 		emailNotofication.sendEmail(emailDTO);
 
 		// Save Notification
+		Notification notification = new Notification();
+		notification.setIsViewed(false);
+		notification.setNotificationTime(new java.util.Date(System.currentTimeMillis()));
+		notification.setTaskId(taskId);
+		notification.setTaskName(task.getTaskName());
+		notification.setTaskOwner(task.getTaskCreatedBy());
+		notification.setUserName(userInfo.getName());
+		notification.setUserSoeId(user);
+		notification.setAplicationId(application.getId());		
+		notifRepository.save(notification);
 		
 		return true;
 	}

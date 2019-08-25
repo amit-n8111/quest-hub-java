@@ -46,8 +46,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public ActiveNotification getAllActiveNotifications(String user) {
 		ActiveNotification actNotifications = new ActiveNotification();
-
-		Criteria criteria = new Criteria();
+		
 		Query query = new Query();
 
 		if (StringUtils.isNotBlank(user)) {
