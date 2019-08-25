@@ -1,17 +1,70 @@
 package com.citi.quest.api.dtos;
 
-public class NotificationDto {
+import java.util.Date;
+
+public class NotificationDTO {
+	
 	Long notId;
-	
+
 	Long taskId;
-	
+
 	String taskName;
-	
+
 	String userId;
-	
+
 	String userName;
-	
+
 	Boolean isViewed = false;
+
+	Date notificationTime;
+
+	Integer numberOfTasksCompleted;
+
+	Integer totalHoursWorked;
+
+	Double rating;
+
+	Integer numberOfReviews;
+
+	public Integer getNumberOfTasksCompleted() {
+		return numberOfTasksCompleted;
+	}
+
+	public void setNumberOfTasksCompleted(Integer numberOfTasksCompleted) {
+		this.numberOfTasksCompleted = numberOfTasksCompleted;
+	}
+
+	public Integer getTotalHoursWorked() {
+		return totalHoursWorked;
+	}
+
+	public void setTotalHoursWorked(Integer totalHoursWorked) {
+		this.totalHoursWorked = totalHoursWorked;
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
+	public Integer getNumberOfReviews() {
+		return numberOfReviews;
+	}
+
+	public void setNumberOfReviews(Integer numberOfReviews) {
+		this.numberOfReviews = numberOfReviews;
+	}
+
+	public Date getNotificationTime() {
+		return notificationTime;
+	}
+
+	public void setNotificationTime(Date notificationTime) {
+		this.notificationTime = notificationTime;
+	}
 
 	public Long getNotId() {
 		return notId;
@@ -60,6 +113,5 @@ public class NotificationDto {
 	public void setIsViewed(Boolean isViewed) {
 		this.isViewed = isViewed;
 	}
-	
-	
+
 }

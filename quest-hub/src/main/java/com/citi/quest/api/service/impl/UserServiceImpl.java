@@ -105,9 +105,7 @@ public class UserServiceImpl implements UserService {
 			Integer taskCompletedId = 5;
 			List<Task> tasks = taskRepository.findByTaskAssignedToAndTaskStatusId(user.getSoeId(), taskCompletedId);
 			WorkHistoryAndFeedbackDTO workHistoryAndFeedbackDTO = new WorkHistoryAndFeedbackDTO();
-			Integer taskCompletedByUser = 0;
 			for (Task task : tasks) {
-				taskCompletedByUser++;
 				workHistoryAndFeedbackDTO.setTaskName(task.getTaskName());
 				workHistoryAndFeedbackDTO.setTaskCreateBy(task.getTaskCreatedBy());
 				workHistoryAndFeedbackDTO.setTaskCreateDate(task.getTaskCreateDate());

@@ -12,18 +12,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Notification;
+import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ActiveNotification;
 import com.citi.quest.api.dtos.ApplicationDTO;
-import com.citi.quest.api.dtos.NotificationResponseDTO;
+import com.citi.quest.api.dtos.NotificationDTO;
+import com.citi.quest.api.dtos.NotificationDetailsDTO;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.NotificationRepository;
+import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
 import com.citi.quest.api.service.NotificationService;
 
 @Service
 @Transactional
 public class NotificationServiceImpl implements NotificationService {
+
+	@Autowired
+	TaskRepository taskRepository;
 
 	@Autowired
 	UserInfoRepository userRepository;
@@ -58,12 +64,11 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public List<NotificationResponseDTO> getAllNotifications(String user) {
-		List<NotificationResponseDTO> notificationResponseList = new ArrayList<NotificationResponseDTO>();
+	public List<NotificationDTO> getAllNotifications(String user) {
 
-		Criteria criteria = new Criteria();
+		List<NotificationDTO> notificationResponseList = new ArrayList<NotificationDTO>();
+
 		Query query = new Query();
-
 		if (StringUtils.isNotBlank(user)) {
 			query.addCriteria(Criteria.where("taskOwner").is(user));
 		}
@@ -72,22 +77,69 @@ public class NotificationServiceImpl implements NotificationService {
 
 		if (null != notifications) {
 			for (Notification notification : notifications) {
-				NotificationResponseDTO notificationResponse = new NotificationResponseDTO();
 
-				UserInfo userInfo = userRepository.findBySoeId(notification.getUserSoeId());
-
-				ApplicationDTO application = applicationRepository.findById(notification.getAplicationId());
-
-				notificationResponse.setNotification(notification);
-				notificationResponse.setApplication(application);
-				notificationResponse.setUserInfo(userInfo);
-
-				notificationResponseList.add(notificationResponse);
+				NotificationDTO notificationDTO = new NotificationDTO();
+				fillNotificationDTO(notification, notificationDTO);
+				List<Task> tasks = taskRepository.findByTaskAssignedToAndTaskStatusId(user, 5);
+				Integer totalHoursWorked = 0;
+				for (Task task : tasks) {
+					totalHoursWorked += task.getManHoursNeeded();
+				}
+				notificationDTO.setTotalHoursWorked(totalHoursWorked);
+				notificationDTO.setNumberOfTasksCompleted(tasks.size());
+				notificationResponseList.add(notificationDTO);
 			}
-
 		}
 
 		return notificationResponseList;
+
+	}
+
+	@Override
+	public NotificationDetailsDTO getNotificationDetail(String user, Long notificationId) {
+
+		Query query = new Query();
+		if (StringUtils.isNotBlank(user)) {
+			query.addCriteria(Criteria.where("taskOwner").is(user));
+		}
+		if (notificationId != null && notificationId > 0) {
+			query.addCriteria(Criteria.where("notificationId").is(notificationId));
+		}
+
+		Notification notification = mongoOperations.findOne(query, Notification.class);
+		UserInfo userInfo = userRepository.findBySoeId(notification.getUserSoeId());
+		ApplicationDTO application = applicationRepository.findById(notification.getAplicationId());
+
+		NotificationDTO notificationDTO = new NotificationDTO();
+		fillNotificationDTO(notification, notificationDTO);
+		List<Task> tasks = taskRepository.findByTaskAssignedToAndTaskStatusId(user, 5);
+		Integer totalHoursWorked = 0;
+		for (Task task : tasks) {
+			totalHoursWorked += task.getManHoursNeeded();
+		}
+		notificationDTO.setTotalHoursWorked(totalHoursWorked);
+		notificationDTO.setNumberOfTasksCompleted(tasks.size());
+
+		NotificationDetailsDTO notificationResponse = new NotificationDetailsDTO();
+		notificationResponse.setNotification(notificationDTO);
+		notificationResponse.setUserInfo(userInfo);
+		notificationResponse.setApplication(application);
+
+		return notificationResponse;
+
+	}
+	
+	
+
+	private void fillNotificationDTO(Notification notification, NotificationDTO notificationDTO) {
+
+		notificationDTO.setNotId(notification.getNotificationId());
+		notificationDTO.setTaskId(notification.getTaskId());
+		notificationDTO.setTaskName(notification.getTaskName());
+		notificationDTO.setUserId(notification.getUserSoeId());
+		notificationDTO.setUserName(notification.getUserName());
+		notificationDTO.setIsViewed(notification.getIsViewed());
+		notificationDTO.setNotificationTime(notification.getNotificationTime());
 	}
 
 }

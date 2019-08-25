@@ -3,19 +3,19 @@ package com.citi.quest.api.dtos;
 import com.citi.quest.api.domain.Notification;
 import com.citi.quest.api.domain.UserInfo;
 
-public class NotificationResponseDTO {
+public class NotificationDetailsDTO {
 
-	Notification notification;
+	NotificationDTO notification;
 
 	UserInfo userInfo;
 
 	ApplicationDTO application;
 
-	public Notification getNotification() {
+	public NotificationDTO getNotification() {
 		return notification;
 	}
 
-	public void setNotification(Notification notification) {
+	public void setNotification(NotificationDTO notification) {
 		this.notification = notification;
 	}
 
