@@ -1,6 +1,7 @@
 package com.citi.quest.api.domain;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,9 +17,9 @@ public class Application extends AbstractDocument {
 
 	List<QuestionDTO> screeningQuestions;
 
-	LocalDateTime startDate;
+	Date startDate;
 
-	LocalDateTime endDate;
+	Date endDate;
 
 	String commentsOrNotes;
 
@@ -30,7 +31,8 @@ public class Application extends AbstractDocument {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
 	public void setUser(UserInfo user) {
 		this.user = user;
@@ -44,7 +46,8 @@ public class Application extends AbstractDocument {
 	}
 
 	/**
-	 * @param task the task to set
+	 * @param task
+	 *            the task to set
 	 */
 	public void setTask(Task task) {
 		this.task = task;
@@ -58,19 +61,19 @@ public class Application extends AbstractDocument {
 		this.screeningQuestions = screeningQuestions;
 	}
 
-	public LocalDateTime getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDateTime getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDateTime endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 

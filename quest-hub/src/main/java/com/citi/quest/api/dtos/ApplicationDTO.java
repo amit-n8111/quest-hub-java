@@ -1,6 +1,7 @@
 package com.citi.quest.api.dtos;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -9,24 +10,24 @@ public class ApplicationDTO {
 	@Id
 	Long id;
 
-	LocalDateTime startDate;
-	LocalDateTime endDate;
+	Date startDate;
+	Date endDate;
 	String commentsOrNotes;
 	List<QuestionDTO> screeningQuestions;
 
-	public LocalDateTime getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDateTime getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDateTime endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 

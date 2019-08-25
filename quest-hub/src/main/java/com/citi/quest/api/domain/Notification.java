@@ -1,15 +1,13 @@
 package com.citi.quest.api.domain;
 
-import org.springframework.data.annotation.Id;
+import java.util.Date;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
-public class Notification {
-
-	@Id
-	Long id;
+public class Notification extends AbstractDocument {
 
 	@JsonProperty
 	Long notificationId;
@@ -28,16 +26,18 @@ public class Notification {
 
 	Boolean isViewed = false;
 
-	public Long getId() {
-		return id;
+	Date notificationTime;
+
+	public Date getNotificationTime() {
+		return notificationTime;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setNotificationTime(Date notificationTime) {
+		this.notificationTime = notificationTime;
 	}
 
 	public Long getNotificationId() {
-		return id;
+		return getId();
 	}
 
 	public Long getTaskId() {

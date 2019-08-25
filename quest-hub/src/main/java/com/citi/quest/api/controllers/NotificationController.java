@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.citi.quest.api.dtos.ActiveNotification;
-import com.citi.quest.api.dtos.NotificationResponseDTO;
+import com.citi.quest.api.dtos.NotificationDTO;
 import com.citi.quest.api.service.NotificationService;
-
 import io.swagger.annotations.Api;
 
 @RestController
@@ -29,8 +27,8 @@ public class NotificationController {
 	}
 
 	@GetMapping(value = "notifications/allNotifications")
-	public List<NotificationResponseDTO> getAllNotifications(@RequestHeader(value = "sm_user") String smUser) {
-		List<NotificationResponseDTO> notifications = notificationService.getAllNotifications(smUser);
+	public List<NotificationDTO> getAllNotifications(@RequestHeader(value = "sm_user") String smUser) {
+		List<NotificationDTO> notifications = notificationService.getAllNotifications(smUser);
 		return notifications;
 	}
 }
