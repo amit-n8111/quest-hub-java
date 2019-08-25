@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
-import com.citi.quest.api.enums.TaskType;
 
 public class TaskDTO {
 

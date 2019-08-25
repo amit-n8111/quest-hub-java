@@ -24,31 +24,41 @@ import io.swagger.annotations.Api;
 
 @RestController
 @Api(tags = "questHub-Tasks APIs")
-@RequestMapping("/api/v1/task")
+@RequestMapping("/api/v1")
 public class TaskController {
 
 	@Autowired
 	TaskService taskPostService;
 
-	@PostMapping(value = "edit/")
+	@PostMapping(value = "task/edit/")
 	public ResponseEntity<Boolean> saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody TaskDTO task) {
 		taskPostService.postTask(task, user);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "tasks")
+	@GetMapping(value = "task/tasks")
 	public List<Task> getTasks() {
 		return taskPostService.getTasks();
 	}
 
-	@PostMapping(value = "tasks")
-	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO) {
-		return taskPostService.searchTasks(searchTaskDTO);
+	@PostMapping(value = "task/tasks")
+	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO, @RequestHeader(value = "sm_user") String user) {
+		return taskPostService.searchTasks(searchTaskDTO, user);
 	}
 
-	@PostMapping(value = "apply/{taskId}")
-	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO,
-			@RequestHeader(value = "sm_user") String user) {
+	@PostMapping(value = "task/apply/{taskId}")
+	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO,@RequestHeader(value = "sm_user") String user) {
 		return taskPostService.applyTask(user, taskId, applicationDTO);
+	}
+	
+	
+	@PostMapping(value = "tasks")
+	public Task saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody Task task) {
+		return taskPostService.saveTask(user, task);
+	}
+	
+	@GetMapping(value = "tasks/{taskId}")
+	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user, @PathVariable(value = "taskId") Long taskId) {
+		return taskPostService.getTask(taskId, user);
 	}
 }

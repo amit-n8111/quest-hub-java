@@ -100,9 +100,6 @@ public class Task implements Serializable {
 	}
 
 	public void setTaskStatusId(Integer taskStatusId) {
-		if(null ==  taskId || taskId < 0) {
-			taskStatusId = 1;
-		}
 		this.taskStatusId = taskStatusId;
 	}
 
@@ -143,9 +140,6 @@ public class Task implements Serializable {
 	}
 
 	public void setTaskCreateDate(Date taskCreateDate) {
-		if(null ==  taskId || taskId < 0) {
-			taskCreateDate = new Date();
-		}
 		this.taskCreateDate = taskCreateDate;
 	}
 
