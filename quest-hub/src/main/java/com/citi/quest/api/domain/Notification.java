@@ -1,34 +1,99 @@
 package com.citi.quest.api.domain;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.citi.quest.api.dtos.NotificationDto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
-public class Notification{
+public class Notification {
 
 	@Id
-	String soeId;
-	
-	List<NotificationDto> notifications;
+	Long id;
 
-	public String getSoeId() {
-		return soeId;
+	@JsonProperty
+	Long notificationId;
+
+	Long taskId;
+
+	String taskName;
+
+	String taskOwner;
+
+	String userSoeId;
+
+	String userName;
+
+	Long aplicationId;
+
+	Boolean isViewed = false;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setSoeId(String soeId) {
-		this.soeId = soeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public List<NotificationDto> getNotifications() {
-		return notifications;
+	public Long getNotificationId() {
+		return id;
 	}
 
-	public void setNotifications(List<NotificationDto> notifications) {
-		this.notifications = notifications;
+	public Long getTaskId() {
+		return taskId;
 	}
-	
-	
+
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getTaskOwner() {
+		return taskOwner;
+	}
+
+	public void setTaskOwner(String taskOwner) {
+		this.taskOwner = taskOwner;
+	}
+
+	public String getUserSoeId() {
+		return userSoeId;
+	}
+
+	public void setUserSoeId(String userSoeId) {
+		this.userSoeId = userSoeId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Boolean getIsViewed() {
+		return isViewed;
+	}
+
+	public void setIsViewed(Boolean isViewed) {
+		this.isViewed = isViewed;
+	}
+
+	public Long getAplicationId() {
+		return aplicationId;
+	}
+
+	public void setAplicationId(Long aplicationId) {
+		this.aplicationId = aplicationId;
+	}
+
 }

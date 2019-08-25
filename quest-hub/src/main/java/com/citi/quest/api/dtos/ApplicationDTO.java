@@ -3,7 +3,11 @@ package com.citi.quest.api.dtos;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+
 public class ApplicationDTO {
+	@Id
+	Long id;
 
 	LocalDateTime startDate;
 	LocalDateTime endDate;

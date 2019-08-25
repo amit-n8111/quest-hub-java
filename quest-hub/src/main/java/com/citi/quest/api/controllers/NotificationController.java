@@ -1,12 +1,15 @@
 package com.citi.quest.api.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.dtos.ActiveNotification;
+import com.citi.quest.api.dtos.NotificationResponseDTO;
 import com.citi.quest.api.service.NotificationService;
 
 import io.swagger.annotations.Api;
@@ -15,13 +18,19 @@ import io.swagger.annotations.Api;
 @Api(tags = "API responsible for getting notifications")
 @RequestMapping("/api/v1")
 public class NotificationController {
-	
+
 	@Autowired
 	NotificationService notificationService;
-	
-	@GetMapping(value = "notifications/{userId}")
-	public ActiveNotification getActiveNotifications(@PathVariable(value = "userId") String smUser) {
+
+	@GetMapping(value = "notifications/activeNotifications")
+	public ActiveNotification getActiveNotifications(@RequestHeader(value = "sm_user") String smUser) {
 		ActiveNotification notifications = notificationService.getAllActiveNotifications(smUser);
+		return notifications;
+	}
+
+	@GetMapping(value = "notifications/allNotifications")
+	public List<NotificationResponseDTO> getAllNotifications(@RequestHeader(value = "sm_user") String smUser) {
+		List<NotificationResponseDTO> notifications = notificationService.getAllNotifications(smUser);
 		return notifications;
 	}
 }
