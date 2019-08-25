@@ -19,7 +19,7 @@ public interface ApplicationRepository extends MongoRepository<Application, Long
 	@ApiOperation("Get Application by its id")
 	ApplicationDTO findById(@Param("id") Long id);
 	
-	List<Application> findByTaskTaskId(Long taskId);
+	List<Application> findByTaskTaskId(@Param("taskId") Long taskId);
 
-	List<Application> findByUserSoeId(String soeId);
+	List<Application> findByUserSoeId(@Param("soeId") String soeId);
 }
