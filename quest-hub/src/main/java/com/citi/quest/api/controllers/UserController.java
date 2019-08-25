@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,7 @@ public class UserController {
 	UserService userService;
 
 	@GetMapping(value = "user/markFavorite/{taskId}")
-	public Boolean markAsFavorite(@PathVariable Long taskId) {
-		String user = "AN58526";
+	public Boolean markAsFavorite(@PathVariable Long taskId,@RequestHeader(value = "sm_user") String user) {
 		return userService.markTaskAsFavorite(taskId, user);
 	}
 

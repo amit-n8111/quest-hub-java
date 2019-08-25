@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Application;
+import com.citi.quest.api.domain.Question;
+import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ApplicationDTO;
@@ -28,6 +30,8 @@ import com.citi.quest.api.enums.RewardType;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.notification.EmailNotification;
 import com.citi.quest.api.repositories.ApplicationRepository;
+import com.citi.quest.api.repositories.QuestionsRepository;
+import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.TopicRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
@@ -53,6 +57,12 @@ public class TaskService {
 
 	@Autowired
 	TopicRepository topicRepository;
+	
+	@Autowired
+	private SkillsRepository skillRepository;
+	
+	@Autowired
+	private QuestionsRepository questionsRepository;
 
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
@@ -205,7 +215,71 @@ public class TaskService {
 		emailDTO.setMailbody(userInfo.getName() + " has applied for Task :: " + application.getTask().getTaskName());
 		emailNotofication.sendEmail(emailDTO);
 
+		// Save Notification
+		
 		return true;
 	}
+
+	public Task saveTask(String user, Task task) {
+		if(null == task.getTaskId() || task.getTaskId() < 0) {
+			task.setTaskCreatedBy(null != userRepository.findBySoeId(user) ? userRepository.findBySoeId(user).getSoeId() :"");
+			task.setTaskStatusId(TaskStatus.DRAFT.getId());
+			task.setTaskCreateDate(new Date());
+			handleScreeningQuestionsSave(task);
+			handleSkillsSave(task);
+		}
+		task = handleTaskSaveWithoutId(task);
+		return task;
+	}
+	
+	public void handleSkillsSave(Task task) {
+		Long maxId = 0L;
+		List<Skill> existingSkills = skillRepository.findAll();
+		if (CollectionUtils.isNotEmpty(existingSkills)) {
+			Skill maxSkill = existingSkills.stream().max(Comparator.comparing(Skill::getId)).get();
+			maxId = maxSkill.getId();
+		}
+		for (Skill skill : task.getSkills()) {
+			if (skill.getId() == null || skill.getId() <= 0) {
+				maxId = maxId + 1;
+				skill.setId(maxId);
+				skillRepository.save(skill);
+			}
+		}
+	}
+
+	
+	public void handleScreeningQuestionsSave(Task task) {
+		Long maxId = 0L;
+		List<Question> existingQues = questionsRepository.findAll();
+		if(CollectionUtils.isNotEmpty(existingQues)) {
+			Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
+			maxId = maxSkill.getId();
+		}
+		for(Question question : task.getScreeningQuestions()) {
+			if(question.getId() == null || question.getId()<=0) {
+				maxId = maxId +1;
+				question.setId(maxId);
+				questionsRepository.save(question);
+			}
+		}
+	}
+
+	
+	public Task handleTaskSaveWithoutId(Task task) {
+		Long maxId = 0L;
+		if ( task.getTaskId() == null || task.getTaskId() <= 0) {
+			List<Task> tasks = taskRepository.findAll();
+			if (CollectionUtils.isNotEmpty(tasks)) {
+				Task max = tasks.stream().max(Comparator.comparing(Task::getTaskId)).get();
+				maxId = max.getTaskId();
+			}
+			task.setTaskId(maxId + 1);
+		}
+		return taskRepository.save(task);
+	}
+	
+	
+
 
 }
