@@ -18,6 +18,7 @@ import com.citi.quest.api.dtos.ActiveNotification;
 import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.NotificationDTO;
 import com.citi.quest.api.dtos.NotificationDetailsDTO;
+import com.citi.quest.api.dtos.NotificationResponseDTO;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.NotificationRepository;
 import com.citi.quest.api.repositories.TaskRepository;
@@ -46,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public ActiveNotification getAllActiveNotifications(String user) {
 		ActiveNotification actNotifications = new ActiveNotification();
-		
+
 		Query query = new Query();
 
 		if (StringUtils.isNotBlank(user)) {
@@ -127,8 +128,39 @@ public class NotificationServiceImpl implements NotificationService {
 		return notificationResponse;
 
 	}
-	
-	
+
+	@Override
+	public List<NotificationResponseDTO> getAllNotifications1(String user) {
+		List<NotificationResponseDTO> notificationResponseList = new ArrayList<NotificationResponseDTO>();
+
+		Criteria criteria = new Criteria();
+		Query query = new Query();
+
+		if (StringUtils.isNotBlank(user)) {
+			query.addCriteria(Criteria.where("taskOwner").is(user));
+		}
+
+		List<Notification> notifications = mongoOperations.find(query, Notification.class);
+
+		if (null != notifications) {
+			for (Notification notification : notifications) {
+				NotificationResponseDTO notificationResponse = new NotificationResponseDTO();
+
+				UserInfo userInfo = userRepository.findBySoeId(notification.getUserSoeId());
+
+				ApplicationDTO application = applicationRepository.findById(notification.getAplicationId());
+
+				notificationResponse.setNotification(notification);
+				notificationResponse.setApplication(application);
+				notificationResponse.setUserInfo(userInfo);
+
+				notificationResponseList.add(notificationResponse);
+			}
+
+		}
+
+		return notificationResponseList;
+	}
 
 	private void fillNotificationDTO(Notification notification, NotificationDTO notificationDTO) {
 
