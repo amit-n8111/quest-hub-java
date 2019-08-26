@@ -39,6 +39,7 @@ import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.TopicRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
+import com.citi.quest.api.util.SequenceGenerator;
 
 @Service
 @Transactional
@@ -61,18 +62,23 @@ public class TaskService {
 
 	@Autowired
 	TopicRepository topicRepository;
-	
+
 	@Autowired
 	private SkillsRepository skillRepository;
-	
+
 	@Autowired
 	private QuestionsRepository questionsRepository;
-	
+
 	@Autowired
 	private FavoriteRepository favRepository;
-	
+
 	@Autowired
 	private NotificationRepository notifRepository;
+
+	private static final String NOTIFICATION_SEQ_KEY = "NOTIFICATION_SEQUENCE";
+
+	@Autowired
+	private SequenceGenerator sequenceGenerator;
 
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
@@ -150,10 +156,10 @@ public class TaskService {
 				taskDTO.setTaskCreatedBy(userRepository.findBySoeId(task.getTaskCreatedBy()));
 				taskDTO.setManHoursNeeded(task.getManHoursNeeded());
 				Favorite fav = favRepository.findOne(user);
-				if(null != fav && fav.getTaskIds().contains(task.getTaskId())) {
+				if (null != fav && fav.getTaskIds().contains(task.getTaskId())) {
 					taskDTO.setMarkedAsFavorite(true);
 				}
-				List<Application> applications= applicationRepository.findByTaskTaskId(task.getTaskId());
+				List<Application> applications = applicationRepository.findByTaskTaskId(task.getTaskId());
 				taskDTO.setNumberOfApplicationRecieved(applications.size());
 				taskDTO.setRewardTypeId(task.getRewardTypeId());
 				for (RewardType rewardType : RewardType.values()) {
@@ -231,6 +237,10 @@ public class TaskService {
 
 		// Save Notification
 		Notification notification = new Notification();
+		if (notification.getId() == null || notification.getId() <= 0) {
+			Long nextSequence = sequenceGenerator.getNextSequence(NOTIFICATION_SEQ_KEY);
+			notification.setId(nextSequence);
+		}
 		notification.setIsViewed(false);
 		notification.setNotificationTime(new java.util.Date(System.currentTimeMillis()));
 		notification.setTaskId(taskId);
@@ -238,15 +248,16 @@ public class TaskService {
 		notification.setTaskOwner(task.getTaskCreatedBy());
 		notification.setUserName(userInfo.getName());
 		notification.setUserSoeId(user);
-		notification.setAplicationId(application.getId());		
+		notification.setAplicationId(application.getId());
 		notifRepository.save(notification);
-		
+
 		return true;
 	}
 
 	public Task saveTask(String user, Task task) {
-		if(null == task.getTaskId() || task.getTaskId() < 0) {
-			task.setTaskCreatedBy(null != userRepository.findBySoeId(user) ? userRepository.findBySoeId(user).getSoeId() :"");
+		if (null == task.getTaskId() || task.getTaskId() < 0) {
+			task.setTaskCreatedBy(
+					null != userRepository.findBySoeId(user) ? userRepository.findBySoeId(user).getSoeId() : "");
 			task.setTaskStatusId(TaskStatus.DRAFT.getId());
 			task.setTaskCreateDate(new Date());
 			handleScreeningQuestionsSave(task);
@@ -255,7 +266,7 @@ public class TaskService {
 		task = handleTaskSaveWithoutId(task);
 		return task;
 	}
-	
+
 	public void handleSkillsSave(Task task) {
 		Long maxId = 0L;
 		List<Skill> existingSkills = skillRepository.findAll();
@@ -272,27 +283,25 @@ public class TaskService {
 		}
 	}
 
-	
 	public void handleScreeningQuestionsSave(Task task) {
 		Long maxId = 0L;
 		List<Question> existingQues = questionsRepository.findAll();
-		if(CollectionUtils.isNotEmpty(existingQues)) {
+		if (CollectionUtils.isNotEmpty(existingQues)) {
 			Question maxSkill = existingQues.stream().max(Comparator.comparing(Question::getId)).get();
 			maxId = maxSkill.getId();
 		}
-		for(Question question : task.getScreeningQuestions()) {
-			if(question.getId() == null || question.getId()<=0) {
-				maxId = maxId +1;
+		for (Question question : task.getScreeningQuestions()) {
+			if (question.getId() == null || question.getId() <= 0) {
+				maxId = maxId + 1;
 				question.setId(maxId);
 				questionsRepository.save(question);
 			}
 		}
 	}
 
-	
 	public Task handleTaskSaveWithoutId(Task task) {
 		Long maxId = 0L;
-		if ( task.getTaskId() == null || task.getTaskId() <= 0) {
+		if (task.getTaskId() == null || task.getTaskId() <= 0) {
 			List<Task> tasks = taskRepository.findAll();
 			if (CollectionUtils.isNotEmpty(tasks)) {
 				Task max = tasks.stream().max(Comparator.comparing(Task::getTaskId)).get();
@@ -305,13 +314,10 @@ public class TaskService {
 
 	public TaskResponseDTO getTask(Long taskId, String user) {
 		Task task = taskRepository.findOne(taskId);
-		List<Task> tasks= new ArrayList<>();
+		List<Task> tasks = new ArrayList<>();
 		tasks.add(task);
 		List<TaskResponseDTO> taskDTOs = mapToTaskResponseDTO(tasks, user);
 		return taskDTOs.get(0);
 	}
-	
-	
-
 
 }

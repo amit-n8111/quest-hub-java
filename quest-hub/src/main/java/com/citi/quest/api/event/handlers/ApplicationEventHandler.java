@@ -21,16 +21,16 @@ public class ApplicationEventHandler {
 
 	@Autowired
 	private SequenceGenerator sequenceGenerator;
-	
+
 	@HandleBeforeSave
 	public void handleApplicationSaveWithoutId(Application application) {
-		if (application.getId() <= 0 || application.getId() == null) {
+		if (application.getId() == null || application.getId() <= 0) {
 			Long nextSequence = sequenceGenerator.getNextSequence(APPLICATION_SEQ_KEY);
 			application.setId(nextSequence);
 		}
 		applicationRepository.save(application);
 	}
-	
+
 	@HandleBeforeCreate
 	public void handleApplicationCreateWithoutId(Application application) {
 
