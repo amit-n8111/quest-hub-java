@@ -1,5 +1,7 @@
 package com.citi.quest.api.domain;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,6 +29,17 @@ public class Notification {
 	Long aplicationId;
 
 	Boolean isViewed = false;
+	
+	Date notificationTime;
+
+	public Date getNotificationTime() {
+		return notificationTime;
+	}
+
+	public void setNotificationTime(Date notificationTime) {
+		this.notificationTime = notificationTime;
+	}
+
 
 	public Long getId() {
 		return id;
