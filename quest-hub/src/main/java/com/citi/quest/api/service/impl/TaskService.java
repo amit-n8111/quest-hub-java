@@ -30,6 +30,7 @@ import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
 import com.citi.quest.api.enums.RewardType;
 import com.citi.quest.api.enums.TaskStatus;
+import com.citi.quest.api.enums.TaskType;
 import com.citi.quest.api.notification.EmailNotification;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.FavoriteRepository;
@@ -97,7 +98,7 @@ public class TaskService {
 		task.setTaskName(taskDto.getTaskName());
 		task.setTaskStatusId(taskDto.getTaskStatusId());
 		task.setTaskDescription(taskDto.getTaskDescription());
-		task.setTaskType(taskDto.getTaskType());
+		task.setTaskTypeName(taskDto.getTaskType());
 		task.setTaskDueDate(taskDto.getTaskDueDate());
 
 		task.setScreeningQuestions(taskDto.getScreeningQuestions());
@@ -186,9 +187,9 @@ public class TaskService {
 				}
 
 				taskDTO.setTotalTasks(100);// TO DO
-				if (null != task.getTaskType()) {
+				if (null != task.getTaskTypeName()) {
 					taskDTO.setTaskType(task.getTaskTypeId().toString());
-					taskDTO.setTaskTypeName(task.getTaskType());
+					taskDTO.setTaskTypeName(task.getTaskTypeName());
 				}
 
 				taskDTOs.add(taskDTO);
@@ -260,6 +261,12 @@ public class TaskService {
 					null != userRepository.findBySoeId(user) ? userRepository.findBySoeId(user).getSoeId() : "");
 			task.setTaskStatusId(TaskStatus.DRAFT.getId());
 			task.setTaskCreateDate(new Date());
+			if (task.getTaskTypeId() == 1) {
+				task.setTaskTypeName(TaskType.MICRO_TASK.getTypeOfTask());
+			} else {
+				task.setTaskTypeName(TaskType.MICRO_PROJECT.getTypeOfTask());
+			}
+
 			handleScreeningQuestionsSave(task);
 			handleSkillsSave(task);
 		}

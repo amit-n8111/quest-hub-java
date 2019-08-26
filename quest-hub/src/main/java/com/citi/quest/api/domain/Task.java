@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
 public class Task implements Serializable {
 
@@ -14,6 +16,8 @@ public class Task implements Serializable {
 
 	@Id
 	Long taskId;
+	
+	@JsonProperty
 
 	String taskName;
 
@@ -23,7 +27,7 @@ public class Task implements Serializable {
 
 	String taskDescription;
 
-	String taskType;
+	String taskTypeName;
 	
 	Integer taskTypeId;
 
@@ -111,12 +115,12 @@ public class Task implements Serializable {
 		this.taskDescription = taskDescription;
 	}
 
-	public String getTaskType() {
-		return taskType;
+	public String getTaskTypeName() {
+		return taskTypeName;
 	}
 
-	public void setTaskType(String taskType) {
-		this.taskType = taskType;
+	public void setTaskTypeName(String taskTypeName) {
+		this.taskTypeName = taskTypeName;
 	}
 	
 	public Integer getTaskTypeId() {
