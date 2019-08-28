@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.citi.quest.api.dtos.DashboardDTO;
 import com.citi.quest.api.dtos.EmailDTO;
 import com.citi.quest.api.notification.EmailNotification;
+import com.citi.quest.api.service.DashboardService;
 
 import io.swagger.annotations.Api;
 
@@ -21,13 +22,22 @@ public class DashboardController {
 	@Autowired
 	EmailNotification emailNotification;
 	
-	@GetMapping
-	public DashboardDTO getDashboardInfo(String user) {
-		return new DashboardDTO();
+	@Autowired
+	DashboardService deshboardService;
+	
+	@GetMapping("/Poster")
+	public DashboardDTO getTaskPosterDashboardInfo(String user) {
+		return deshboardService.getPosterDashboardData(user);
 	}
 	
 	@PostMapping("/sendMail")
 	public void sendMail(@RequestBody EmailDTO emailDTO) {
 		emailNotification.sendEmail(emailDTO);
 	}
+	
+	@GetMapping("/Seeker")
+	public DashboardDTO getTaskSeekerDashboardInfo(String user) {
+		return deshboardService.getSeekerDashboardData(user);
+	}
+	
 }

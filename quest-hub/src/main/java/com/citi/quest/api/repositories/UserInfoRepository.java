@@ -10,6 +10,7 @@ import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.domain.UserInfo;
+import com.citi.quest.api.dtos.SkillDetailsDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +25,7 @@ public interface UserInfoRepository extends MongoRepository<UserInfo, String> {
 			@Param("soeId") @ApiParam(name = "soeId", required = false, value = "details of user", defaultValue = "sm82199") String soeId);
 
 	@ApiOperation("Get all skills of a user by soeId")
-	List<Skill> findSkillsBySoeId(String soeId);
+	List<SkillDetailsDTO> findSkillDetailsBySoeId(@Param("soeId") String soeId);
 
 	@ApiOperation("Get all topics subscribed by user")
 	List<Topic> findTopicBySoeId(String soeId);
