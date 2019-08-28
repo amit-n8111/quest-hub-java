@@ -18,7 +18,7 @@ import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
-import com.citi.quest.api.service.impl.TaskService;
+import com.citi.quest.api.service.impl.TaskServiceImpl;
 
 import io.swagger.annotations.Api;
 
@@ -28,7 +28,7 @@ import io.swagger.annotations.Api;
 public class TaskController {
 
 	@Autowired
-	TaskService taskPostService;
+	TaskServiceImpl taskPostService;
 
 	@PostMapping(value = "task/edit/")
 	public ResponseEntity<Boolean> saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody TaskDTO task) {
