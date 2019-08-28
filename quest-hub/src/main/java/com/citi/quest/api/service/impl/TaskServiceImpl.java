@@ -40,11 +40,12 @@ import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.TopicRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
+import com.citi.quest.api.service.TaskService;
 import com.citi.quest.api.util.SequenceGenerator;
 
 @Service
 @Transactional
-public class TaskService {
+public class TaskServiceImpl implements TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
@@ -81,6 +82,7 @@ public class TaskService {
 	@Autowired
 	private SequenceGenerator sequenceGenerator;
 
+	@Override
 	public void postTask(TaskDTO taskDto, String user) {
 		// UserInfo userInfo = userRepository.findBySoeId(taskDto.getTaskCreatedBy());
 
@@ -88,10 +90,8 @@ public class TaskService {
 		task = taskRepository.save(task);
 	}
 
-	/*
-	 * 
-	 */
-	private Task updateTaskInfo(TaskDTO taskDto) {
+    @Override
+	public Task updateTaskInfo(TaskDTO taskDto) {
 		Task task = new Task();
 
 		task.setTaskId(taskDto.getTaskId());
@@ -114,10 +114,12 @@ public class TaskService {
 		return task;
 	}
 
+    @Override
 	public List<Task> getTasks() {
 		return taskRepository.findAll();
 	}
 
+    @Override
 	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user) {
 
 		Criteria criteria = new Criteria();
@@ -149,7 +151,8 @@ public class TaskService {
 		return mapToTaskResponseDTO(tasks, user);
 	}
 
-	private List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user) {
+    @Override
+	public List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user) {
 		List<TaskResponseDTO> taskDTOs = new ArrayList<>();
 		if (CollectionUtils.isNotEmpty(tasks)) {
 			for (Task task : tasks) {
@@ -200,6 +203,7 @@ public class TaskService {
 		return taskDTOs;
 	}
 
+    @Override
 	public Boolean applyTask(String user, Long taskId, ApplicationDTO applicationDTO) {
 		Application application = new Application();
 		UserInfo userInfo = userRepository.findBySoeId(user);
@@ -255,6 +259,7 @@ public class TaskService {
 		return true;
 	}
 
+    @Override
 	public Task saveTask(String user, Task task) {
 		if (null == task.getTaskId() || task.getTaskId() < 0) {
 			task.setTaskCreatedBy(
