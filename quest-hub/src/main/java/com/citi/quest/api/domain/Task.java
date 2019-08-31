@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Document
 public class Task implements Serializable {
@@ -15,20 +17,20 @@ public class Task implements Serializable {
 
 	@Id
 	Long taskId;
-	
-	//@TextIndexed(weight = 4)
+
+	// @TextIndexed(weight = 4)
 	String taskName;
 
-	//@TextIndexed(weight = 3)
+	// @TextIndexed(weight = 3)
 	Long taskTopicId;
 
 	Integer taskStatusId;
 
-	//@TextIndexed(weight = 2)
+	// @TextIndexed(weight = 2)
 	String taskDescription;
 
 	String taskTypeName;
-	
+
 	Integer taskTypeId;
 
 	Date taskDueDate;
@@ -39,7 +41,7 @@ public class Task implements Serializable {
 
 	List<Question> screeningQuestions;
 
-	//@TextIndexed(weight = 3)
+	// @TextIndexed(weight = 3)
 	List<Skill> skills;
 
 	String taskAssignedTo;
@@ -51,6 +53,18 @@ public class Task implements Serializable {
 	Integer rewardTypeId;
 
 	Integer rating;
+
+	@JsonIgnore
+	@TextScore
+	Float score;
+
+	public Float getScore() {
+		return score;
+	}
+
+	public void setScore(Float score) {
+		this.score = score;
+	}
 
 	public Integer getRating() {
 		return rating;
@@ -123,7 +137,7 @@ public class Task implements Serializable {
 	public void setTaskTypeName(String taskTypeName) {
 		this.taskTypeName = taskTypeName;
 	}
-	
+
 	public Integer getTaskTypeId() {
 		return taskTypeId;
 	}

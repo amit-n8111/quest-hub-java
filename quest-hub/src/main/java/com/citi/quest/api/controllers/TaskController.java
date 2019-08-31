@@ -2,6 +2,7 @@ package com.citi.quest.api.controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,23 +43,36 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "task/tasks")
-	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO, @RequestHeader(value = "sm_user") String user) {
-		return taskPostService.searchTasks(searchTaskDTO, user);
+	public List<TaskResponseDTO> searchTasks(@RequestBody SearchTaskDTO searchTaskDTO,
+			@RequestHeader(value = "sm_user") String user) {
+
+		if (StringUtils.isNotBlank(searchTaskDTO.getSearch()) || StringUtils.isNotBlank(searchTaskDTO.getSkillId())
+				|| (searchTaskDTO.getTasktopicId() != null && searchTaskDTO.getTasktopicId() > 0)
+				|| (searchTaskDTO.getTasktypeId() != null && searchTaskDTO.getTasktypeId() > 0) 
+				|| StringUtils.isNotBlank(searchTaskDTO.getCreatedBy()))
+				 {
+			return taskPostService.searchTasks(searchTaskDTO, user);
+		}
+		else {
+			System.out.println("getting recommended tasks");
+			return taskPostService.getRecomendedTasks(user,searchTaskDTO.getPageNumber(),searchTaskDTO.getPageSize());
+		}
 	}
 
 	@PostMapping(value = "task/apply/{taskId}")
-	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO,@RequestHeader(value = "sm_user") String user) {
+	public Boolean applyTask(@PathVariable(value = "taskId") Long taskId, @RequestBody ApplicationDTO applicationDTO,
+			@RequestHeader(value = "sm_user") String user) {
 		return taskPostService.applyTask(user, taskId, applicationDTO);
 	}
-	
-	
+
 	@PostMapping(value = "tasks")
 	public Task saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody Task task) {
 		return taskPostService.saveTask(user, task);
 	}
-	
+
 	@GetMapping(value = "tasks/{taskId}")
-	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user, @PathVariable(value = "taskId") Long taskId) {
+	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user,
+			@PathVariable(value = "taskId") Long taskId) {
 		return taskPostService.getTask(taskId, user);
 	}
 }

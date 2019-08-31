@@ -23,5 +23,8 @@ public interface TaskRepository extends MongoRepository<Task, Long> {
 
 	@Query("{ 'taskAssignedTo': ?0, 'taskStatusId': ?1}")
 	List<Task> findByTaskAssignedToAndTaskStatusId(String taskAssignedTo, Integer taskStatusId);
+	
+	@Query("{'taskStatusId': ?0}")
+	List<Task> findByTaskStatusId(Integer taskStatusId);
 
 }

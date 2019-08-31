@@ -1,9 +1,11 @@
 package com.citi.quest.api.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,8 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +29,13 @@ import com.citi.quest.api.domain.Notification;
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
+import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ApplicationDTO;
+import com.citi.quest.api.dtos.DashboardDTO;
 import com.citi.quest.api.dtos.EmailDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
+import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
 import com.citi.quest.api.enums.RewardType;
@@ -46,24 +56,30 @@ import com.citi.quest.api.util.SequenceGenerator;
 @Service
 @Transactional
 public class TaskServiceImpl implements TaskService {
+	
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Autowired
 	private TaskRepository taskRepository;
 
 	@Autowired
-	ApplicationRepository applicationRepository;
+	private UserInfoRepository userInfoRepository;
 
 	@Autowired
-	UserInfoRepository userRepository;
+	private ApplicationRepository applicationRepository;
 
 	@Autowired
-	MongoOperations mongoOperations;
+	private UserInfoRepository userRepository;
 
 	@Autowired
-	EmailNotification emailNotofication;
+	private MongoOperations mongoOperations;
 
 	@Autowired
-	TopicRepository topicRepository;
+	private EmailNotification emailNotofication;
+
+	@Autowired
+	private TopicRepository topicRepository;
 
 	@Autowired
 	private SkillsRepository skillRepository;
@@ -90,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
 		task = taskRepository.save(task);
 	}
 
-    @Override
+	@Override
 	public Task updateTaskInfo(TaskDTO taskDto) {
 		Task task = new Task();
 
@@ -114,24 +130,22 @@ public class TaskServiceImpl implements TaskService {
 		return task;
 	}
 
-    @Override
+	@Override
 	public List<Task> getTasks() {
 		return taskRepository.findAll();
 	}
 
-    @Override
+	@Override
 	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user) {
 
-		Criteria criteria = new Criteria();
 		Query query = new Query();
-
+		query.addCriteria(Criteria.where("taskStatusId").is(TaskStatus.PUBLISHED.getId()));
 		if (StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
 			query.addCriteria(Criteria.where("taskCreatedBy").is(searchTaskDTO.getCreatedBy()));
 		}
-
 		if (StringUtils.isNotBlank(searchTaskDTO.getSearch())) {
-			query.addCriteria(new Criteria().orOperator(criteria.where("taskName").regex(searchTaskDTO.getSearch()),
-					criteria.where("taskDescription").regex(searchTaskDTO.getSearch()),
+			query.addCriteria(new Criteria().orOperator(Criteria.where("taskName").regex(searchTaskDTO.getSearch()),
+					Criteria.where("taskDescription").regex(searchTaskDTO.getSearch()),
 					Criteria.where("skills").elemMatch(Criteria.where("name").regex(searchTaskDTO.getSearch()))));
 
 		}
@@ -151,7 +165,7 @@ public class TaskServiceImpl implements TaskService {
 		return mapToTaskResponseDTO(tasks, user);
 	}
 
-    @Override
+	@Override
 	public List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user) {
 		List<TaskResponseDTO> taskDTOs = new ArrayList<>();
 		if (CollectionUtils.isNotEmpty(tasks)) {
@@ -203,7 +217,7 @@ public class TaskServiceImpl implements TaskService {
 		return taskDTOs;
 	}
 
-    @Override
+	@Override
 	public Boolean applyTask(String user, Long taskId, ApplicationDTO applicationDTO) {
 		Application application = new Application();
 		UserInfo userInfo = userRepository.findBySoeId(user);
@@ -259,7 +273,7 @@ public class TaskServiceImpl implements TaskService {
 		return true;
 	}
 
-    @Override
+	@Override
 	public Task saveTask(String user, Task task) {
 		if (null == task.getTaskId() || task.getTaskId() < 0) {
 			task.setTaskCreatedBy(
@@ -330,6 +344,70 @@ public class TaskServiceImpl implements TaskService {
 		tasks.add(task);
 		List<TaskResponseDTO> taskDTOs = mapToTaskResponseDTO(tasks, user);
 		return taskDTOs.get(0);
+	}
+
+	public List<TaskResponseDTO> getRecomendedTasks(String user, int pageNum, int pageSize) {
+		
+		UserInfo userInfo = userInfoRepository.findBySoeId(user);
+		List<SkillDetailsDTO> skills = userInfo.getSkillDetails();
+		//List<Topic> topics = userInfo.getTopicsSubscribed();
+		
+		List<String> skillWords = skills.stream().map(skill -> skill.getSkill().getName()).collect(Collectors.toList());
+		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience()).collect(Collectors.toList());
+		//searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
+		StringBuilder sb = new StringBuilder();
+		
+		for(String searchWord : skillWords) {			
+			sb.append(searchWord);
+			sb.append(" ");
+		}		
+		/*TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+				  .onField("skills.name", 2F)
+				  //.onField("taskDescription", 1F)
+				  .onField("taskName", 1F)
+				  .build();
+		mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);*/				
+		TextCriteria criteria = TextCriteria.forDefaultLanguage()
+				  .matching(sb.toString());
+		Query query = TextQuery.queryText(criteria)
+				  .sortByScore()
+				  .with(new PageRequest(pageNum, pageSize));
+
+		List<Task> recomendedTasks = mongoTemplate.find(query, Task.class);
+		
+		System.out.println("size:- "+recomendedTasks.size());
+		System.out.println("scores before ");
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
+		
+		for(Task t : recomendedTasks) {
+			updateScorefromExperience(t,skillWords,skillExp);
+		}
+		
+		//sorting based on experience		
+		recomendedTasks.sort((o1,o2) -> o2.getScore().compareTo(o1.getScore()));
+		
+		System.out.println("\n scores after sort");
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
+		System.out.println("");
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
+		
+		return mapToTaskResponseDTO(recomendedTasks, user);
+	}
+
+	private void updateScorefromExperience(Task t, List<String> skillWords, List<Integer> skillExp) {
+		float releventExperience=0;
+		List<Skill> taskSkills = t.getSkills();
+		for(int i=0;i<taskSkills.size();i++) {
+			System.out.println("\n\nlooping thru taskSkills "+taskSkills.get(i).getName());
+			if(skillWords.contains(taskSkills.get(i).getName())) {				
+				releventExperience += skillExp.get(i);
+				System.out.println("found "+taskSkills.get(i).getName()+", "+ "current releventExperience="+releventExperience);
+			}
+		}
+		System.out.println("final releventExperience "+ releventExperience);
+		System.out.println("before score "+t.getScore());
+		t.setScore( t.getScore() + releventExperience/100 );
+		System.out.println("after score "+t.getScore());
 	}
 
 }
