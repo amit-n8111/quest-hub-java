@@ -24,4 +24,5 @@ public interface TaskService {
 
 	List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user);
 
+	Task approveTask(Long taskId, String applicant);
 }
