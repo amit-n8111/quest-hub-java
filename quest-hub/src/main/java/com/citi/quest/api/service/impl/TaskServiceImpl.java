@@ -1,7 +1,6 @@
 package com.citi.quest.api.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -29,10 +26,8 @@ import com.citi.quest.api.domain.Notification;
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
-import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ApplicationDTO;
-import com.citi.quest.api.dtos.DashboardDTO;
 import com.citi.quest.api.dtos.EmailDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.SkillDetailsDTO;
@@ -408,6 +403,14 @@ public class TaskServiceImpl implements TaskService {
 		System.out.println("before score "+t.getScore());
 		t.setScore( t.getScore() + releventExperience/100 );
 		System.out.println("after score "+t.getScore());
+	}
+
+	@Override
+	public Task approveTask(Long taskId, String applicant) {
+		Task task = taskRepository.findByTaskId(taskId);
+		task.setTaskStatusId(2);
+		task.setTaskAssignedTo(applicant);
+		return task;
 	}
 
 }

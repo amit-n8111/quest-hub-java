@@ -70,6 +70,12 @@ public class TaskController {
 		return taskPostService.saveTask(user, task);
 	}
 
+	@PostMapping(value = "tasks/approve/{taskId}")
+	public Task approveTask(@PathVariable(value = "taskId") Long taskId, @RequestHeader(value = "sm_user") String user, @RequestBody String applicant) {
+		return taskPostService.approveTask(taskId, applicant);
+	}
+	
+
 	@GetMapping(value = "tasks/{taskId}")
 	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user,
 			@PathVariable(value = "taskId") Long taskId) {
