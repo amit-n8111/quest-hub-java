@@ -361,18 +361,20 @@ public class TaskServiceImpl implements TaskService {
 				  //.onField("taskDescription", 1F)
 				  .onField("taskName", 1F)
 				  .build();
-		mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);*/				
+		mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);*/	
+		
 		TextCriteria criteria = TextCriteria.forDefaultLanguage()
 				  .matching(sb.toString());
 		Query query = TextQuery.queryText(criteria)
-				  .sortByScore()
+				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2))
 				  .with(new PageRequest(pageNum, pageSize));
 
 		List<Task> recomendedTasks = mongoTemplate.find(query, Task.class);
 		
-		System.out.println("size:- "+recomendedTasks.size());
-		System.out.println("scores before ");
+		System.out.println("\n index after sort");
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
+		System.out.println("\n scores after sort");
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
 		
 		for(Task t : recomendedTasks) {
 			updateScorefromExperience(t,skillWords,skillExp);
@@ -381,9 +383,9 @@ public class TaskServiceImpl implements TaskService {
 		//sorting based on experience		
 		recomendedTasks.sort((o1,o2) -> o2.getScore().compareTo(o1.getScore()));
 		
-		System.out.println("\n scores after sort");
+		System.out.println("\n index after sort");
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
-		System.out.println("");
+		System.out.println("\n scores after sort");
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
 		
 		return mapToTaskResponseDTO(recomendedTasks, user);

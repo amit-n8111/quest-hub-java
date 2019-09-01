@@ -18,15 +18,12 @@ public class Task implements Serializable {
 	@Id
 	Long taskId;
 
-	// @TextIndexed(weight = 4)
 	String taskName;
 
-	// @TextIndexed(weight = 3)
 	Long taskTopicId;
 
 	Integer taskStatusId;
 
-	// @TextIndexed(weight = 2)
 	String taskDescription;
 
 	String taskTypeName;
@@ -41,7 +38,6 @@ public class Task implements Serializable {
 
 	List<Question> screeningQuestions;
 
-	// @TextIndexed(weight = 3)
 	List<Skill> skills;
 
 	String taskAssignedTo;
