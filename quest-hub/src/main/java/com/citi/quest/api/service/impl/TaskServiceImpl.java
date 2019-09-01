@@ -164,7 +164,9 @@ public class TaskServiceImpl implements TaskService {
 			Task task = tasks.get(i);
 			List<SimillarTaskDTO> simillarTask = getSimillarTasks(task);
 			taskresponsesDTO.get(i).setSimillarTasks(simillarTask);
+			System.out.println("simillarTask "+simillarTask );
 		}
+		
 		return taskresponsesDTO;
 	}
 
@@ -208,7 +210,7 @@ public class TaskServiceImpl implements TaskService {
 
 				taskDTO.setTotalTasks(100);// TO DO
 				if (null != task.getTaskTypeName()) {
-					taskDTO.setTaskType(task.getTaskTypeId().toString());
+					taskDTO.setTaskTypeId(task.getTaskTypeId());
 					taskDTO.setTaskTypeName(task.getTaskTypeName());
 				}
 
@@ -424,7 +426,13 @@ public class TaskServiceImpl implements TaskService {
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
 		System.out.println("\n scores after sort");
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
-		
+		List<TaskResponseDTO> taskresponsesDTO = mapToTaskResponseDTO(recomendedTasks, user);
+		for(int i=0;i<recomendedTasks.size();i++) {
+			Task task = recomendedTasks.get(i);
+			List<SimillarTaskDTO> simillarTask = getSimillarTasks(task);
+			taskresponsesDTO.get(i).setSimillarTasks(simillarTask);
+			System.out.println("simillarTask "+simillarTask );
+		}
 		return mapToTaskResponseDTO(recomendedTasks, user);
 	}
 
