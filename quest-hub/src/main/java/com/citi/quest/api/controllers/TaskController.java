@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.dtos.ApplicationDTO;
+import com.citi.quest.api.dtos.OwnerTaskSuggestionDTO;
+import com.citi.quest.api.dtos.OwnerTaskSuggestionResponseDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
@@ -80,5 +82,10 @@ public class TaskController {
 	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user,
 			@PathVariable(value = "taskId") Long taskId) {
 		return taskPostService.getTask(taskId, user);
+	}
+	
+	@PostMapping(value = "tasks/suggestion/")
+	public OwnerTaskSuggestionResponseDTO getTaskSuggestions(@RequestBody OwnerTaskSuggestionDTO search, @RequestHeader(value = "sm_user") String user) {
+		return taskPostService.getTaskSuggestions(search, user);
 	}
 }
