@@ -1,1 +1,1 @@
-questhub.task.createIndex({"skills.name":"text","taskName":"text","taskDescription":"text"},{weights:{"skills.name":2,"taskName":2,"taskDescription":1}, name:"skills.name_taskName_taskDescription_TextIndex"});
+db.task.createIndex({"skills.name":"text","taskName":"text","taskDescription":"text"},{weights:{"skills.name":2,"taskName":2,"taskDescription":1}, name:"skills.name_taskName_taskDescription_TextIndex"});
