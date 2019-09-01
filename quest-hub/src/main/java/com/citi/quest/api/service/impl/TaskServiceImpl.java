@@ -26,10 +26,12 @@ import com.citi.quest.api.domain.Notification;
 import com.citi.quest.api.domain.Question;
 import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
+import com.citi.quest.api.domain.Topic;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.EmailDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
+import com.citi.quest.api.dtos.SimillarTaskDTO;
 import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.dtos.TaskDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
@@ -335,27 +337,50 @@ public class TaskServiceImpl implements TaskService {
 
 	public TaskResponseDTO getTask(Long taskId, String user) {
 		Task task = taskRepository.findOne(taskId);
+		//task are simmilar if they have 
+	    //	1.simmilar task name
+		//	2.simmilar skills
+		//	3.simmilar topic
+		List<String> taskSkills = task.getSkills().stream().map(skill -> skill.getName()).collect(Collectors.toList());
+		String searchString = listToString(taskSkills);
+		searchString = new StringBuilder().append(task.getTaskName()).append(" ").append(searchString).toString();
+		System.out.println("searchString "+searchString);
+		TextCriteria criteria = TextCriteria.forDefaultLanguage()
+				  .matching(searchString);
+		Query query = TextQuery.queryText(criteria)
+				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2)).limit(5);
+
+		List<Task> simmilarTasks = mongoTemplate.find(query, Task.class);
+		
+		System.out.println("\n scores of siillar tasks");
+		simmilarTasks.stream().forEach(t -> System.out.print(t.getScore()+","));
+		
+		System.out.println("simmilarTasks size "+simmilarTasks.size());
+		List<SimillarTaskDTO> simillarTask = makeSimillarTaskList(simmilarTasks);
+		//************************
 		List<Task> tasks = new ArrayList<>();
 		tasks.add(task);
 		List<TaskResponseDTO> taskDTOs = mapToTaskResponseDTO(tasks, user);
+		taskDTOs.get(0).setSimillarTasks(simillarTask);
 		return taskDTOs.get(0);
 	}
+
+	
+
+	
 
 	public List<TaskResponseDTO> getRecomendedTasks(String user, int pageNum, int pageSize) {
 		
 		UserInfo userInfo = userInfoRepository.findBySoeId(user);
 		List<SkillDetailsDTO> skills = userInfo.getSkillDetails();
-		//List<Topic> topics = userInfo.getTopicsSubscribed();
+		List<Topic> topics = userInfo.getTopicsSubscribed();
 		
 		List<String> skillWords = skills.stream().map(skill -> skill.getSkill().getName()).collect(Collectors.toList());
 		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience()).collect(Collectors.toList());
-		//searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
-		StringBuilder sb = new StringBuilder();
+		List<String> searchWords = new ArrayList<String>(skillWords);
+		searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
+		String searchString = listToString(searchWords);
 		
-		for(String searchWord : skillWords) {			
-			sb.append(searchWord);
-			sb.append(" ");
-		}		
 		/*TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
 				  .onField("skills.name", 2F)
 				  //.onField("taskDescription", 1F)
@@ -364,7 +389,7 @@ public class TaskServiceImpl implements TaskService {
 		mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);*/	
 		
 		TextCriteria criteria = TextCriteria.forDefaultLanguage()
-				  .matching(sb.toString());
+				  .matching(searchString);
 		Query query = TextQuery.queryText(criteria)
 				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2))
 				  .with(new PageRequest(pageNum, pageSize));
@@ -413,6 +438,24 @@ public class TaskServiceImpl implements TaskService {
 		task.setTaskStatusId(2);
 		task.setTaskAssignedTo(applicant);
 		return task;
+	}
+	
+	
+	private String listToString(List<String> searchWords) {
+		StringBuilder sb = new StringBuilder();		
+		for(String searchWord : searchWords) {			
+			sb.append(searchWord);
+			sb.append(" ");
+		}
+		return sb.toString();
+	}
+	
+	private List<SimillarTaskDTO> makeSimillarTaskList(List<Task> similarTasks) {
+		List<SimillarTaskDTO> similarTaskDTOs = new ArrayList<SimillarTaskDTO>();
+		for(Task similarTask : similarTasks) {
+			similarTaskDTOs.add(new SimillarTaskDTO(similarTask.getTaskId(),similarTask.getTaskName()));
+		}
+		return similarTaskDTOs;
 	}
 
 }
