@@ -159,15 +159,8 @@ public class TaskServiceImpl implements TaskService {
 
 		}
 		List<Task> tasks = mongoOperations.find(query, Task.class);
-		List<TaskResponseDTO> taskresponsesDTO = mapToTaskResponseDTO(tasks, user);
-		for(int i=0;i<tasks.size();i++) {
-			Task task = tasks.get(i);
-			List<SimillarTaskDTO> simillarTask = getSimillarTasks(task);
-			taskresponsesDTO.get(i).setSimillarTasks(simillarTask);
-			System.out.println("simillarTask "+simillarTask );
-		}
-		
-		return taskresponsesDTO;
+
+		return mapToTaskResponseDTO(tasks, user);
 	}
 
 	@Override
@@ -176,6 +169,8 @@ public class TaskServiceImpl implements TaskService {
 		if (CollectionUtils.isNotEmpty(tasks)) {
 			for (Task task : tasks) {
 				TaskResponseDTO taskDTO = new TaskResponseDTO();
+				List<SimillarTaskDTO> simillarTask = getSimillarTasks(task);
+				taskDTO.setSimillarTasks(simillarTask);
 				taskDTO.setTaskCreatedBy(userRepository.findBySoeId(task.getTaskCreatedBy()));
 				taskDTO.setManHoursNeeded(task.getManHoursNeeded());
 				Favorite fav = favRepository.findOne(user);
@@ -354,7 +349,6 @@ public class TaskServiceImpl implements TaskService {
 		List<Task> tasks = new ArrayList<>();
 		tasks.add(task);
 		List<TaskResponseDTO> taskDTOs = mapToTaskResponseDTO(tasks, user);
-		taskDTOs.get(0).setSimillarTasks(simillarTask);
 		return taskDTOs.get(0);
 	}
 
@@ -372,14 +366,14 @@ public class TaskServiceImpl implements TaskService {
 		TextCriteria criteria = TextCriteria.forDefaultLanguage()
 				  .matching(searchString);
 		Query query = TextQuery.queryText(criteria)
-				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2)).limit(5);
+				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2).andOperator(Criteria.where("taskId").ne(task.getTaskId()))).limit(5);
 
 		List<Task> simmilarTasks = mongoTemplate.find(query, Task.class);
 		
 		System.out.println("\n scores of siillar tasks");
 		simmilarTasks.stream().forEach(t -> System.out.print(t.getScore()+","));
 		
-		System.out.println("simmilarTasks size "+simmilarTasks.size());
+		System.out.println("similarTasks size "+simmilarTasks.size());
 		return makeTaskDTOList(simmilarTasks);
 	}
 
@@ -426,13 +420,6 @@ public class TaskServiceImpl implements TaskService {
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
 		System.out.println("\n scores after sort");
 		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
-		List<TaskResponseDTO> taskresponsesDTO = mapToTaskResponseDTO(recomendedTasks, user);
-		for(int i=0;i<recomendedTasks.size();i++) {
-			Task task = recomendedTasks.get(i);
-			List<SimillarTaskDTO> simillarTask = getSimillarTasks(task);
-			taskresponsesDTO.get(i).setSimillarTasks(simillarTask);
-			System.out.println("simillarTask "+simillarTask );
-		}
 		return mapToTaskResponseDTO(recomendedTasks, user);
 	}
 
