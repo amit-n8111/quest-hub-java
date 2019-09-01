@@ -20,7 +20,7 @@ public class TaskResponseDTO {
 	private Integer taskStatusId;
 	private String taskDescription;
 	private String taskTypeName;
-	private String taskType;
+	private Integer taskTypeId;
 	private Date taskDueDate;
 	private Date taskCreatedDate;
 	private int numberOfApplicationRecieved;
@@ -128,12 +128,13 @@ public class TaskResponseDTO {
 		this.taskTypeName = taskTypeName;
 	}
 
-	public String getTaskType() {
-		return taskType;
+	
+	public Integer getTaskTypeId() {
+		return taskTypeId;
 	}
 
-	public void setTaskType(String taskType) {
-		this.taskType = taskType;
+	public void setTaskTypeId(Integer taskTypeId) {
+		this.taskTypeId = taskTypeId;
 	}
 
 	public Date getTaskDueDate() {
