@@ -37,6 +37,7 @@ import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.SimillarTaskDTO;
 import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.dtos.TaskDTO;
+import com.citi.quest.api.dtos.TaskFeedbackDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
 import com.citi.quest.api.enums.RewardType;
 import com.citi.quest.api.enums.TaskStatus;
@@ -56,7 +57,7 @@ import com.citi.quest.api.util.SequenceGenerator;
 @Service
 @Transactional
 public class TaskServiceImpl implements TaskService {
-	
+
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
@@ -340,6 +341,7 @@ public class TaskServiceImpl implements TaskService {
 		return taskRepository.save(task);
 	}
 
+	@Override
 	public TaskResponseDTO getTask(Long taskId, String user) {
 		Task task = taskRepository.findOne(taskId);
 		List<Task> tasks = new ArrayList<>();
@@ -348,94 +350,92 @@ public class TaskServiceImpl implements TaskService {
 		return taskDTOs.get(0);
 	}
 
-	
-
-	
-
 	private List<SimillarTaskDTO> getSimillarTasks(Task task) {
-		//task are simmilar if they have 
-	    //	1.simmilar task name
-		//	2.simmilar skills
-		//	3.simmilar topic		
+		// task are simmilar if they have
+		// 1.simmilar task name
+		// 2.simmilar skills
+		// 3.simmilar topic
 		List<String> taskSkills = task.getSkills().stream().map(skill -> skill.getName()).collect(Collectors.toList());
 		String searchString = listToString(taskSkills);
 		searchString = new StringBuilder().append(task.getTaskName()).append(" ").append(searchString).toString();
-		System.out.println("searchString "+searchString);
-		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage()
-				  .matching(searchString);
-		Query query = TextQuery.queryText(criteria)
-				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2).andOperator(Criteria.where("taskId").ne(task.getTaskId()))).limit(5);
+		System.out.println("searchString " + searchString);
+
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore()
+				.addCriteria(
+						Criteria.where("taskStatusId").is(2).andOperator(Criteria.where("taskId").ne(task.getTaskId())))
+				.limit(5);
 
 		List<Task> simmilarTasks = mongoTemplate.find(query, Task.class);
-		
+
 		System.out.println("\n scores of siillar tasks");
-		simmilarTasks.stream().forEach(t -> System.out.print(t.getScore()+","));
-		
-		System.out.println("similarTasks size "+simmilarTasks.size());
+		simmilarTasks.stream().forEach(t -> System.out.print(t.getScore() + ","));
+
+		System.out.println("similarTasks size " + simmilarTasks.size());
 		return makeTaskDTOList(simmilarTasks);
 	}
 
+	@Override
 	public List<TaskResponseDTO> getRecomendedTasks(String user, int pageNum, int pageSize) {
-		
+
 		UserInfo userInfo = userInfoRepository.findBySoeId(user);
 		List<SkillDetailsDTO> skills = userInfo.getSkillDetails();
 		List<Topic> topics = userInfo.getTopicsSubscribed();
-		
+
 		List<String> skillWords = skills.stream().map(skill -> skill.getSkill().getName()).collect(Collectors.toList());
-		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience()).collect(Collectors.toList());
+		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience())
+				.collect(Collectors.toList());
 		List<String> searchWords = new ArrayList<String>(skillWords);
 		searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
 		String searchString = listToString(searchWords);
-		
-		/*TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-				  .onField("skills.name", 2F)
-				  //.onField("taskDescription", 1F)
-				  .onField("taskName", 1F)
-				  .build();
-		mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);*/	
-		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage()
-				  .matching(searchString);
-		Query query = TextQuery.queryText(criteria)
-				  .sortByScore().addCriteria(Criteria.where("taskStatusId").is(2))
-				  .with(new PageRequest(pageNum-1, pageSize));
+
+		/*
+		 * TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+		 * .onField("skills.name", 2F) //.onField("taskDescription", 1F)
+		 * .onField("taskName", 1F) .build();
+		 * mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);
+		 */
+
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore().addCriteria(Criteria.where("taskStatusId").is(2))
+				.with(new PageRequest(pageNum - 1, pageSize));
 
 		List<Task> recomendedTasks = mongoTemplate.find(query, Task.class);
-		
+
 		System.out.println("\n index after sort");
-		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId() + ","));
 		System.out.println("\n scores after sort");
-		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
-		
-		for(Task t : recomendedTasks) {
-			updateScorefromExperience(t,skillWords,skillExp);
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore() + ","));
+
+		for (Task t : recomendedTasks) {
+			updateScorefromExperience(t, skillWords, skillExp);
 		}
-		
-		//sorting based on experience		
-		recomendedTasks.sort((o1,o2) -> o2.getScore().compareTo(o1.getScore()));
-		
+
+		// sorting based on experience
+		recomendedTasks.sort((o1, o2) -> o2.getScore().compareTo(o1.getScore()));
+
 		System.out.println("\n index after sort");
-		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId()+","));
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getTaskId() + ","));
 		System.out.println("\n scores after sort");
-		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore()+","));
+		recomendedTasks.stream().forEach(task -> System.out.print(task.getScore() + ","));
 		return mapToTaskResponseDTO(recomendedTasks, user);
 	}
 
 	private void updateScorefromExperience(Task t, List<String> skillWords, List<Integer> skillExp) {
-		float releventExperience=0;
+		float releventExperience = 0;
 		List<Skill> taskSkills = t.getSkills();
-		for(int i=0;i<taskSkills.size();i++) {
-			System.out.println("\n\nlooping thru taskSkills "+taskSkills.get(i).getName());
-			if(skillWords.contains(taskSkills.get(i).getName())) {				
+		for (int i = 0; i < taskSkills.size(); i++) {
+			System.out.println("\n\nlooping thru taskSkills " + taskSkills.get(i).getName());
+			if (skillWords.contains(taskSkills.get(i).getName())) {
 				releventExperience += skillExp.get(i);
-				System.out.println("found "+taskSkills.get(i).getName()+", "+ "current releventExperience="+releventExperience);
+				System.out.println("found " + taskSkills.get(i).getName() + ", " + "current releventExperience="
+						+ releventExperience);
 			}
 		}
-		System.out.println("final releventExperience "+ releventExperience);
-		System.out.println("before score "+t.getScore());
-		t.setScore( t.getScore() + releventExperience/100 );
-		System.out.println("after score "+t.getScore());
+		System.out.println("final releventExperience " + releventExperience);
+		System.out.println("before score " + t.getScore());
+		t.setScore(t.getScore() + releventExperience / 100);
+		System.out.println("after score " + t.getScore());
 	}
 
 	@Override
@@ -445,53 +445,66 @@ public class TaskServiceImpl implements TaskService {
 		task.setTaskAssignedTo(applicant);
 		return task;
 	}
-	
-	
+
 	private String listToString(List<String> searchWords) {
-		StringBuilder sb = new StringBuilder();		
-		for(String searchWord : searchWords) {			
+		StringBuilder sb = new StringBuilder();
+		for (String searchWord : searchWords) {
 			sb.append(searchWord);
 			sb.append(" ");
 		}
 		return sb.toString();
 	}
-	
+
 	private List<SimillarTaskDTO> makeTaskDTOList(List<Task> similarTasks) {
 		List<SimillarTaskDTO> similarTaskDTOs = new ArrayList<SimillarTaskDTO>();
-		for(Task similarTask : similarTasks) {
-			similarTaskDTOs.add(new SimillarTaskDTO(similarTask.getTaskId(),similarTask.getTaskName()));
+		for (Task similarTask : similarTasks) {
+			similarTaskDTOs.add(new SimillarTaskDTO(similarTask.getTaskId(), similarTask.getTaskName()));
 		}
 		return similarTaskDTOs;
 	}
 
+	@Override
 	public OwnerTaskSuggestionResponseDTO getTaskSuggestions(OwnerTaskSuggestionDTO search, String user) {
-		
+
 		String searchText = search.getTaskName();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("taskName").regex(searchText, "i")).limit(10);
-		List<Task> suggestedTasks = mongoTemplate.find(query, Task.class);	
-				
-		TextCriteria criteria = TextCriteria.forDefaultLanguage()
-				  .matching(searchText);
-		Query query2 = TextQuery.queryText(criteria)
-				  .sortByScore();
+		List<Task> suggestedTasks = mongoTemplate.find(query, Task.class);
+
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchText);
+		Query query2 = TextQuery.queryText(criteria).sortByScore();
 		List<Topic> suggestedTopics = mongoTemplate.find(query2, Topic.class);
-		
-		return makeSuggestionDTO(suggestedTasks,suggestedTopics);
+
+		return makeSuggestionDTO(suggestedTasks, suggestedTopics);
 	}
 
 	private OwnerTaskSuggestionResponseDTO makeSuggestionDTO(List<Task> suggestedTasks, List<Topic> suggestedTopics) {
 		OwnerTaskSuggestionResponseDTO response = new OwnerTaskSuggestionResponseDTO();
 		List<RelatedTaskDTO> taskList = new ArrayList<RelatedTaskDTO>();
-		for(Task suggestedTask : suggestedTasks) {
+		for (Task suggestedTask : suggestedTasks) {
 			RelatedTaskDTO task = new RelatedTaskDTO();
 			task.setId(suggestedTask.getTaskId());
 			task.setTaskName(suggestedTask.getTaskName());
 			taskList.add(task);
 		}
 		response.setRelatedTasks(taskList);
-		response.setRelatedTopics(suggestedTopics);		
+		response.setRelatedTopics(suggestedTopics);
 		return response;
+	}
+
+	@Override
+	public boolean setTaskFeedback(TaskFeedbackDTO feedbakDTO, String taskOwner) {
+		try {
+			Task task = taskRepository.findOne(feedbakDTO.getTaskId());
+			task.setTaskStatusId(5);
+			task.setRating(feedbakDTO.getRating());
+			taskRepository.save(task);
+			return true;
+			
+		}catch(Exception e){			
+			return false;
+		}
+		
 	}
 
 }

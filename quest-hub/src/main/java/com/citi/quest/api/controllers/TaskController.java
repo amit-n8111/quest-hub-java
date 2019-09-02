@@ -20,6 +20,7 @@ import com.citi.quest.api.dtos.OwnerTaskSuggestionDTO;
 import com.citi.quest.api.dtos.OwnerTaskSuggestionResponseDTO;
 import com.citi.quest.api.dtos.SearchTaskDTO;
 import com.citi.quest.api.dtos.TaskDTO;
+import com.citi.quest.api.dtos.TaskFeedbackDTO;
 import com.citi.quest.api.dtos.TaskResponseDTO;
 import com.citi.quest.api.service.impl.TaskServiceImpl;
 
@@ -50,14 +51,12 @@ public class TaskController {
 
 		if (StringUtils.isNotBlank(searchTaskDTO.getSearch()) || StringUtils.isNotBlank(searchTaskDTO.getSkillId())
 				|| (searchTaskDTO.getTasktopicId() != null && searchTaskDTO.getTasktopicId() > 0)
-				|| (searchTaskDTO.getTasktypeId() != null && searchTaskDTO.getTasktypeId() > 0) 
-				|| StringUtils.isNotBlank(searchTaskDTO.getCreatedBy()))
-				 {
+				|| (searchTaskDTO.getTasktypeId() != null && searchTaskDTO.getTasktypeId() > 0)
+				|| StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
 			return taskPostService.searchTasks(searchTaskDTO, user);
-		}
-		else {
+		} else {
 			System.out.println("getting recommended tasks");
-			return taskPostService.getRecomendedTasks(user,searchTaskDTO.getPageNumber(),searchTaskDTO.getPageSize());
+			return taskPostService.getRecomendedTasks(user, searchTaskDTO.getPageNumber(), searchTaskDTO.getPageSize());
 		}
 	}
 
@@ -73,19 +72,25 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "tasks/approve/{taskId}")
-	public Task approveTask(@PathVariable(value = "taskId") Long taskId, @RequestHeader(value = "sm_user") String user, @RequestBody String applicant) {
+	public Task approveTask(@PathVariable(value = "taskId") Long taskId, @RequestHeader(value = "sm_user") String user,
+			@RequestBody String applicant) {
 		return taskPostService.approveTask(taskId, applicant);
 	}
-	
 
 	@GetMapping(value = "tasks/{taskId}")
 	public TaskResponseDTO getTask(@RequestHeader(value = "sm_user") String user,
 			@PathVariable(value = "taskId") Long taskId) {
 		return taskPostService.getTask(taskId, user);
 	}
-	
+
 	@PostMapping(value = "tasks/suggestion/")
-	public OwnerTaskSuggestionResponseDTO getTaskSuggestions(@RequestBody OwnerTaskSuggestionDTO search, @RequestHeader(value = "sm_user") String user) {
+	public OwnerTaskSuggestionResponseDTO getTaskSuggestions(@RequestBody OwnerTaskSuggestionDTO search,
+			@RequestHeader(value = "sm_user") String user) {
 		return taskPostService.getTaskSuggestions(search, user);
+	}
+
+	@PostMapping(value = "tasks/feedback/")
+	public boolean setTaskFeedback(@RequestBody TaskFeedbackDTO feedbakDTO, @RequestHeader(value = "sm_user") String user) {
+		return taskPostService.setTaskFeedback(feedbakDTO, user);
 	}
 }
