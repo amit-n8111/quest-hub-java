@@ -3,7 +3,7 @@ package com.citi.quest.api.dtos;
 import java.util.Date;
 
 public class NotificationDTO {
-	
+
 	Long notId;
 
 	Long taskId;
@@ -25,6 +25,16 @@ public class NotificationDTO {
 	Double rating;
 
 	Integer numberOfReviews;
+
+	Float userScore;
+
+	public Float getUserScore() {
+		return userScore;
+	}
+
+	public void setUserScore(Float userScore) {
+		this.userScore = userScore;
+	}
 
 	public Integer getNumberOfTasksCompleted() {
 		return numberOfTasksCompleted;

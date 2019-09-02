@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
 
 import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.BusinessUnit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document
@@ -37,6 +39,18 @@ public class UserInfo {
 	Double rating;
 
 	String userDescription;
+	
+	@JsonIgnore
+	@TextScore
+	Float score;
+
+	public Float getScore() {
+		return score;
+	}
+
+	public void setScore(Float score) {
+		this.score = score;
+	}
 
 	public String getEmail() {
 		return email;

@@ -2,6 +2,8 @@ package com.citi.quest.api.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +66,13 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public List<NotificationDTO> getAllNotifications(String user) {
+	public List<NotificationDTO> getAllNotifications(String notificationOwner) {
 
 		List<NotificationDTO> notificationResponseList = new ArrayList<NotificationDTO>();
 
 		Query query = new Query();
-		if (StringUtils.isNotBlank(user)) {
-			query.addCriteria(Criteria.where("taskOwner").is(user));
+		if (StringUtils.isNotBlank(notificationOwner)) {
+			query.addCriteria(Criteria.where("taskOwner").is(notificationOwner));
 		}
 
 		List<Notification> notifications = mongoOperations.find(query, Notification.class);
@@ -80,19 +82,44 @@ public class NotificationServiceImpl implements NotificationService {
 
 				NotificationDTO notificationDTO = new NotificationDTO();
 				fillNotificationDTO(notification, notificationDTO);
-				List<Task> tasks = taskRepository.findByTaskAssignedToAndTaskStatusId(user, 5);
-				Integer totalHoursWorked = 0;
-				for (Task task : tasks) {
-					totalHoursWorked += task.getManHoursNeeded();
-				}
+				List<Task> tasksDoneByUser = taskRepository.findByTaskAssignedToAndTaskStatusId(notification.getUserSoeId(), 5);
+				UserInfo notificationUser = userRepository.findBySoeId(notification.getUserSoeId());
+				Integer totalHoursWorked = calculateTotalWorkHoursOfUser(tasksDoneByUser);
+				Float profileMatchScore = generateUserProfileScroeForTask(tasksDoneByUser,notification,notificationUser);
 				notificationDTO.setTotalHoursWorked(totalHoursWorked);
-				notificationDTO.setNumberOfTasksCompleted(tasks.size());
+				notificationDTO.setNumberOfTasksCompleted(tasksDoneByUser.size());
+				notificationDTO.setUserScore(profileMatchScore);
 				notificationResponseList.add(notificationDTO);
 			}
 		}
 
 		return notificationResponseList;
 
+	}
+
+	private Float generateUserProfileScroeForTask(List<Task> tasksDoneByUser, Notification notification, UserInfo notificationUser) {
+		
+		Task currTask = taskRepository.findByTaskId(notification.getTaskId());
+		List<String> taskSkills = currTask.getSkills().stream().map(a->a.getName()).collect(Collectors.toList());
+		List<String> userSkills = notificationUser.getSkillDetails().stream().map(a->a.getSkill().getName()).collect(Collectors.toList());
+		userSkills.retainAll(taskSkills);
+		float skillMatchScore = 0f ,avgTaskRatingScore = 0f;
+		if(taskSkills.size() != 0){
+			skillMatchScore = (float)userSkills.size()/(float)taskSkills.size();
+		}
+		if(tasksDoneByUser.size() != 0) {
+			avgTaskRatingScore = (float)tasksDoneByUser.stream().map(task-> task.getScore()).reduce(Float::sum).get()/(float)tasksDoneByUser.size();
+		}
+		
+		return (skillMatchScore)*(avgTaskRatingScore);
+	}
+
+	private Integer calculateTotalWorkHoursOfUser(List<Task> tasks) {
+		Integer totalHoursWorked=0;		
+		for (Task task : tasks) {
+			totalHoursWorked += task.getManHoursNeeded();
+		}
+		return totalHoursWorked;
 	}
 
 	@Override
