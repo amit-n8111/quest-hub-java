@@ -443,7 +443,7 @@ public class TaskServiceImpl implements TaskService {
 		Task task = taskRepository.findByTaskId(taskId);
 		task.setTaskStatusId(2);
 		task.setTaskAssignedTo(applicant);
-		return task;
+		return taskRepository.save(task);
 	}
 
 	private String listToString(List<String> searchWords) {
