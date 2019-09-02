@@ -85,7 +85,7 @@ public class NotificationServiceImpl implements NotificationService {
 				List<Task> tasksDoneByUser = taskRepository.findByTaskAssignedToAndTaskStatusId(notification.getUserSoeId(), 5);
 				UserInfo notificationUser = userRepository.findBySoeId(notification.getUserSoeId());
 				Integer totalHoursWorked = calculateTotalWorkHoursOfUser(tasksDoneByUser);
-				Float profileMatchScore = generateUserProfileScroeForTask(tasksDoneByUser,notification,notificationUser);
+				Float profileMatchScore = generateUserScroeForTask(tasksDoneByUser,notification,notificationUser);
 				notificationDTO.setTotalHoursWorked(totalHoursWorked);
 				notificationDTO.setNumberOfTasksCompleted(tasksDoneByUser.size());
 				notificationDTO.setUserScore(profileMatchScore);
@@ -97,7 +97,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	}
 
-	private Float generateUserProfileScroeForTask(List<Task> tasksDoneByUser, Notification notification, UserInfo notificationUser) {
+	private Float generateUserScroeForTask(List<Task> tasksDoneByUser, Notification notification, UserInfo notificationUser) {
 		
 		Task currTask = taskRepository.findByTaskId(notification.getTaskId());
 		List<String> taskSkills = currTask.getSkills().stream().map(a->a.getName()).collect(Collectors.toList());
