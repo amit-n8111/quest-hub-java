@@ -21,6 +21,7 @@ import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.NotificationDTO;
 import com.citi.quest.api.dtos.NotificationDetailsDTO;
 import com.citi.quest.api.dtos.NotificationResponseDTO;
+import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.repositories.ApplicationRepository;
 import com.citi.quest.api.repositories.NotificationRepository;
 import com.citi.quest.api.repositories.TaskRepository;
@@ -74,22 +75,11 @@ public class NotificationServiceImpl implements NotificationService {
 		if (StringUtils.isNotBlank(notificationOwner)) {
 			query.addCriteria(Criteria.where("taskOwner").is(notificationOwner));
 		}
-
 		List<Notification> notifications = mongoOperations.find(query, Notification.class);
 
 		if (null != notifications) {
-			for (Notification notification : notifications) {
-
-				NotificationDTO notificationDTO = new NotificationDTO();
-				fillNotificationDTO(notification, notificationDTO);
-				List<Task> tasksDoneByUser = taskRepository.findByTaskAssignedToAndTaskStatusId(notification.getUserSoeId(), 5);
-				UserInfo notificationUser = userRepository.findBySoeId(notification.getUserSoeId());
-				Integer totalHoursWorked = calculateTotalWorkHoursOfUser(tasksDoneByUser);
-				Float profileMatchScore = generateUserScroeForTask(tasksDoneByUser,notification,notificationUser);
-				notificationDTO.setTotalHoursWorked(totalHoursWorked);
-				notificationDTO.setNumberOfTasksCompleted(tasksDoneByUser.size());
-				notificationDTO.setUserScore(profileMatchScore);
-				notificationResponseList.add(notificationDTO);
+			for (Notification notification : notifications) {				
+				notificationResponseList.add(prepareNotificationDTO(notification));
 			}
 		}
 
@@ -97,28 +87,50 @@ public class NotificationServiceImpl implements NotificationService {
 
 	}
 
+	private NotificationDTO prepareNotificationDTO(Notification notification) {
+		NotificationDTO notificationDTO = new NotificationDTO();
+		fillNotificationDTO(notification, notificationDTO);
+		Query query = new Query();
+		query.addCriteria(Criteria.where("taskStatusId").is(TaskStatus.COMPLETED.getId()));
+		query.addCriteria(Criteria.where("taskAssignedTo").is(notification.getUserSoeId()));
+		List<Task> tasksDoneByUser = mongoOperations.find(query, Task.class);
+		System.out.println("tasksDoneByUser "+tasksDoneByUser.size());
+		UserInfo notificationUser = userRepository.findBySoeId(notification.getUserSoeId());
+		Integer totalHoursWorked = calculateTotalWorkHoursOfUser(tasksDoneByUser);
+		Float profileMatchScore = generateUserScroeForTask(tasksDoneByUser,notification,notificationUser);
+		notificationDTO.setTotalHoursWorked(totalHoursWorked);
+		notificationDTO.setNumberOfTasksCompleted(tasksDoneByUser.size());
+		notificationDTO.setUserScore(profileMatchScore);
+		return notificationDTO;
+	}
+
 	private Float generateUserScroeForTask(List<Task> tasksDoneByUser, Notification notification, UserInfo notificationUser) {
 		
 		Task currTask = taskRepository.findByTaskId(notification.getTaskId());
 		List<String> taskSkills = currTask.getSkills().stream().map(a->a.getName()).collect(Collectors.toList());
 		List<String> userSkills = notificationUser.getSkillDetails().stream().map(a->a.getSkill().getName()).collect(Collectors.toList());
+		System.out.printf("taskSkills %s \n userSkills %s \n",taskSkills,userSkills);
 		userSkills.retainAll(taskSkills);
-		float skillMatchScore = 0f ,avgTaskRatingScore = 0f;
+		System.out.printf("commonSkills %s \n",userSkills);
+		float skillMatchScore = 0f ,avgTaskRatingScore = 1f;
 		if(taskSkills.size() != 0){
 			skillMatchScore = (float)userSkills.size()/(float)taskSkills.size();
 		}
 		if(tasksDoneByUser.size() != 0) {
-			avgTaskRatingScore = (float)tasksDoneByUser.stream().map(task-> task.getScore()).reduce(Float::sum).get()/(float)tasksDoneByUser.size();
+			avgTaskRatingScore = (float)tasksDoneByUser.stream().map(task-> task.getRating()).reduce(0, Integer::sum)/(float)tasksDoneByUser.size();
+					
 		}
-		
-		return (skillMatchScore)*(avgTaskRatingScore);
+		System.out.printf("skillMatchScore %s \n avgTaskRatingScore %s \n",skillMatchScore,avgTaskRatingScore);
+		return (skillMatchScore*avgTaskRatingScore*20);
 	}
 
+
 	private Integer calculateTotalWorkHoursOfUser(List<Task> tasks) {
-		Integer totalHoursWorked=0;		
+		int totalHoursWorked=0;		
 		for (Task task : tasks) {
 			totalHoursWorked += task.getManHoursNeeded();
 		}
+		System.out.printf("task size= %s , totalHoursWorked= %s \n",tasks.size(),totalHoursWorked);
 		return totalHoursWorked;
 	}
 
