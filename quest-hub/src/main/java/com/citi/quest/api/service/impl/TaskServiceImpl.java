@@ -441,7 +441,7 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Task approveTask(Long taskId, String applicant) {
 		Task task = taskRepository.findByTaskId(taskId);
-		task.setTaskStatusId(2);
+		task.setTaskStatusId(3);
 		task.setTaskAssignedTo(applicant);
 		return taskRepository.save(task);
 	}
