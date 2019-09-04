@@ -1,7 +1,11 @@
 package com.citi.quest.api.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +24,7 @@ import com.citi.quest.api.dtos.ApplicationDTO;
 import com.citi.quest.api.dtos.NotificationDTO;
 import com.citi.quest.api.dtos.NotificationDetailsDTO;
 import com.citi.quest.api.dtos.NotificationResponseDTO;
+import com.citi.quest.api.dtos.OtherUserInfoDTO;
 import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.enums.TaskStatus;
 import com.citi.quest.api.repositories.ApplicationRepository;
@@ -214,11 +219,47 @@ public class NotificationServiceImpl implements NotificationService {
 				notificationResponse.setUserInfo(userInfo);
 				notificationResponseList.add(notificationResponse);
 			}
-			notificationResponseList.stream().forEach(a -> a.getNotification().setUserScore(( a.getNotification().getUserScore()*100f ) / requestScopeBean.getMaxUserScroeForTask()));
-
+			notificationResponseList.stream().forEach(a -> a.getNotification().setUserScore(( a.getNotification().getUserScore()*100f ) / requestScopeBean.getMaxUserScroeForTask()));			
+			setOthersScoreInfoInNotification(notificationResponseList);
 		}
-
 		return notificationResponseList;
+	}
+
+	private void setOthersScoreInfoInNotification(List<NotificationResponseDTO> notificationResponseList) {
+		
+		Map<Long,List<OtherUserInfoDTO>> allUserScoreOfAllTask = new HashMap<Long,List<OtherUserInfoDTO>>();		
+		for(NotificationResponseDTO notificationResponseDTO : notificationResponseList) {
+			Long key = notificationResponseDTO.getNotification().getTaskId();
+			List<OtherUserInfoDTO> usersScore = allUserScoreOfAllTask.get(key);
+			if(usersScore == null) {
+				usersScore = new ArrayList<OtherUserInfoDTO>();
+				OtherUserInfoDTO otherUserInfoDTO = prepareOtherUserInfo(notificationResponseDTO);
+				usersScore.add(otherUserInfoDTO);
+				allUserScoreOfAllTask.put(key, usersScore);
+			}else {
+				OtherUserInfoDTO otherUserInfoDTO = prepareOtherUserInfo(notificationResponseDTO);
+				usersScore.add(otherUserInfoDTO);
+				allUserScoreOfAllTask.put(key, usersScore);
+			}				
+		}
+		
+		for(NotificationResponseDTO notificationResponseDTO : notificationResponseList) {
+			List<OtherUserInfoDTO> list = allUserScoreOfAllTask.get(notificationResponseDTO.getNotification().getTaskId());
+			list.sort((o1,o2) -> o2.getScore().compareTo(o1.getScore()));
+			notificationResponseDTO.setOtherUserInfo(list);		
+		}
+	}
+
+	private OtherUserInfoDTO prepareOtherUserInfo(NotificationResponseDTO notificationResponseDTO) {
+		OtherUserInfoDTO otherUserInfoDTO = new  OtherUserInfoDTO();
+		otherUserInfoDTO.setName(notificationResponseDTO.getUserInfo().getName());
+		otherUserInfoDTO.setRating(notificationResponseDTO.getUserInfo().getRating());
+		otherUserInfoDTO.setScore(notificationResponseDTO.getNotification().getUserScore());
+		otherUserInfoDTO.setSoeId(notificationResponseDTO.getUserInfo().getSoeId());
+		otherUserInfoDTO.setAvalableStartDate(notificationResponseDTO.getApplication().getStartDate());
+		otherUserInfoDTO.setAvilableEndDate(notificationResponseDTO.getApplication().getEndDate());
+		return otherUserInfoDTO;
+		
 	}
 
 	private void fillNotificationDTO(Notification notification, NotificationDTO notificationDTO) {
