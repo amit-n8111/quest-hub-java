@@ -4,15 +4,17 @@ import java.util.Date;
 
 public class NotificationDTO {
 
-	Long notId;
+	Long id;
 
 	Long taskId;
 
 	String taskName;
 
-	String userId;
+	String userSoeId;
 
 	String userName;
+
+	Long aplicationId;
 
 	Boolean isViewed = false;
 
@@ -76,20 +78,32 @@ public class NotificationDTO {
 		this.notificationTime = notificationTime;
 	}
 
-	public Long getNotId() {
-		return notId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setNotId(Long notId) {
-		this.notId = notId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getUserId() {
-		return userId;
+	public Long getNotificationId() {
+		return id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public String getUserSoeId() {
+		return userSoeId;
+	}
+
+	public void setUserSoeId(String userSoeId) {
+		this.userSoeId = userSoeId;
+	}
+
+	public Long getAplicationId() {
+		return aplicationId;
+	}
+
+	public void setAplicationId(Long aplicationId) {
+		this.aplicationId = aplicationId;
 	}
 
 	public String getUserName() {

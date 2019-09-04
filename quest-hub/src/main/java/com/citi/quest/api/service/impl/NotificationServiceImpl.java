@@ -114,31 +114,34 @@ public class NotificationServiceImpl implements NotificationService {
 		List<String> taskSkills = currTask.getSkills().stream().map(a -> a.getName()).collect(Collectors.toList());
 		List<SkillDetailsDTO> matchingSkillsdto = notificationUser.getSkillDetails().stream()
 				.filter(s -> taskSkills.contains(s.getSkill().getName())).collect(Collectors.toList());
-
-		float skillMatchScore = 0f, avgTaskRatingScore = 1f;
+		int skillMatchCount = matchingSkillsdto.size(); 
+		float skillMatchScore = 0f, avgTaskRatingScore = 1f, releventExperienceScore=1f;
 		if (taskSkills.size() != 0) {
-			skillMatchScore = matchingSkillsdto.size() / taskSkills.size();
+			skillMatchScore = skillMatchCount;
 		}
 
-		float releventExperienceScore = matchingSkillsdto.stream().map(skill -> {
-			Integer level = skill.getLevel() == null ? null : skill.getLevel().getId();
-			Integer exp = skill.getYearsOfExperience();
-			if (level != null && exp != null)
-				return skill.getLevel().getId() * skill.getYearsOfExperience();
-			else if (level != null)
-				return skill.getLevel().getId();
-			else if (exp != null)
-				return skill.getYearsOfExperience();
-			else {
-				return 1;
-			}
-		}).reduce(0, Integer::sum) / matchingSkillsdto.size();
+		if(skillMatchCount != 0) {
+			releventExperienceScore = (float) matchingSkillsdto.stream().map(skill -> {
+				Integer level = skill.getLevel() == null ? null : skill.getLevel().getId();
+				Integer exp = skill.getYearsOfExperience();
+				if (level != null && exp != null)
+					return skill.getLevel().getId() * skill.getYearsOfExperience();
+				else if (level != null)
+					return skill.getLevel().getId();
+				else if (exp != null)
+					return skill.getYearsOfExperience();
+				else {
+					return 1;
+				}
+			}).reduce(0, Integer::sum) / (float)skillMatchCount;
+		}
+			
 		if (tasksDoneByUser.size() != 0) {
 			avgTaskRatingScore = (float) tasksDoneByUser.stream().map(task -> task.getRating()).reduce(0, Integer::sum)
 					/ (float) tasksDoneByUser.size();
 		}
-		System.out.printf("skillMatchScore %s \n avgTaskRatingScore %s \n", skillMatchScore, avgTaskRatingScore);
-		float currUserScore = (skillMatchScore * avgTaskRatingScore * releventExperienceScore);
+		System.out.printf("skillMatchScore %s \n avgTaskRatingScore %s \n releventExperienceScore %s \n", skillMatchScore, avgTaskRatingScore,releventExperienceScore);
+		float currUserScore = (skillMatchScore * (avgTaskRatingScore + releventExperienceScore) );
 		if (currUserScore > requestScopeBean.getMaxUserScroeForTask())
 			requestScopeBean.setMaxUserScroeForTask(currUserScore);
 		return currUserScore;
@@ -202,18 +205,16 @@ public class NotificationServiceImpl implements NotificationService {
 
 		if (null != notifications) {
 			for (Notification notification : notifications) {
+				
 				NotificationResponseDTO notificationResponse = new NotificationResponseDTO();
-
 				UserInfo userInfo = userRepository.findBySoeId(notification.getUserSoeId());
-
 				ApplicationDTO application = applicationRepository.findById(notification.getAplicationId());
-
-				notificationResponse.setNotification(notification);
+				notificationResponse.setNotification(prepareNotificationDTO(notification));			
 				notificationResponse.setApplication(application);
 				notificationResponse.setUserInfo(userInfo);
-
 				notificationResponseList.add(notificationResponse);
 			}
+			notificationResponseList.stream().forEach(a -> a.getNotification().setUserScore(( a.getNotification().getUserScore()*100f ) / requestScopeBean.getMaxUserScroeForTask()));
 
 		}
 
@@ -222,10 +223,10 @@ public class NotificationServiceImpl implements NotificationService {
 
 	private void fillNotificationDTO(Notification notification, NotificationDTO notificationDTO) {
 
-		notificationDTO.setNotId(notification.getNotificationId());
+		notificationDTO.setId(notification.getId());
 		notificationDTO.setTaskId(notification.getTaskId());
 		notificationDTO.setTaskName(notification.getTaskName());
-		notificationDTO.setUserId(notification.getUserSoeId());
+		notificationDTO.setUserSoeId(notification.getUserSoeId());
 		notificationDTO.setUserName(notification.getUserName());
 		notificationDTO.setIsViewed(notification.getIsViewed());
 		notificationDTO.setNotificationTime(notification.getNotificationTime());

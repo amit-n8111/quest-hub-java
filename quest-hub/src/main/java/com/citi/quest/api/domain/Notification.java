@@ -5,16 +5,11 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Document
 public class Notification {
 
 	@Id
 	Long id;
-
-	@JsonProperty
-	Long notificationId;
 
 	Long taskId;
 
@@ -29,7 +24,7 @@ public class Notification {
 	Long aplicationId;
 
 	Boolean isViewed = false;
-	
+
 	Date notificationTime;
 
 	public Date getNotificationTime() {
@@ -40,17 +35,12 @@ public class Notification {
 		this.notificationTime = notificationTime;
 	}
 
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getNotificationId() {
-		return id;
 	}
 
 	public Long getTaskId() {
