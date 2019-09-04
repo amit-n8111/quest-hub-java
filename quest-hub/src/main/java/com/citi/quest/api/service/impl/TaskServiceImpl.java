@@ -427,7 +427,7 @@ public class TaskServiceImpl implements TaskService {
 		for (int i = 0; i < taskSkills.size(); i++) {
 			System.out.println("\n\nlooping thru taskSkills " + taskSkills.get(i).getName());
 			if (skillWords.contains(taskSkills.get(i).getName())) {
-				releventExperience += skillExp.get(i);
+				releventExperience += skillExp.get(skillWords.indexOf(taskSkills.get(i).getName()));
 				System.out.println("found " + taskSkills.get(i).getName() + ", " + "current releventExperience="
 						+ releventExperience);
 			}
