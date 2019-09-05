@@ -2,14 +2,19 @@ package com.citi.quest.api.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +23,7 @@ import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
 import com.citi.quest.api.dtos.SearchUserResponseDTO;
+import com.citi.quest.api.dtos.SkillDetailsDTO;
 import com.citi.quest.api.dtos.WorkHistoryAndFeedbackDTO;
 import com.citi.quest.api.repositories.FavoriteRepository;
 import com.citi.quest.api.repositories.TaskRepository;
@@ -36,6 +42,10 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	MongoOperations mongoOperations;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
+	
 
 	@Autowired
 	TaskRepository taskRepository;
@@ -89,6 +99,12 @@ public class UserServiceImpl implements UserService {
 		}
 		List<UserInfo> users = mongoOperations.find(query, UserInfo.class);
 
+		List<SearchUserResponseDTO> response = mapToSearchUserResponseDTO(users);
+		return response;
+	}
+
+	private List<SearchUserResponseDTO> mapToSearchUserResponseDTO(List<UserInfo> users) {
+		
 		List<SearchUserResponseDTO> response = new ArrayList<SearchUserResponseDTO>();
 		for (UserInfo user : users) {
 			SearchUserResponseDTO searchUserResponseDTO = new SearchUserResponseDTO();
@@ -116,14 +132,74 @@ public class UserServiceImpl implements UserService {
 			searchUserResponseDTO.setNumberOfTasksCompleted(tasks.size());
 			response.add(searchUserResponseDTO);
 		}
-
+		
 		return response;
+		
 	}
 
 	@Override
-	public List<SearchUserResponseDTO> getRecomendedUsers(String user, Integer pageNumber, Integer pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<SearchUserResponseDTO> getRecomendedUsers(String user,Long taskId , Integer pageNum, Integer pageSize) {
+		
+		Task task = taskRepository.findByTaskId(taskId);
+		List<String> taskSkills = task.getSkills().stream()
+				.map(skill -> skill.getName())
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		String searchString = listToString(taskSkills);
+		System.out.println("searchString " + searchString);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore()
+				.with(new PageRequest(pageNum - 1, pageSize));
+
+		List<UserInfo> recomendedUsers = mongoTemplate.find(query, UserInfo.class);
+
+		System.out.println("\n index after sort");
+		recomendedUsers.stream().forEach(u -> System.out.print(u.getSoeId() + ","));
+		System.out.println("\n scores after sort");
+		recomendedUsers.stream().forEach(u -> System.out.print(u.getScore() + ","));
+
+		for (UserInfo u : recomendedUsers) {
+			updateScorefromExperience(u, taskSkills);
+		}
+		
+		recomendedUsers.sort((o1, o2) -> o2.getScore().compareTo(o1.getScore()));
+
+		System.out.println("\n index after sort");
+		recomendedUsers.stream().forEach(u -> System.out.print(u.getSoeId() + ","));
+		System.out.println("\n scores after sort");
+		recomendedUsers.stream().forEach(u -> System.out.print(u.getScore() + ","));
+
+		return mapToSearchUserResponseDTO(recomendedUsers);
+	}
+	
+	private void updateScorefromExperience(UserInfo u, List<String> taskSkills) {
+		float advanceSkillScore = 0;
+		List<SkillDetailsDTO> userSkillDTOs = u.getSkillDetails();  //.stream().map(s-> s.getSkill()).collect(Collectors.toList());
+		for(String taskSkill : taskSkills) {			
+			for(int i=0;i<userSkillDTOs.size();i++) {
+				String userSkill = userSkillDTOs.get(i).getSkill().getName();
+				if(userSkill.equalsIgnoreCase(taskSkill)) {
+					/*if(userSkillDTOs.get(i).getNumOfTaskCompleted() != null)
+						advanceSkillScore += userSkillDTOs.get(i).getNumOfTaskCompleted();*/
+					if(userSkillDTOs.get(i).getYearsOfExperience() != null)	
+						advanceSkillScore += userSkillDTOs.get(i).getYearsOfExperience();
+					advanceSkillScore += userSkillDTOs.get(i).getLevel().getId();
+				}
+				
+			}		
+		}
+		u.setScore(u.getScore() + advanceSkillScore);
+		
+	}
+
+	private String listToString(List<String> searchWords) {
+		StringBuilder sb = new StringBuilder();
+		for (String searchWord : searchWords) {
+			sb.append(searchWord);
+			sb.append(" ");
+		}
+		return sb.toString();
 	}
 
 }

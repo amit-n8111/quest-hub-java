@@ -13,6 +13,16 @@ public class SkillDetailsDTO {
 
 	String lastWorked;
 
+	/*Integer numOfTaskCompleted;
+
+	public Integer getNumOfTaskCompleted() {
+		return numOfTaskCompleted;
+	}
+
+	public void setNumOfTaskCompleted(Integer numOfTaskCompleted) {
+		this.numOfTaskCompleted = numOfTaskCompleted;
+	}*/
+
 	public Skill getSkill() {
 		return skill;
 	}
@@ -29,7 +39,8 @@ public class SkillDetailsDTO {
 	}
 
 	/**
-	 * @param level the level to set
+	 * @param level
+	 *            the level to set
 	 */
 	public void setLevel(ExpertiseLevel level) {
 		this.level = level;
@@ -43,7 +54,8 @@ public class SkillDetailsDTO {
 	}
 
 	/**
-	 * @param yearsOfExperience the yearsOfExperience to set
+	 * @param yearsOfExperience
+	 *            the yearsOfExperience to set
 	 */
 	public void setYearsOfExperience(Integer yearsOfExperience) {
 		this.yearsOfExperience = yearsOfExperience;
@@ -57,7 +69,8 @@ public class SkillDetailsDTO {
 	}
 
 	/**
-	 * @param lastWorked the lastWorked to set
+	 * @param lastWorked
+	 *            the lastWorked to set
 	 */
 	public void setLastWorked(String lastWorked) {
 		this.lastWorked = lastWorked;

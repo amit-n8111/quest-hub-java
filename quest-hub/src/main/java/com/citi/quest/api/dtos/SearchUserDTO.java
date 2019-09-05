@@ -9,6 +9,15 @@ public class SearchUserDTO {
 	private String search;
 	private Long taskTopicId;
 	private Long skillId;
+	private Long taskId;
+
+	public Long getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Long taskId) {
+		this.taskId = taskId;
+	}
 
 	public Integer getPageNumber() {
 		return pageNumber;

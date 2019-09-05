@@ -14,6 +14,6 @@ public interface UserService {
 
 	List<SearchUserResponseDTO> searchUserInfo(SearchUserDTO searchUserDTO);
 
-	List<SearchUserResponseDTO> getRecomendedUsers(String user, Integer pageNumber, Integer pageSize);
+	List<SearchUserResponseDTO> getRecomendedUsers(String user, Long taskId, Integer pageNumber, Integer pageSize);
 
 }

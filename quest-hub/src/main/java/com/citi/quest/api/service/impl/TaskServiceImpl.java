@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -386,10 +387,9 @@ public class TaskServiceImpl implements TaskService {
 		List<Topic> topics = userInfo.getTopicsSubscribed();
 
 		List<String> skillWords = skills.stream().map(skill -> skill.getSkill().getName()).collect(Collectors.toList());
-		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience())
-				.collect(Collectors.toList());
+		List<Integer> skillExp = skills.stream().map(skill -> skill.getYearsOfExperience()).filter(Objects::nonNull).collect(Collectors.toList());
 		List<String> searchWords = new ArrayList<String>(skillWords);
-		searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
+		//searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
 		String searchString = listToString(searchWords);
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchString);

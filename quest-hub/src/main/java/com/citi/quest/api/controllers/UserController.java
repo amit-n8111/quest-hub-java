@@ -44,12 +44,13 @@ public class UserController {
 		
 		if (StringUtils.isNotBlank(searchUserDTO.getSearch()) 
 				|| (searchUserDTO.getSkillId() != null && searchUserDTO.getSkillId() > 0)
-				|| (searchUserDTO.getTaskTopicId() != null && searchUserDTO.getTaskTopicId() > 0)) {
+				|| (searchUserDTO.getTaskTopicId() != null && searchUserDTO.getTaskTopicId() > 0)
+				|| (searchUserDTO.getTaskId() == null) ) {
 			
 			return userService.searchUserInfo(searchUserDTO);
 		} else {
 			System.out.println("getting recommended users");
-			return userService.getRecomendedUsers(user, searchUserDTO.getPageNumber(), searchUserDTO.getPageSize());
+			return userService.getRecomendedUsers(user,searchUserDTO.getTaskId(), searchUserDTO.getPageNumber(), searchUserDTO.getPageSize());
 		}
 	}
 
