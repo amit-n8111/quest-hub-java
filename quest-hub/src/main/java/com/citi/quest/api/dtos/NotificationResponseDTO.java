@@ -1,5 +1,7 @@
 package com.citi.quest.api.dtos;
 
+import java.util.List;
+
 import com.citi.quest.api.domain.UserInfo;
 
 public class NotificationResponseDTO {
@@ -9,6 +11,16 @@ public class NotificationResponseDTO {
 	UserInfo userInfo;
 
 	ApplicationDTO application;
+
+	List<OtherUserInfoDTO> otherUserInfo;
+
+	public List<OtherUserInfoDTO> getOtherUserInfo() {
+		return otherUserInfo;
+	}
+
+	public void setOtherUserInfo(List<OtherUserInfoDTO> otherUserInfo) {
+		this.otherUserInfo = otherUserInfo;
+	}
 
 	public NotificationDTO getNotification() {
 		return notification;

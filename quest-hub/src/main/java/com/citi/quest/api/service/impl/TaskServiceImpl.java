@@ -357,10 +357,7 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	private List<SimillarTaskDTO> getSimillarTasks(Task task) {
-		// task are simmilar if they have
-		// 1.simmilar task name
-		// 2.simmilar skills
-		// 3.simmilar topic
+
 		List<String> taskSkills = task.getSkills().stream().map(skill -> skill.getName()).collect(Collectors.toList());
 		String searchString = listToString(taskSkills);
 		searchString = new StringBuilder().append(task.getTaskName()).append(" ").append(searchString).toString();
@@ -394,13 +391,6 @@ public class TaskServiceImpl implements TaskService {
 		List<String> searchWords = new ArrayList<String>(skillWords);
 		searchWords.addAll(topics.stream().map(topic -> topic.getTopicName()).collect(Collectors.toList()));
 		String searchString = listToString(searchWords);
-
-		/*
-		 * TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-		 * .onField("skills.name", 2F) //.onField("taskDescription", 1F)
-		 * .onField("taskName", 1F) .build();
-		 * mongoTemplate.indexOps(Task.class).ensureIndex(textIndex);
-		 */
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchString);
 		Query query = TextQuery.queryText(criteria).sortByScore().addCriteria(Criteria.where("taskStatusId").is(2))
@@ -474,7 +464,7 @@ public class TaskServiceImpl implements TaskService {
 
 		String searchText = search.getTaskName();
 		Query query = new Query();
-		query.addCriteria(Criteria.where("taskName").regex(searchText, "i")).limit(10);
+		query.addCriteria(Criteria.where("taskName").regex(searchText, "i")).limit(5);
 		List<Task> suggestedTasks = mongoTemplate.find(query, Task.class);
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching(searchText);

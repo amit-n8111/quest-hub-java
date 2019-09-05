@@ -120,4 +120,10 @@ public class UserServiceImpl implements UserService {
 		return response;
 	}
 
+	@Override
+	public List<SearchUserResponseDTO> getRecomendedUsers(String user, Integer pageNumber, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
