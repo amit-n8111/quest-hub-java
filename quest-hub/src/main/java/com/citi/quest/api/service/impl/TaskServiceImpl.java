@@ -166,7 +166,7 @@ public class TaskServiceImpl implements TaskService {
 		return mapToTaskResponseDTO(tasks, user);
 	}
 
-	@Override
+
 	public List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user) {
 		List<TaskResponseDTO> taskDTOs = new ArrayList<>();
 		if (CollectionUtils.isNotEmpty(tasks)) {
@@ -367,7 +367,7 @@ public class TaskServiceImpl implements TaskService {
 
 		System.out.println("\n scores of siillar tasks");
 		simmilarTasks.stream().forEach(t -> System.out.print(t.getScore() + ","));
-
+		simmilarTasks = simmilarTasks.stream().filter(t -> t.getScore()>10).collect(Collectors.toList());
 		System.out.println("similarTasks size " + simmilarTasks.size());
 		return makeTaskDTOList(simmilarTasks);
 	}
@@ -419,6 +419,10 @@ public class TaskServiceImpl implements TaskService {
 			if (skillWords.contains(taskSkills.get(i).getName())) {
 				releventExperience += skillExp.get(skillWords.indexOf(taskSkills.get(i).getName()));
 				System.out.println("found " + taskSkills.get(i).getName() + ", " + "current releventExperience="
+						+ releventExperience);
+			}else {
+				releventExperience = releventExperience * (float) (7/10);
+				System.out.println("task skill " + taskSkills.get(i).getName() + "not found in user skills , reducing his score " + ", " + "current releventExperience="
 						+ releventExperience);
 			}
 		}

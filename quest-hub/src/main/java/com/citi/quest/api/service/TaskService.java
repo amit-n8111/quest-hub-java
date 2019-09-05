@@ -25,8 +25,6 @@ public interface TaskService {
 
 	Task updateTaskInfo(TaskDTO taskDto);
 
-	List<TaskResponseDTO> mapToTaskResponseDTO(List<Task> tasks, String user);
-
 	Task approveTask(Long taskId, String applicant);
 
 	boolean setTaskFeedback(TaskFeedbackDTO feedbakDTO, String user);
