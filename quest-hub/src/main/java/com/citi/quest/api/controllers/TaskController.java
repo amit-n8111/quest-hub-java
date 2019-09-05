@@ -53,11 +53,18 @@ public class TaskController {
 				|| (searchTaskDTO.getTasktopicId() != null && searchTaskDTO.getTasktopicId() > 0)
 				|| (searchTaskDTO.getTasktypeId() != null && searchTaskDTO.getTasktypeId() > 0)
 				|| StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
-			return taskPostService.searchTasks(searchTaskDTO, user);
+			return taskPostService.searchTasks(searchTaskDTO, user, false);
 		} else {
 			System.out.println("getting recommended tasks");
 			return taskPostService.getRecomendedTasks(user, searchTaskDTO.getPageNumber(), searchTaskDTO.getPageSize());
 		}
+	}
+
+	@PostMapping(value = "task/myTasks")
+	public List<TaskResponseDTO> searchMyTasks(@RequestBody SearchTaskDTO searchTaskDTO,
+			@RequestHeader(value = "sm_user") String user) {
+
+		return taskPostService.searchTasks(searchTaskDTO, user, true);
 	}
 
 	@PostMapping(value = "task/apply/{taskId}")
@@ -67,8 +74,13 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "tasks")
+	public Task submitTask(@RequestHeader(value = "sm_user") String user, @RequestBody Task task) {
+		return taskPostService.saveTask(user, task, true);
+	}
+
+	@PostMapping(value = "tasks/saveTask")
 	public Task saveTask(@RequestHeader(value = "sm_user") String user, @RequestBody Task task) {
-		return taskPostService.saveTask(user, task);
+		return taskPostService.saveTask(user, task, false);
 	}
 
 	@PostMapping(value = "tasks/approve/{taskId}")
@@ -90,7 +102,8 @@ public class TaskController {
 	}
 
 	@PostMapping(value = "tasks/feedback/")
-	public boolean setTaskFeedback(@RequestBody TaskFeedbackDTO feedbakDTO, @RequestHeader(value = "sm_user") String user) {
+	public boolean setTaskFeedback(@RequestBody TaskFeedbackDTO feedbakDTO,
+			@RequestHeader(value = "sm_user") String user) {
 		return taskPostService.setTaskFeedback(feedbakDTO, user);
 	}
 }

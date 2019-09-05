@@ -12,6 +12,7 @@
 	<groupId>com.citi</groupId>
 	<artifactId>quest-hub-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<!--  <packaging>war</packaging>-->
 
 	<name>quest-hub</name>
 	<description>Quest hub</description>
@@ -23,6 +24,16 @@
 	</properties>
 
 	<dependencies>
+	<!-- <dependency>
+	<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-tomcat</artifactId>
+		<scope>provided</scope>
+	</dependency> -->
 
 		<!--DATA REST -->
 		<dependency>
