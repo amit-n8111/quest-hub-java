@@ -2,6 +2,7 @@ package com.citi.quest.api.controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,8 +39,18 @@ public class UserController {
 	}
 
 	@PostMapping(value = "users")
-	public List<SearchUserResponseDTO> searchUserInfo(@RequestBody SearchUserDTO searchUserDTO) {
-		return userService.searchUserInfo(searchUserDTO);
+	public List<SearchUserResponseDTO> searchUserInfo(@RequestBody SearchUserDTO searchUserDTO,
+			@RequestHeader(value = "sm_user") String user) {
+		
+		if (StringUtils.isNotBlank(searchUserDTO.getSearch()) 
+				|| (searchUserDTO.getSkillId() != null && searchUserDTO.getSkillId() > 0)
+				|| (searchUserDTO.getTaskTopicId() != null && searchUserDTO.getTaskTopicId() > 0)) {
+			
+			return userService.searchUserInfo(searchUserDTO);
+		} else {
+			System.out.println("getting recommended users");
+			return userService.getRecomendedUsers(user, searchUserDTO.getPageNumber(), searchUserDTO.getPageSize());
+		}
 	}
 
 	@PostMapping(value = "users/saveFromCollaborate")
