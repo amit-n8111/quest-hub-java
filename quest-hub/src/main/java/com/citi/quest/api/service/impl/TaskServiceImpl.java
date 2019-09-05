@@ -137,10 +137,14 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user) {
+	public List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user, Boolean isMyTasks) {
 
 		Query query = new Query();
-		query.addCriteria(Criteria.where("taskStatusId").is(TaskStatus.PUBLISHED.getId()));
+
+		if (!isMyTasks) {
+			query.addCriteria(Criteria.where("taskStatusId").is(TaskStatus.PUBLISHED.getId()));
+		}
+
 		if (StringUtils.isNotBlank(searchTaskDTO.getCreatedBy())) {
 			query.addCriteria(Criteria.where("taskCreatedBy").is(searchTaskDTO.getCreatedBy()));
 		}
@@ -277,11 +281,13 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public Task saveTask(String user, Task task) {
+	public Task saveTask(String user, Task task, Boolean isSubmitOperation) {
 		if (null == task.getTaskId() || task.getTaskId() < 0) {
 			task.setTaskCreatedBy(
 					null != userRepository.findBySoeId(user) ? userRepository.findBySoeId(user).getSoeId() : "");
-			task.setTaskStatusId(TaskStatus.DRAFT.getId());
+
+			task.setTaskStatusId(isSubmitOperation ? TaskStatus.PUBLISHED.getId() : TaskStatus.DRAFT.getId());
+
 			task.setTaskCreateDate(new Date());
 			if (task.getTaskTypeId() == 1) {
 				task.setTaskTypeName(TaskType.MICRO_TASK.getTypeOfTask());
@@ -500,11 +506,11 @@ public class TaskServiceImpl implements TaskService {
 			task.setRating(feedbakDTO.getRating());
 			taskRepository.save(task);
 			return true;
-			
-		}catch(Exception e){			
+
+		} catch (Exception e) {
 			return false;
 		}
-		
+
 	}
 
 }

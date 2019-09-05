@@ -15,11 +15,11 @@ public interface TaskService {
 
 	void postTask(TaskDTO taskDto, String user);
 
-	Task saveTask(String user, Task task);
+	Task saveTask(String user, Task task, Boolean isSubmitOperation);
 
 	Boolean applyTask(String user, Long taskId, ApplicationDTO applicationDTO);
 
-	List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user);
+	List<TaskResponseDTO> searchTasks(SearchTaskDTO searchTaskDTO, String user, Boolean isMyTasks);
 
 	List<Task> getTasks();
 
@@ -36,4 +36,5 @@ public interface TaskService {
 	List<TaskResponseDTO> getRecomendedTasks(String user, int pageNum, int pageSize);
 
 	TaskResponseDTO getTask(Long taskId, String user);
+
 }
