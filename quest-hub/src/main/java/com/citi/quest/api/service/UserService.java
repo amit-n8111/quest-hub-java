@@ -5,6 +5,7 @@ import java.util.List;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
 import com.citi.quest.api.dtos.SearchUserResponseDTO;
+import com.citi.quest.api.dtos.TagUserSkillDTO;
 
 public interface UserService {
 
@@ -15,5 +16,7 @@ public interface UserService {
 	List<SearchUserResponseDTO> searchUserInfo(SearchUserDTO searchUserDTO);
 
 	List<SearchUserResponseDTO> getRecomendedUsers(String user, Long taskId, Integer pageNumber, Integer pageSize);
+
+	Boolean tagSkillsToUserProfile(String user, TagUserSkillDTO tagUserSkills);
 
 }

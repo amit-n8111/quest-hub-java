@@ -19,13 +19,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.citi.quest.api.domain.Favorite;
+import com.citi.quest.api.domain.Skill;
 import com.citi.quest.api.domain.Task;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
 import com.citi.quest.api.dtos.SearchUserResponseDTO;
 import com.citi.quest.api.dtos.SkillDetailsDTO;
+import com.citi.quest.api.dtos.TagUserSkillDTO;
 import com.citi.quest.api.dtos.WorkHistoryAndFeedbackDTO;
+import com.citi.quest.api.enums.ExpertiseLevel;
 import com.citi.quest.api.repositories.FavoriteRepository;
+import com.citi.quest.api.repositories.SkillsRepository;
 import com.citi.quest.api.repositories.TaskRepository;
 import com.citi.quest.api.repositories.UserInfoRepository;
 import com.citi.quest.api.service.UserService;
@@ -46,9 +50,12 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
-
 	@Autowired
 	TaskRepository taskRepository;
+	
+	@Autowired
+	SkillsRepository skillsRepository;
+	
 
 	@Override
 	public Boolean markTaskAsFavorite(long taskId, String user) {
@@ -200,6 +207,33 @@ public class UserServiceImpl implements UserService {
 			sb.append(" ");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public Boolean tagSkillsToUserProfile(String user, TagUserSkillDTO tagUserSkills) {
+		UserInfo userInfo = userInfoRepository.findBySoeId(user);
+		List<SkillDetailsDTO> userSkills = userInfo.getSkillDetails();
+		for(String tagUserSkill : tagUserSkills.getSkills()) {
+			boolean flag = false;
+			for(int i=0;i<userSkills.size();i++) {
+				if(tagUserSkill.equalsIgnoreCase(userSkills.get(i).getSkill().getName())) {
+					flag=true;
+					break;
+				}
+			}
+			if(flag == false) {
+				Skill skill = skillsRepository.findSkillsByName(tagUserSkill);
+				SkillDetailsDTO skillDTO = new SkillDetailsDTO();
+				skillDTO.setSkill(skill);
+				skillDTO.setLevel(ExpertiseLevel.BEGINNER);
+				skillDTO.setYearsOfExperience(1);
+				userSkills.add(skillDTO);
+			}
+		}
+		
+		userInfo.setSkillDetails(userSkills);
+		userInfoRepository.save(userInfo);		
+		return true;
 	}
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.citi.quest.api.domain.UserInfo;
 import com.citi.quest.api.dtos.SearchUserDTO;
 import com.citi.quest.api.dtos.SearchUserResponseDTO;
+import com.citi.quest.api.dtos.TagUserSkillDTO;
 import com.citi.quest.api.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -60,4 +61,9 @@ public class UserController {
 		return true;
 	}
 
+	@PostMapping(value = "users/tagSkills")
+	public Boolean tagSkillsToUserProfile(@RequestHeader(value = "sm_user") String user, @RequestBody TagUserSkillDTO tagUserSkill) {
+		return userService.tagSkillsToUserProfile(user,tagUserSkill);
+		
+	}
 }

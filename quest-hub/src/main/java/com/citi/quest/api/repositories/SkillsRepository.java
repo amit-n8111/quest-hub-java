@@ -15,6 +15,9 @@ import io.swagger.annotations.ApiOperation;
 public interface SkillsRepository extends MongoRepository<Skill, Long> {
 
 	@Override
-	@ApiOperation("Find questions for the application.")
+	@ApiOperation("Find All Skills.")
 	List<Skill> findAll();
+	
+	@ApiOperation("Find skill by name.")
+	Skill findSkillsByName(String name);
 }
